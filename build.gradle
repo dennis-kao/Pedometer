@@ -5,6 +5,7 @@ buildscript {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        google()
     }
     dependencies {
         if (rootProject.ext.has("gradle_classpath")) {
@@ -23,14 +24,19 @@ android {
     if (rootProject.ext.has("compileSdkVersion")) {
         compileSdkVersion rootProject.ext.compileSdkVersion
         buildToolsVersion rootProject.ext.buildToolsVersion
+
+//        compileSdkVersion = 27
+//        buildToolsVersion = "27.0.2"
+
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
         compileSdkVersion = 27
-        buildToolsVersion = "27.0.1"
+        buildToolsVersion = "27.0.2"
     }
 
     defaultConfig {
         applicationId "de.j4velin.pedometer"
+        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {
@@ -63,6 +69,8 @@ android {
             minifyEnabled false
         }
     }
+
+
 }
 
 repositories {
@@ -70,15 +78,20 @@ repositories {
     maven {
         url "https://maven.google.com"
     }
+    google()
 }
 
 dependencies {
-    compile 'com.github.j4velin.colorpicker:colorpicker:1.2.3'
+    compile 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.j4velin.colorpicker:colorpicker:1.20.6'
     compile 'com.github.j4velin.EazeGraph:EazeGraph:1.0.2'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    playCompile 'com.google.android.gms:play-services-fitness:11.0.4'
-    playCompile 'com.google.android.gms:play-services-games:11.0.4'
-    playCompile 'com.google.android.gms:play-services-identity:11.0.4'
+    playCompile 'com.google.android.gms:play-services-fitness:11.8.0'
+    playCompile 'com.google.android.gms:play-services-games:11.8.0'
+    playCompile 'com.google.android.gms:play-services-identity:11.8.0'
 }
 
 def props = new Properties()
