@@ -26,15 +26,20 @@ import android.widget.TextView;
 
 import de.j4velin.pedometer.R;
 
+/* Dialog Split class which allows the user to activate the options where they can
+ * see the exact distance travelled in how much time (seoonds/ days or even weeks)
+ */
 abstract class Dialog_Split {
 
     private static boolean split_active;
 
+    //split count dialog box and its layout
     public static Dialog getDialog(final Context c, final int totalSteps) {
         final Dialog d = new Dialog(c);
         d.setTitle(R.string.split_count);
         d.setContentView(R.layout.dialog_split);
 
+        //spliting steps according to the dates they were taken
         final SharedPreferences prefs =
                 c.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
         long split_date = prefs.getLong("split_date", -1);
@@ -43,15 +48,19 @@ abstract class Dialog_Split {
                 .setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
         float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
         float distance = (totalSteps - split_steps) * stepsize;
+
+        //shows steps taken in kilometer
         if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm")) {
             distance /= 100000;
             ((TextView) d.findViewById(R.id.distanceunit)).setText("km");
         } else {
+            //shows steps taken in miles
             distance /= 5280;
             ((TextView) d.findViewById(R.id.distanceunit)).setText("mi");
         }
         ((TextView) d.findViewById(R.id.distance))
                 .setText(Fragment_Overview.formatter.format(distance));
+        //getting date and time when steps were taken
         ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
                 java.text.DateFormat.getDateTimeInstance().format(split_date)));
 
@@ -63,6 +72,7 @@ abstract class Dialog_Split {
         started.setVisibility(split_active ? View.VISIBLE : View.GONE);
         stopped.setVisibility(split_active ? View.GONE : View.VISIBLE);
 
+        //once stop has been hit, user's step and distance gets stored in the history
         final Button startstop = (Button) d.findViewById(R.id.start);
         startstop.setText(split_active ? R.string.stop : R.string.start);
         startstop.setOnClickListener(new OnClickListener() {

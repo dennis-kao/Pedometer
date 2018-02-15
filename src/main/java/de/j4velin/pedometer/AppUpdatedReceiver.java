@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+//calls the sensor listener to update user's steps information on the app
 public class AppUpdatedReceiver extends BroadcastReceiver {
 
 	@Override
