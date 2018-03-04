@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.j4velin.pedometer.ui;
+//package de.j4velin.pedometer.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -35,6 +35,8 @@ import android.widget.TextView;
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.ui.Fragment_Overview;
+import de.j4velin.pedometer.ui.Fragment_Settings;
 
 public class Activity_Main extends FragmentActivity {
 
@@ -97,11 +99,11 @@ public class Activity_Main extends FragmentActivity {
                         });
                 builder2.create().show();
                 break;
-            case R.id.action_faq:
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                break;
+//            case R.id.action_faq:
+//                startActivity(new Intent(Intent.ACTION_VIEW,
+//                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))
+//                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                break;
             case R.id.action_about:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.about);

@@ -124,13 +124,13 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        PlaySettingsWrapper.onSavedInstance(outState, (Activity_Main) getActivity());
+        PlaySettingsWrapper.onSavedInstance(outState, (de.j4velin.pedometer.ui.Activity_Main) getActivity());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
