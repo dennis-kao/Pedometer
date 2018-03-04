@@ -25,6 +25,12 @@ import de.j4velin.pedometer.util.Logger;
 
 public class BootReceiver extends BroadcastReceiver {
 
+    /**
+     * Listener which recieves an event on a shutdown event, whether by the user
+     * or by a crash
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (BuildConfig.DEBUG) Logger.log("booted");

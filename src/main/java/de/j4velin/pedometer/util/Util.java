@@ -21,6 +21,7 @@ import java.util.Calendar;
 public abstract class Util {
 
     /**
+     * Getting current time in milliseconds 
      * @return milliseconds since 1.1.1970 for today 0:00:00 local timezone
      */
     public static long getToday() {
@@ -34,6 +35,7 @@ public abstract class Util {
     }
 
     /**
+     * Getting time of next day starting from 1 second
      * @return milliseconds since 1.1.1970 for tomorrow 0:00:01 local timezone
      */
     public static long getTomorrow() {

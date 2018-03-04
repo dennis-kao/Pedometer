@@ -68,12 +68,23 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
     private boolean showSteps = true;
 
+    /**
+     * Initial Creation of the overview fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
+    /**
+     * UI Creation of overview fragment, graphs, steps, litsener set-up
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -106,6 +117,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         return v;
     }
 
+    /**
+     * Function which resumes counting of steps and sets the icon to resume
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -181,6 +195,9 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         updateBars();
     }
 
+    /**
+     * Function which handles pausing the counting of steps and stops the phone from counting steps
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -196,6 +213,12 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         db.close();
     }
 
+    /**
+     * Creates the expanded view of the option menu and sets the pause/resume icon
+     * to the approriate icon
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
@@ -213,6 +236,12 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         pause.setIcon(d);
     }
 
+    /**
+     * Function which handles an option item selection and displays the appropriate
+     * dialog/drawable when an item gets selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
@@ -245,11 +274,21 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         }
     }
 
+    /**
+     * (Part of implementing sensor listener)
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
         // won't happen
     }
 
+    /**
+     * Function which handles an event when the sensor has changed
+     * (part of implementing sensor listener)
+     * @param event
+     */
     @Override
     public void onSensorChanged(final SensorEvent event) {
         if (BuildConfig.DEBUG)

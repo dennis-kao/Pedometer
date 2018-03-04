@@ -30,6 +30,10 @@ import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.Util;
 
+/* Keeps track of the steps taken by the user and exact date and time (from Util class)
+ * and sends them to fragment_Overview to update the graph and figures of steps 
+ * taken by the user
+ */
 abstract class Dialog_Statistics {
 
 	public static Dialog getDialog(final Context c, int since_boot) {
@@ -44,6 +48,7 @@ abstract class Dialog_Statistics {
 		});
 		Database db = Database.getInstance(c);
 
+		//gets the current month, week, date and time 
 		Pair<Date, Integer> record = db.getRecordData();
 
 		Calendar date = Calendar.getInstance();
@@ -62,6 +67,7 @@ abstract class Dialog_Statistics {
                 Fragment_Overview.formatter.format(record.second) + " @ "
 				+ java.text.DateFormat.getDateInstance().format(record.first));
 
+		//calling fragment_Overview function so time and user's activity could be updated on the app
 		((TextView) d.findViewById(R.id.totalthisweek)).setText(Fragment_Overview.formatter.format(thisWeek));
 		((TextView) d.findViewById(R.id.totalthismonth)).setText(Fragment_Overview.formatter.format(thisMonth));
 

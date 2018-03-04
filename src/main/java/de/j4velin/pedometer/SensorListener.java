@@ -62,6 +62,11 @@ public class SensorListener extends Service implements SensorEventListener {
 
     public final static String ACTION_UPDATE_NOTIFICATION = "updateNotificationState";
 
+    /**
+     * Another implementation function of interface Sensor Listener
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(final Sensor sensor, int accuracy) {
         // nobody knows what happens here: step value might magically decrease
@@ -69,6 +74,11 @@ public class SensorListener extends Service implements SensorEventListener {
         if (BuildConfig.DEBUG) Logger.log(sensor.getName() + " accuracy changed: " + accuracy);
     }
 
+    /**
+     * Another implementation function of interface Sensor Listener
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onSensorChanged(final SensorEvent event) {
         if (event.values[0] > Integer.MAX_VALUE) {
@@ -80,6 +90,9 @@ public class SensorListener extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Updates the database with the users new steps if steps have changed since last check
+     */
     private void updateIfNecessary() {
         if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
@@ -106,6 +119,7 @@ public class SensorListener extends Service implements SensorEventListener {
             startService(new Intent(this, WidgetUpdateService.class));
         }
     }
+
 
     @Override
     public IBinder onBind(final Intent intent) {
@@ -161,6 +175,9 @@ public class SensorListener extends Service implements SensorEventListener {
         return START_STICKY;
     }
 
+    /**
+     * Function which handles the intial creation of a sensor listener and
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -169,6 +186,10 @@ public class SensorListener extends Service implements SensorEventListener {
         updateNotificationState();
     }
 
+    /**
+     * Function which handles the event that a task gets removed
+     * @param rootIntent
+     */
     @Override
     public void onTaskRemoved(final Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
@@ -179,6 +200,9 @@ public class SensorListener extends Service implements SensorEventListener {
                         .getService(this, 3, new Intent(this, SensorListener.class), 0));
     }
 
+    /**
+     * Funciton which handles when a sensorl listener is destroyed
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -192,6 +216,10 @@ public class SensorListener extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Function which updates the notification state, whether goal has been reached,
+     * paused, resumed, etc
+     */
     private void updateNotificationState() {
         if (BuildConfig.DEBUG) Logger.log("SensorListener updateNotificationState");
         SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
@@ -236,6 +264,9 @@ public class SensorListener extends Service implements SensorEventListener {
         }
     }
 
+    /**
+     * Re-registers a sensor listener and unregisters the previous one sensor listener
+     */
     private void reRegisterSensor() {
         if (BuildConfig.DEBUG) Logger.log("re-register sensor listener");
         SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
