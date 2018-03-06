@@ -10,13 +10,6 @@
         android:layout_weight="1"
         android:padding="10dp" >
 
-        <TextView
-            android:id="@+id/stopped"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/no_split_active" />
-
         <RelativeLayout
             android:id="@+id/started"
             android:layout_width="match_parent"

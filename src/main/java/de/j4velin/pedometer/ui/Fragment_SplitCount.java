@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -139,18 +136,12 @@ public class Fragment_SplitCount extends Fragment {
         distanceText =  d.findViewById(R.id.distance);
         distanceText.setText(Fragment_Overview.formatter.format(distance));
 
-        final View started = d.findViewById(R.id.started);
-        final View stopped = d.findViewById(R.id.stopped);
-
         //  split date is used to determine if a split count is active
         split_active = split_date > 0;
         //getting date and time when steps were taken
         if (split_date == -1) split_date = System.currentTimeMillis();  //  if getting the split date failed, set it to the current day
         ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
                 java.text.DateFormat.getDateTimeInstance().format(split_date)));
-
-        started.setVisibility(split_active ? View.VISIBLE : View.GONE);
-        stopped.setVisibility(split_active ? View.GONE : View.VISIBLE);
 
         //once stop has been hit, user's step and distance gets stored in the history
         final Button startstop = d.findViewById(R.id.start);
@@ -162,11 +153,7 @@ public class Fragment_SplitCount extends Fragment {
                     prefs.edit().putLong("split_date", System.currentTimeMillis())
                             .putInt("split_steps", totalSteps).apply();
                     split_active = true;
-                    started.setVisibility(View.VISIBLE);
-                    stopped.setVisibility(View.GONE);
                 } else {
-                    started.setVisibility(View.GONE);
-                    stopped.setVisibility(View.VISIBLE);
                     prefs.edit().remove("split_date").remove("split_steps").apply();
                     split_active = false;
                     updateStepsAndDistanceText(0, 0);
