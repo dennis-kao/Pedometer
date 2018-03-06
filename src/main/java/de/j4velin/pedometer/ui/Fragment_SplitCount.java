@@ -139,15 +139,15 @@ public class Fragment_SplitCount extends Fragment {
         distanceText =  d.findViewById(R.id.distance);
         distanceText.setText(Fragment_Overview.formatter.format(distance));
 
+        final View started = d.findViewById(R.id.started);
+        final View stopped = d.findViewById(R.id.stopped);
+
+        //  split date is used to determine if a split count is active
+        split_active = split_date > 0;
         //getting date and time when steps were taken
         if (split_date == -1) split_date = System.currentTimeMillis();  //  if getting the split date failed, set it to the current day
         ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
                 java.text.DateFormat.getDateTimeInstance().format(split_date)));
-
-        final View started = d.findViewById(R.id.started);
-        final View stopped = d.findViewById(R.id.stopped);
-
-        split_active = split_date > 0;
 
         started.setVisibility(split_active ? View.VISIBLE : View.GONE);
         stopped.setVisibility(split_active ? View.GONE : View.VISIBLE);
