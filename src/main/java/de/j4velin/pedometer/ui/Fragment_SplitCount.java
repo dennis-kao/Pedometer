@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,10 +43,7 @@ public class Fragment_SplitCount extends Fragment {
     private float stepsize, distance;
     private static boolean split_active;
 
-    public Fragment_SplitCount(int ts) {
-        // Required empty public constructor
-        totalSteps = ts;
-    }
+    private TextView stepsText, distanceText;
 
     public Fragment_SplitCount() {
         // Required empty public constructor
@@ -80,17 +80,23 @@ public class Fragment_SplitCount extends Fragment {
     public void updateStepsAndDistanceData()
     {
         Database db = Database.getInstance(getContext());
-        int todayOffset = db.getSteps(Util.getToday());
-        int total_start = db.getTotalWithoutToday();
-        int since_boot = db.getCurrentSteps();
+        todayOffset = db.getSteps(Util.getToday());
+        total_start = db.getTotalWithoutToday();
+        since_boot = db.getCurrentSteps();
 
         totalSteps = total_start + Math.max(todayOffset + since_boot, 0);
         db.close();
     }
 
-    public void updateTextUI()
+    public void updateStepsAndDistanceText(int newDistance, int newSteps)
     {
+        distance = newDistance;
 
+        distanceText
+                .setText(Fragment_Overview.formatter.format(newDistance));
+
+        stepsText
+                .setText(Fragment_Overview.formatter.format(newSteps));
     }
 
     @Override
@@ -115,8 +121,8 @@ public class Fragment_SplitCount extends Fragment {
 
         split_date = prefs.getLong("split_date", -1);
         split_steps = prefs.getInt("split_steps", totalSteps);
-        ((TextView) d.findViewById(R.id.steps))
-                .setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
+        stepsText = d.findViewById(R.id.steps);
+        stepsText.setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
         stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
         distance = (totalSteps - split_steps) * stepsize;
 
@@ -129,9 +135,12 @@ public class Fragment_SplitCount extends Fragment {
             distance /= 5280;
             ((TextView) d.findViewById(R.id.distanceunit)).setText("mi");
         }
-        ((TextView) d.findViewById(R.id.distance))
-                .setText(Fragment_Overview.formatter.format(distance));
+
+        distanceText =  d.findViewById(R.id.distance);
+        distanceText.setText(Fragment_Overview.formatter.format(distance));
+
         //getting date and time when steps were taken
+        if (split_date == -1) split_date = System.currentTimeMillis();  //  if getting the split date failed, set it to the current day
         ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
                 java.text.DateFormat.getDateTimeInstance().format(split_date)));
 
@@ -144,7 +153,7 @@ public class Fragment_SplitCount extends Fragment {
         stopped.setVisibility(split_active ? View.GONE : View.VISIBLE);
 
         //once stop has been hit, user's step and distance gets stored in the history
-        final Button startstop = (Button) d.findViewById(R.id.start);
+        final Button startstop = d.findViewById(R.id.start);
         startstop.setText(split_active ? R.string.stop : R.string.start);
         startstop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +169,7 @@ public class Fragment_SplitCount extends Fragment {
                     stopped.setVisibility(View.VISIBLE);
                     prefs.edit().remove("split_date").remove("split_steps").apply();
                     split_active = false;
+                    updateStepsAndDistanceText(0, 0);
                 }
                 startstop.setText(split_active ? R.string.stop : R.string.start);
             }
@@ -206,4 +216,11 @@ public class Fragment_SplitCount extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(final MenuItem item)
+//    {
+//
+//        return ((Fragment_Overview) getContext()).onOptionsItemSelected(item);
+//    }
 }
