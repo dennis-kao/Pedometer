@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/steps"
                 android:layout_alignParentRight="true"
-                android:text="@string/steps" />
+                android:text="@string/steps"
+                android:visibility="invisible" />
         </RelativeLayout>
     </FrameLayout>
 
@@ -80,15 +81,9 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/close"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/close" />
+            android:text="START" />
+
     </LinearLayout>
 
 </LinearLayout>

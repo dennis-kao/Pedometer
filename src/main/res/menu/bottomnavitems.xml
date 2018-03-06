@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_games_black_24dp"
         android:title="@string/achievements"/>
     <item
-        android:id="@+id/action_leaderboard"
-        android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/leaderboard"/>
+        android:id="@+id/action_split_count"
+        android:icon="@drawable/ic_directions_run_black_24dp"
+        android:title="@string/split_count"/>
 </menu>

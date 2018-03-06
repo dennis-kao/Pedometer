@@ -32,16 +32,19 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
 import de.j4velin.pedometer.BuildConfig;
+import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.GoogleFit;
 import de.j4velin.pedometer.util.Logger;
+import de.j4velin.pedometer.util.Util;
 
 /**
  * Created by dkao on 2/11/2018.
  */
 
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener,
+        Fragment_SplitCount.OnFragmentInteractionListener {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -147,8 +150,10 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 
     public boolean optionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                getFragmentManager().popBackStackImmediate();
+            case R.id.action_statistics:
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new Fragment_Overview()).addToBackStack(null)
+                        .commit();
                 break;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
@@ -216,6 +221,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                         });
                 builder.create().show();
                 break;
+            case R.id.action_split_count:
+
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new Fragment_SplitCount()).addToBackStack(null)
+                        .commit();
         }
         return true;
     }
@@ -278,4 +289,9 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
+    }
 }
