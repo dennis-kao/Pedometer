@@ -98,7 +98,7 @@
                     android:layout_weight="1"
                     android:autoText="false"
                     android:gravity="center_horizontal"
-                    android:text="Split Count History"
+                    android:text="HISTORY"
                     android:textSize="15dp"
                     android:visibility="visible" />
 
