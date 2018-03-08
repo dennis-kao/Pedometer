@@ -225,6 +225,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, new Fragment_SplitCount()).addToBackStack(null)
                         .commit();
+                break;
         }
         return true;
     }
