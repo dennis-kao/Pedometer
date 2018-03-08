@@ -141,9 +141,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_settings).setVisible(false);
-        menu.findItem(R.id.action_pause).setVisible(false);
-        menu.findItem(R.id.action_split_count).setVisible(false);
     }
 
     @Override
