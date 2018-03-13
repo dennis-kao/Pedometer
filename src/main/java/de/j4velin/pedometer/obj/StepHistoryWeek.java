@@ -5,12 +5,12 @@ package de.j4velin.pedometer.obj;
  */
 
 public class StepHistoryWeek {
-    private int totalSteps;
-    private int avgSteps;
-    private int distance;
-    private int totalCalBurned;
-    private long dtEnd;
-    private long dtStart;
+    private int totalSteps = 0;
+    private int avgSteps = 0;
+    private int distance = 0;
+    private int totalCalBurned = 0;
+    private long dtEnd = 0;
+    private long dtStart = 0;
 
     public int getTotalSteps() {
         return totalSteps;
@@ -18,14 +18,20 @@ public class StepHistoryWeek {
 
     public void setTotalSteps(int totalSteps) {
         this.totalSteps = totalSteps;
+        this.setAvgSteps();
+        this.setDistance();
     }
 
     public int getAvgSteps() {
-        return avgSteps;
+        return (avgSteps > 0) ? avgSteps : totalSteps/7;
     }
 
     public void setAvgSteps(int avgSteps) {
-        this.avgSteps = avgSteps;
+         this.avgSteps = avgSteps;
+    }
+
+    public void setAvgSteps() {
+        this.avgSteps = this.totalSteps/7;
     }
 
     public int getDistance() {
@@ -34,6 +40,10 @@ public class StepHistoryWeek {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public void setDistance() {
+        this.distance = this.totalSteps; // multiplied by stride length
     }
 
     public int getTotalCalBurned() {

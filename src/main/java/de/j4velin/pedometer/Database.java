@@ -24,16 +24,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.j4velin.pedometer.obj.StepHistoryWeek;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
 public class Database extends SQLiteOpenHelper {
 
     private final static String DB_NAME = "steps";
+    private final static String DATE_COL = "date";
+    private final static String STEPS_COL = "steps";
     private final static int DB_VERSION = 2;
 
     private static Database instance;
@@ -299,6 +304,72 @@ public class Database extends SQLiteOpenHelper {
         }
         c.close();
         return re;
+    }
+
+    /**
+     * Gets all data from the database and sorts the data by week starting on Mondays
+     * @return list of step history data based on StepHistoryWeek object
+     */
+    public List<StepHistoryWeek> getAllStepHistoryByWeek() {
+        List<StepHistoryWeek> stepHistoryWeekList = null;
+        StepHistoryWeek shw = null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME, null);
+        int totalWeekSteps = 0;
+        long datetime;
+
+        try {
+            while (c.moveToNext()) {
+                datetime = c.getColumnIndexOrThrow(DATE_COL);
+                if (shw == null) {
+                    shw = new StepHistoryWeek();
+                    cal.setTimeInMillis(datetime);
+                    shw.setDtStart(datetime);
+                    switch (cal.get(Calendar.DAY_OF_WEEK)) {
+                        case Calendar.MONDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(6)));
+                            break;
+
+                        case Calendar.TUESDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(5)));
+                            break;
+
+                        case Calendar.WEDNESDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(4)));
+                            break;
+
+                        case Calendar.THURSDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(3)));
+                            break;
+
+                        case Calendar.FRIDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(2)));
+                            break;
+
+                        case Calendar.SATURDAY:
+                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(1)));
+                            break;
+
+                        case Calendar.SUNDAY:
+                            shw.setDtEnd(datetime);
+                            break;
+                    }
+                if (datetime > shw.getDtEnd()) {
+                    shw.setTotalSteps(totalWeekSteps);
+                    stepHistoryWeekList.add(shw);
+                    cal.setTimeInMillis(datetime);
+                    totalWeekSteps = 0;
+                }
+                totalWeekSteps += c.getColumnIndexOrThrow(STEPS_COL);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            c.close();
+        }
+        return stepHistoryWeekList;
     }
 
     /**
