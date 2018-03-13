@@ -1,0 +1,359 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+MERGED from [com.android.support:design:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/design-27.0.2.aar/fd792cd6221dc297a8454680e2811bb2/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:appcompat-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/ac93dc240350dc8a65c6f28ce3aca222/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/2b0dd1541e0f8f710c361de39036ca38/AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:2:1-18:12
+MERGED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:2:1-16:12
+MERGED from [com.google.android.gms:play-services-fitness:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-11.8.0.aar/38a7e2754e0b1008d0ab0aecc8edb698/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-games:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-11.8.0.aar/6995cef3c300aa74ea628aa187210ea7/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-identity:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-11.8.0.aar/545e1c969742acb76be056d2a7065ff1/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-location:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-11.8.0.aar/8c56d7c8bb8ebe311c1a539bbd534bea/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-drive:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-11.8.0.aar/ef98d93230ec0296de58afe16a1eb5ba/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:17:1-29:12
+MERGED from [com.google.android.gms:play-services-tasks:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.8.0.aar/06d4e019d79e58e829a195d7e52ed879/AndroidManifest.xml:2:1-9:12
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:17:1-28:12
+MERGED from [com.android.support:support-v4:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/02af6d721516c3013a110fe832e0d5b3/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/545c194d57cf4fc7e985df352175c609/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:palette-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/palette-v7-27.0.2.aar/da8859ddc2e830899c1d872657cd152f/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/5455d5b341dbcc3d105a912da451b574/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/439d71a8af406ebc1bccc66f41ecbdc6/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/8b4851dae76cf333351034a8f1deddf4/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.0.2.aar/357d887ff661850517dc20e4202e3389/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/transition-27.0.2.aar/0f8f8f2c0cc8ca1e34309fd32fd32772/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/98eca2f27fdb87cf55761f9fd7fcb127/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-media-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/58834f3a39db4640f0b98e37e2df94d1/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/ba8e516245e16c0b1b8ab1c44398a2b3/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.gms:play-services-fitness-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-license-11.8.0.aar/25d04a24200a231179b135958d28506a/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-games-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-license-11.8.0.aar/4905c485601edd36acfb06f8943da727/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-identity-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-license-11.8.0.aar/6ff0d72f393546765f1747c9b25b3b74/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-base-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.8.0.aar/ec915d6cc41e2e70e43559893a0834d5/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.8.0.aar/d2af8471d5db47c7f5e9a7c5afa12279/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-location-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-license-11.8.0.aar/88b6a88e4ec5f27b920d5aaf66f69b11/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.8.0.aar/9102bd459d7e56775f15d39b6b6408ec/AndroidManifest.xml:2:1-6:12
+MERGED from [com.google.android.gms:play-services-drive-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-license-11.8.0.aar/ae890c4f12510a3eaa12147154326e54/AndroidManifest.xml:2:1-6:12
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/a6f71a0b7f096a315cac694cb584e932/AndroidManifest.xml:17:1-24:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:2:1-114:12
+	package
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:3:5-35
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:7:5-32
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:5:5-51
+	xmlns:android
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:4:5-63
+	android:versionCode
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:6:5-30
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+		INJECTED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml
+uses-sdk
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:9:5-11:40
+MERGED from [com.android.support:design:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/design-27.0.2.aar/fd792cd6221dc297a8454680e2811bb2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/design-27.0.2.aar/fd792cd6221dc297a8454680e2811bb2/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/ac93dc240350dc8a65c6f28ce3aca222/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.2.aar/ac93dc240350dc8a65c6f28ce3aca222/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/2b0dd1541e0f8f710c361de39036ca38/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/2b0dd1541e0f8f710c361de39036ca38/AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:7:5-9:41
+MERGED from [com.google.android.gms:play-services-fitness:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-11.8.0.aar/38a7e2754e0b1008d0ab0aecc8edb698/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fitness:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-11.8.0.aar/38a7e2754e0b1008d0ab0aecc8edb698/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-11.8.0.aar/6995cef3c300aa74ea628aa187210ea7/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-games:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-11.8.0.aar/6995cef3c300aa74ea628aa187210ea7/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-11.8.0.aar/545e1c969742acb76be056d2a7065ff1/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-identity:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-11.8.0.aar/545e1c969742acb76be056d2a7065ff1/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-location:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-11.8.0.aar/8c56d7c8bb8ebe311c1a539bbd534bea/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-location:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-11.8.0.aar/8c56d7c8bb8ebe311c1a539bbd534bea/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-drive:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-11.8.0.aar/ef98d93230ec0296de58afe16a1eb5ba/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-drive:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-11.8.0.aar/ef98d93230ec0296de58afe16a1eb5ba/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-tasks:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.8.0.aar/06d4e019d79e58e829a195d7e52ed879/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-tasks:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.8.0.aar/06d4e019d79e58e829a195d7e52ed879/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/02af6d721516c3013a110fe832e0d5b3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-v4-27.0.2.aar/02af6d721516c3013a110fe832e0d5b3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/545c194d57cf4fc7e985df352175c609/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.2.aar/545c194d57cf4fc7e985df352175c609/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:palette-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/palette-v7-27.0.2.aar/da8859ddc2e830899c1d872657cd152f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:palette-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/palette-v7-27.0.2.aar/da8859ddc2e830899c1d872657cd152f/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/5455d5b341dbcc3d105a912da451b574/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.2.aar/5455d5b341dbcc3d105a912da451b574/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/439d71a8af406ebc1bccc66f41ecbdc6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.2.aar/439d71a8af406ebc1bccc66f41ecbdc6/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/8b4851dae76cf333351034a8f1deddf4/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.2.aar/8b4851dae76cf333351034a8f1deddf4/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.0.2.aar/357d887ff661850517dc20e4202e3389/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/recyclerview-v7-27.0.2.aar/357d887ff661850517dc20e4202e3389/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/transition-27.0.2.aar/0f8f8f2c0cc8ca1e34309fd32fd32772/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/transition-27.0.2.aar/0f8f8f2c0cc8ca1e34309fd32fd32772/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/98eca2f27fdb87cf55761f9fd7fcb127/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.2.aar/98eca2f27fdb87cf55761f9fd7fcb127/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/58834f3a39db4640f0b98e37e2df94d1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-media-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.0.2.aar/58834f3a39db4640f0b98e37e2df94d1/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/ba8e516245e16c0b1b8ab1c44398a2b3/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.2.aar/ba8e516245e16c0b1b8ab1c44398a2b3/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-fitness-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-license-11.8.0.aar/25d04a24200a231179b135958d28506a/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-fitness-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-license-11.8.0.aar/25d04a24200a231179b135958d28506a/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-games-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-license-11.8.0.aar/4905c485601edd36acfb06f8943da727/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-games-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-license-11.8.0.aar/4905c485601edd36acfb06f8943da727/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-identity-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-license-11.8.0.aar/6ff0d72f393546765f1747c9b25b3b74/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-identity-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-license-11.8.0.aar/6ff0d72f393546765f1747c9b25b3b74/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-base-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.8.0.aar/ec915d6cc41e2e70e43559893a0834d5/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-base-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.8.0.aar/ec915d6cc41e2e70e43559893a0834d5/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.8.0.aar/d2af8471d5db47c7f5e9a7c5afa12279/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.8.0.aar/d2af8471d5db47c7f5e9a7c5afa12279/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-location-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-license-11.8.0.aar/88b6a88e4ec5f27b920d5aaf66f69b11/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-location-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-license-11.8.0.aar/88b6a88e4ec5f27b920d5aaf66f69b11/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.8.0.aar/9102bd459d7e56775f15d39b6b6408ec/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.8.0.aar/9102bd459d7e56775f15d39b6b6408ec/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-drive-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-license-11.8.0.aar/ae890c4f12510a3eaa12147154326e54/AndroidManifest.xml:4:5-43
+MERGED from [com.google.android.gms:play-services-drive-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-license-11.8.0.aar/ae890c4f12510a3eaa12147154326e54/AndroidManifest.xml:4:5-43
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/a6f71a0b7f096a315cac694cb584e932/AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.3] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/runtime-1.0.3.aar/a6f71a0b7f096a315cac694cb584e932/AndroidManifest.xml:20:5-22:41
+	android:targetSdkVersion
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:11:9-38
+	android:minSdkVersion
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:10:9-35
+uses-feature#android.hardware.sensor.stepcounter
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:13:5-15:34
+	android:required
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:15:9-32
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:14:9-59
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:17:5-80
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:17:22-78
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:18:5-80
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:18:22-78
+application
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:20:5-112:19
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/2b0dd1541e0f8f710c361de39036ca38/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/2b0dd1541e0f8f710c361de39036ca38/AndroidManifest.xml:9:5-20
+MERGED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:11:5-16:19
+MERGED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:11:5-16:19
+MERGED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:11:5-14:19
+MERGED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:11:5-14:19
+MERGED from [com.google.android.gms:play-services-fitness:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-11.8.0.aar/38a7e2754e0b1008d0ab0aecc8edb698/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-fitness:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-11.8.0.aar/38a7e2754e0b1008d0ab0aecc8edb698/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-11.8.0.aar/6995cef3c300aa74ea628aa187210ea7/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-games:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-11.8.0.aar/6995cef3c300aa74ea628aa187210ea7/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-11.8.0.aar/545e1c969742acb76be056d2a7065ff1/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-identity:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-11.8.0.aar/545e1c969742acb76be056d2a7065ff1/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-location:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-11.8.0.aar/8c56d7c8bb8ebe311c1a539bbd534bea/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-location:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-11.8.0.aar/8c56d7c8bb8ebe311c1a539bbd534bea/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-drive:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-11.8.0.aar/ef98d93230ec0296de58afe16a1eb5ba/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-drive:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-11.8.0.aar/ef98d93230ec0296de58afe16a1eb5ba/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:22:5-27:19
+MERGED from [com.google.android.gms:play-services-tasks:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.8.0.aar/06d4e019d79e58e829a195d7e52ed879/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-tasks:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-11.8.0.aar/06d4e019d79e58e829a195d7e52ed879/AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:22:5-26:19
+MERGED from [com.google.android.gms:play-services-fitness-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-license-11.8.0.aar/25d04a24200a231179b135958d28506a/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-fitness-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-fitness-license-11.8.0.aar/25d04a24200a231179b135958d28506a/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-games-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-license-11.8.0.aar/4905c485601edd36acfb06f8943da727/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-games-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-games-license-11.8.0.aar/4905c485601edd36acfb06f8943da727/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-identity-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-license-11.8.0.aar/6ff0d72f393546765f1747c9b25b3b74/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-identity-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-identity-license-11.8.0.aar/6ff0d72f393546765f1747c9b25b3b74/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-base-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.8.0.aar/ec915d6cc41e2e70e43559893a0834d5/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-base-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-license-11.8.0.aar/ec915d6cc41e2e70e43559893a0834d5/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.8.0.aar/d2af8471d5db47c7f5e9a7c5afa12279/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-basement-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-license-11.8.0.aar/d2af8471d5db47c7f5e9a7c5afa12279/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-location-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-license-11.8.0.aar/88b6a88e4ec5f27b920d5aaf66f69b11/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-location-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-location-license-11.8.0.aar/88b6a88e4ec5f27b920d5aaf66f69b11/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.8.0.aar/9102bd459d7e56775f15d39b6b6408ec/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-tasks-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-tasks-license-11.8.0.aar/9102bd459d7e56775f15d39b6b6408ec/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-drive-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-license-11.8.0.aar/ae890c4f12510a3eaa12147154326e54/AndroidManifest.xml:5:5-20
+MERGED from [com.google.android.gms:play-services-drive-license:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-drive-license-11.8.0.aar/ae890c4f12510a3eaa12147154326e54/AndroidManifest.xml:5:5-20
+	android:label
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:23:9-41
+		REJECTED from [com.github.j4velin.EazeGraph:EazeGraph:1.0.2] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/EazeGraph-1.0.2.aar/86980a60214c3ecfab9eb7d1dafad3ee/AndroidManifest.xml:13:9-41
+	android:icon
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:22:9-45
+	android:allowBackup
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:21:9-35
+	android:theme
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:24:9-67
+	tools:replace
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:25:9-30
+meta-data#com.google.android.gms.games.APP_ID
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:27:9-29:46
+	android:value
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:29:13-43
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:28:13-63
+meta-data#com.google.android.gms.version
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:30:9-32:69
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:23:9-25:69
+MERGED from [com.google.android.gms:play-services-basement:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.8.0.aar/399ef170f4344af44b1371b29a072893/AndroidManifest.xml:23:9-25:69
+	android:value
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:32:13-66
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:31:13-58
+activity#de.j4velin.pedometer.ui.Activity_Main
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:34:9-42:20
+	android:label
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:36:13-45
+	android:launchMode
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:37:13-44
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:35:13-65
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:38:13-41:29
+action#android.intent.action.MAIN
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:39:17-68
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:39:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:40:17-76
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:40:27-74
+receiver#de.j4velin.pedometer.BootReceiver
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:44:9-48:20
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:44:19-47
+intent-filter#android.intent.action.BOOT_COMPLETED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:45:13-47:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:46:17-78
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:46:25-76
+receiver#de.j4velin.pedometer.AppUpdatedReceiver
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:49:9-53:20
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:49:19-53
+intent-filter#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:50:13-52:29
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:51:17-83
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:51:25-81
+service#de.j4velin.pedometer.SensorListener
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:55:9-56:45
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:56:13-43
+receiver#de.j4velin.pedometer.ShutdownRecevier
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:58:9-64:20
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:59:13-45
+intent-filter#android.intent.action.ACTION_SHUTDOWN+de.j4velin.ACTION_SHUTDOWN
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:60:13-63:29
+action#android.intent.action.ACTION_SHUTDOWN
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:61:17-79
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:61:25-77
+action#de.j4velin.ACTION_SHUTDOWN
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:62:17-68
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:62:25-66
+service#de.j4velin.pedometer.widget.DashClock
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:66:9-82:19
+	android:permission
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:68:13-98
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:67:13-45
+intent-filter#com.google.android.apps.dashclock.Extension
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:69:13-71:29
+action#com.google.android.apps.dashclock.Extension
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:70:17-85
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:70:25-83
+meta-data#protocolVersion
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:73:13-75:36
+	android:value
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:75:17-34
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:74:17-47
+meta-data#worldReadable
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:76:13-78:39
+	android:value
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:78:17-37
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:77:17-45
+meta-data#description
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:79:13-81:65
+	android:value
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:81:17-63
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:80:17-43
+activity#de.j4velin.pedometer.widget.WidgetConfig
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:84:9-90:20
+	android:theme
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:86:13-73
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:85:13-48
+intent-filter#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:87:13-89:29
+action#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:88:17-86
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:88:25-84
+receiver#de.j4velin.pedometer.widget.Widget
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:92:9-100:20
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:92:19-48
+intent-filter#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:93:13-95:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:94:17-83
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:94:25-81
+meta-data#android.appwidget.provider
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:97:13-99:49
+	android:resource
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:99:17-47
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:98:17-58
+service#de.j4velin.pedometer.widget.WidgetUpdateService
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:102:9-62
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:102:18-60
+receiver#de.j4velin.pedometer.PowerReceiver
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:104:9-111:20
+	android:enabled
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:106:13-36
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:105:13-42
+intent-filter#android.intent.action.ACTION_POWER_CONNECTED+android.intent.action.ACTION_POWER_DISCONNECTED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:107:13-110:29
+action#android.intent.action.ACTION_POWER_CONNECTED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:108:17-86
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:108:25-84
+action#android.intent.action.ACTION_POWER_DISCONNECTED
+ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:109:17-89
+	android:name
+		ADDED from /Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/AndroidManifest.xml:109:25-87
+activity#de.j4velin.lib.colorpicker.ExtractFromPhoto
+ADDED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:12:9-15:54
+	android:hardwareAccelerated
+		ADDED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:14:13-48
+	android:theme
+		ADDED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:15:13-51
+	android:name
+		ADDED from [com.github.j4velin.colorpicker:colorpicker:1.20.6] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/colorpicker-1.20.6.aar/608d70b5cdb5a55e6fd16765c7aa01bb/AndroidManifest.xml:13:13-71
+activity#com.google.android.gms.common.api.GoogleApiActivity
+ADDED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:23:9-26:75
+	android:exported
+		ADDED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:25:13-37
+	android:theme
+		ADDED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:26:13-72
+	android:name
+		ADDED from [com.google.android.gms:play-services-base:11.8.0] /Users/kiranbir/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/b9df9bcd9baefe5f7f8a07bc33a5467e/AndroidManifest.xml:24:13-79

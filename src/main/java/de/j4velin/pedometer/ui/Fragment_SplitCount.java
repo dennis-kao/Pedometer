@@ -3,7 +3,6 @@ package de.j4velin.pedometer.ui;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -101,13 +100,14 @@ public class Fragment_SplitCount extends Fragment {
     public void onResume()
     {
         super.onResume();
+//        updateStepsAndDistance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View d = inflater.inflate(R.layout.dialog_split, container, false);
+        View d = inflater.inflate(R.layout.dialog_split, container, false);
 
         final Context c = getContext();
 
@@ -116,7 +116,7 @@ public class Fragment_SplitCount extends Fragment {
 
         updateStepsAndDistanceData();
 
-        split_date = prefs.getLong("split_date", System.currentTimeMillis()); //  if getting the split date failed, set it to the current day
+        split_date = prefs.getLong("split_date", -1);
         split_steps = prefs.getInt("split_steps", totalSteps);
         stepsText = d.findViewById(R.id.steps);
         stepsText.setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
@@ -138,14 +138,13 @@ public class Fragment_SplitCount extends Fragment {
 
         //  split date is used to determine if a split count is active
         split_active = split_date > 0;
-
-        //  set date and time when steps were taken
+        //getting date and time when steps were taken
+        if (split_date == -1) split_date = System.currentTimeMillis();  //  if getting the split date failed, set it to the current day
         ((TextView) d.findViewById(R.id.date)).setText(c.getString(R.string.since,
                 java.text.DateFormat.getDateTimeInstance().format(split_date)));
 
-        //  setup the initial button color, text and behavior
-        final Button startstop = d.findViewById(R.id.startStopButton);
-        startstop.setBackgroundColor(split_active? Color.RED : Color.GREEN);
+        //once stop has been hit, user's step and distance gets stored in the history
+        final Button startstop = d.findViewById(R.id.start);
         startstop.setText(split_active ? R.string.stop : R.string.start);
         startstop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,12 +153,10 @@ public class Fragment_SplitCount extends Fragment {
                     prefs.edit().putLong("split_date", System.currentTimeMillis())
                             .putInt("split_steps", totalSteps).apply();
                     split_active = true;
-                    d.findViewById(R.id.startStopButton).setBackgroundColor(Color.RED);
                 } else {
                     prefs.edit().remove("split_date").remove("split_steps").apply();
                     split_active = false;
                     updateStepsAndDistanceText(0, 0);
-                    d.findViewById(R.id.startStopButton).setBackgroundColor(Color.GREEN);
                 }
                 startstop.setText(split_active ? R.string.stop : R.string.start);
             }
@@ -206,4 +203,11 @@ public class Fragment_SplitCount extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(final MenuItem item)
+//    {
+//
+//        return ((Fragment_Overview) getContext()).onOptionsItemSelected(item);
+//    }
 }

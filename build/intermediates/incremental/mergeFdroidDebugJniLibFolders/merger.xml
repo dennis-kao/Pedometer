@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/jniLibs"/></dataSet><dataSet config="fdroid"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/fdroid/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/debug/jniLibs"/></dataSet><dataSet config="fdroidDebug"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/fdroidDebug/jniLibs"/></dataSet></merger>

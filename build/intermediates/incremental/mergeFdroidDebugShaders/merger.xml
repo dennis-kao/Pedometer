@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/main/shaders"/></dataSet><dataSet config="fdroid"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/fdroid/shaders"/></dataSet><dataSet config="debug"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/debug/shaders"/></dataSet><dataSet config="fdroidDebug"><source path="/Users/kiranbir/Desktop/3760/w18-sec-3-group-3-project/src/fdroidDebug/shaders"/></dataSet></merger>
