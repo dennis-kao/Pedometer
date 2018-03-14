@@ -356,11 +356,14 @@ public class Database extends SQLiteOpenHelper {
                             shw.setDtEnd(datetime);
                             break;
                     }
+                }
                 if (datetime > shw.getDtEnd()) {
                     shw.setTotalSteps(totalWeekSteps);
                     stepHistoryWeekList.add(shw);
-                    cal.setTimeInMillis(datetime);
+
                     totalWeekSteps = 0;
+                    shw.setDtStart(datetime);
+                    shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
                 }
                 totalWeekSteps += c.getColumnIndexOrThrow(STEPS_COL);
             }

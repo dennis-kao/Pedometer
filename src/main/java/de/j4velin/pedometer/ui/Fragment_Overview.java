@@ -29,6 +29,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,9 +47,11 @@ import org.eazegraph.lib.models.PieModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
@@ -75,6 +78,13 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Database db = Database.getInstance(getActivity());
+//        Calendar cal = Calendar.getInstance();
+//        Log.d("Rayshawn", cal.getTime().toString());
+//        for (int i = 0; i < 14; i ++) {
+//            db.insertNewDay(cal.getTimeInMillis() - TimeUnit.DAYS.toMillis(i), 101 * i);
+//        }
+//        db.close();
         setHasOptionsMenu(true);
     }
 
