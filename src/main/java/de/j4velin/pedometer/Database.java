@@ -316,56 +316,64 @@ public class Database extends SQLiteOpenHelper {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         Cursor c = getReadableDatabase()
-                .rawQuery("SELECT * FROM " + DB_NAME, null);
+                .rawQuery("SELECT * FROM " + DB_NAME + "ORDER BY ? ASC", new String[] {DATE_COL});
         int totalWeekSteps = 0;
-        long datetime;
+        long datetime = 0;
 
         try {
             while (c.moveToNext()) {
                 datetime = c.getColumnIndexOrThrow(DATE_COL);
-                if (shw == null) {
-                    shw = new StepHistoryWeek();
-                    cal.setTimeInMillis(datetime);
-                    shw.setDtStart(datetime);
-                    switch (cal.get(Calendar.DAY_OF_WEEK)) {
-                        case Calendar.MONDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(6)));
-                            break;
+                if (datetime > 0) {
+                    if (shw == null) {
+                        shw = new StepHistoryWeek();
+                        cal.setTimeInMillis(datetime);
+                        shw.setDtStart(datetime);
+                        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+                            case Calendar.MONDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(6)));
+                                break;
 
-                        case Calendar.TUESDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(5)));
-                            break;
+                            case Calendar.TUESDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(5)));
+                                break;
 
-                        case Calendar.WEDNESDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(4)));
-                            break;
+                            case Calendar.WEDNESDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(4)));
+                                break;
 
-                        case Calendar.THURSDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(3)));
-                            break;
+                            case Calendar.THURSDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(3)));
+                                break;
 
-                        case Calendar.FRIDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(2)));
-                            break;
+                            case Calendar.FRIDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(2)));
+                                break;
 
-                        case Calendar.SATURDAY:
-                            shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(1)));
-                            break;
+                            case Calendar.SATURDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(1)));
+                                break;
 
-                        case Calendar.SUNDAY:
-                            shw.setDtEnd(datetime);
-                            break;
+                            case Calendar.SUNDAY:
+                                shw.setDtEnd(datetime);
+                                break;
+                        }
                     }
-                }
-                if (datetime > shw.getDtEnd()) {
-                    shw.setTotalSteps(totalWeekSteps);
-                    stepHistoryWeekList.add(shw);
+                    if (datetime > shw.getDtEnd()) {
+                        shw.setTotalSteps(totalWeekSteps);
+                        stepHistoryWeekList.add(shw);
 
-                    totalWeekSteps = 0;
-                    shw.setDtStart(datetime);
-                    shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
+                        shw = new StepHistoryWeek();
+                        totalWeekSteps = 0;
+                        shw.setDtStart(datetime);
+                        shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
+                    }
+                    totalWeekSteps += c.getColumnIndexOrThrow(STEPS_COL);
                 }
-                totalWeekSteps += c.getColumnIndexOrThrow(STEPS_COL);
+            }
+            if (totalWeekSteps > 0) {
+                shw.setTotalSteps(totalWeekSteps);
+                shw.setDtEnd(datetime);
+                stepHistoryWeekList.add(shw);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -373,6 +381,14 @@ public class Database extends SQLiteOpenHelper {
             c.close();
         }
         return stepHistoryWeekList;
+    }
+
+    public void updateStepHistoryWeekList(List<StepHistoryWeek> stepHistoryWeekList) {
+        if (stepHistoryWeekList == null) {
+            stepHistoryWeekList = getAllStepHistoryByWeek();
+        } else {
+
+        }
     }
 
     /**

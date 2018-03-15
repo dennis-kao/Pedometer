@@ -78,13 +78,6 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Database db = Database.getInstance(getActivity());
-//        Calendar cal = Calendar.getInstance();
-//        Log.d("Rayshawn", cal.getTime().toString());
-//        for (int i = 0; i < 14; i ++) {
-//            db.insertNewDay(cal.getTimeInMillis() - TimeUnit.DAYS.toMillis(i), 101 * i);
-//        }
-//        db.close();
         setHasOptionsMenu(true);
     }
 
