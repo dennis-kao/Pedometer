@@ -310,13 +310,13 @@ public class Database extends SQLiteOpenHelper {
      * Gets all data from the database and sorts the data by week starting on Mondays
      * @return list of step history data based on StepHistoryWeek object
      */
-    public List<StepHistoryWeek> getAllStepHistoryByWeek() {
-        List<StepHistoryWeek> stepHistoryWeekList = null;
+    public ArrayList<StepHistoryWeek> getAllStepHistoryByWeek() {
+        ArrayList<StepHistoryWeek> stepHistoryWeekList = null;
         StepHistoryWeek shw = null;
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         Cursor c = getReadableDatabase()
-                .rawQuery("SELECT * FROM " + DB_NAME + "ORDER BY ? ASC", new String[] {DATE_COL});
+                .rawQuery("SELECT * FROM " + DB_NAME + "WHERE ? > 0 ORDER BY ? ASC", new String[] {DATE_COL, DATE_COL});
         int totalWeekSteps = 0;
         long datetime = 0;
 
@@ -325,6 +325,7 @@ public class Database extends SQLiteOpenHelper {
                 datetime = c.getColumnIndexOrThrow(DATE_COL);
                 if (datetime > 0) {
                     if (shw == null) {
+                        stepHistoryWeekList = new ArrayList<>();
                         shw = new StepHistoryWeek();
                         cal.setTimeInMillis(datetime);
                         shw.setDtStart(datetime);
@@ -383,11 +384,23 @@ public class Database extends SQLiteOpenHelper {
         return stepHistoryWeekList;
     }
 
-    public void updateStepHistoryWeekList(List<StepHistoryWeek> stepHistoryWeekList) {
+    public void updateStepHistoryWeekList(ArrayList<StepHistoryWeek> stepHistoryWeekList) {
         if (stepHistoryWeekList == null) {
             stepHistoryWeekList = getAllStepHistoryByWeek();
         } else {
+            Cursor c = getReadableDatabase().rawQuery("SELECT * FROM " + DB_NAME + "WHERE ? > 0 ORDER BY ? ASC", new String[]{DATE_COL, DATE_COL});
+            long datetime = 0;
+            try {
+                c.moveToFirst();
+                datetime = c.getColumnIndexOrThrow(DATE_COL);
+                if (datetime > 0) {
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                c.close();
+            }
         }
     }
 
