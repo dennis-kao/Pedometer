@@ -7,6 +7,9 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import de.j4velin.pedometer.R;
 
@@ -62,11 +65,36 @@ public class Fragment_StepHistory extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment__step_history , container, false);
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment__step_history, container, false);
+
+
+
+
+        // Construct the data source
+        ArrayList<Day_Step_History> arrayOfUsers = new ArrayList<Day_Step_History>();
+        arrayOfUsers.add(new Day_Step_History());
+        // Create the adapter to convert the array to views
+        StepHistoryCellAdapter adapter = new StepHistoryCellAdapter(getContext(), arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) view.findViewById(R.id.step_history_list);
+        listView.setAdapter(adapter);
+
+        return view;
+
+
+
+
     }
+
+
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
