@@ -44,7 +44,8 @@ import de.j4velin.pedometer.util.Util;
 
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        Fragment_SplitCount.OnFragmentInteractionListener {
+        Fragment_SplitCount.OnFragmentInteractionListener,
+        Fragment_StepHistory.OnFragmentInteractionListener {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -225,6 +226,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, new Fragment_SplitCount()).addToBackStack(null)
                         .commit();
+                break;
+            case R.id.action_step_history:
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new Fragment_StepHistory()).addToBackStack(null)
+                        .commit();
+                break;
         }
         return true;
     }

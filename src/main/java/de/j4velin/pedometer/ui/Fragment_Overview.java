@@ -29,7 +29,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,11 +46,9 @@ import org.eazegraph.lib.models.PieModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.Database;
@@ -143,27 +140,27 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
         // register a sensorlistener to live update the UI if a step is taken
         if (!prefs.contains("pauseCount")) {
-//            SensorManager sm =
-//                    (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-//            Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-//            if (sensor == null) {
-//                new AlertDialog.Builder(getActivity()).setTitle(R.string.no_sensor)
-//                        .setMessage(R.string.no_sensor_explain)
-//                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                            @Override
-//                            public void onDismiss(final DialogInterface dialogInterface) {
-//                                getActivity().finish();
-//                            }
-//                        }).setNeutralButton(android.R.string.ok,
-//                        new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(final DialogInterface dialogInterface, int i) {
-//                                dialogInterface.dismiss();
-//                            }
-//                        }).create().show();
-//            } else {
-//                sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
-//            }
+            /*SensorManager sm =
+                    (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+            Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            if (sensor == null) {
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.no_sensor)
+                        .setMessage(R.string.no_sensor_explain)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(final DialogInterface dialogInterface) {
+                                getActivity().finish();
+                            }
+                        }).setNeutralButton(android.R.string.ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create().show();
+            } else {
+                sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
+            }*/
         }
 
         since_boot -= pauseDifference;
