@@ -13,6 +13,7 @@ public class Week_Step_History {
     private int totalCalBurned = 0;
     private long dtEnd = 0;
     private long dtStart = 0;
+    private long bestDay = 0;
 
     public long getBestDay() {
         return bestDay;
@@ -21,8 +22,6 @@ public class Week_Step_History {
     public void setBestDay(long bestDay) {
         this.bestDay = bestDay;
     }
-
-    private long bestDay = 0;
 
     public int getTotalSteps() {
         return totalSteps;

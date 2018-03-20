@@ -87,7 +87,7 @@ public class Fragment_StepHistory extends Fragment {
         this.lsView = (ListView) view.findViewById(R.id.step_history_list);
 
         recordTypeTab.addOnTabSelectedListener(new StepHistoryFragmentListener(this));
-        this.showWeekStepHistory();
+        this.showDayStepHistory();
         return view;
     }
 
