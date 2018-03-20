@@ -1,16 +1,28 @@
 package de.j4velin.pedometer.obj;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by calimr on 2018-03-06.
  */
 
-public class StepHistoryWeek {
+public class Week_Step_History {
     private int totalSteps = 0;
     private int avgSteps = 0;
     private int distance = 0;
     private int totalCalBurned = 0;
     private long dtEnd = 0;
     private long dtStart = 0;
+
+    public long getBestDay() {
+        return bestDay;
+    }
+
+    public void setBestDay(long bestDay) {
+        this.bestDay = bestDay;
+    }
+
+    private long bestDay = 0;
 
     public int getTotalSteps() {
         return totalSteps;
@@ -23,7 +35,9 @@ public class StepHistoryWeek {
     }
 
     public int getAvgSteps() {
-        return (avgSteps > 0) ? avgSteps : totalSteps/7;
+        long numDays = 7;
+        numDays = (this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1);
+        return (avgSteps > 0) ? avgSteps : (int)(totalSteps/numDays);
     }
 
     public void setAvgSteps(int avgSteps) {

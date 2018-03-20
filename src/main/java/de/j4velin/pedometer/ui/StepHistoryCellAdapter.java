@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class StepHistoryCellAdapter  extends ArrayAdapter<Day_Step_History>{
 
-
     private int position;
     private View convertView;
     private ViewGroup parent;

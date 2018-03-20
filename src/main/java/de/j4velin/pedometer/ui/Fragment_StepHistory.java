@@ -4,14 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.support.design.widget.TabLayout;
 
 import java.util.ArrayList;
 
+import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.obj.Week_Step_History;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +36,18 @@ public class Fragment_StepHistory extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+//    private StepHistoryFragmentListener shfListener;
+
+    private ListView lsView;
+
+    private ArrayList<Day_Step_History> dayHistoryRecords = null;
+    private StepHistoryCellAdapter dayStepHistoryAdapter = null;
+
+    private ArrayList<Week_Step_History> weekHistoryRecords = null;
+    private WeekStepHistoryCellAdapter weekStepHistoryCellAdapter = null;
+
+//    private ArrayList<Month_Step_History> monthHistoryRecords;
 
     public Fragment_StepHistory() {
         // Required empty public constructor
@@ -67,32 +83,50 @@ public class Fragment_StepHistory extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment__step_history , container, false);
+        TabLayout recordTypeTab = (TabLayout) view.findViewById(R.id.tab_layout);
+        this.lsView = (ListView) view.findViewById(R.id.step_history_list);
 
+        recordTypeTab.addOnTabSelectedListener(new StepHistoryFragmentListener(this));
+        this.showWeekStepHistory();
+        return view;
+    }
 
-        // Inflate the layout for this fragment
-
-
-
+    public void showDayStepHistory() {
+        //Hard-Coded Values
 
         // Construct the data source
         ArrayList<Day_Step_History> arrayOfUsers = new ArrayList<Day_Step_History>();
         arrayOfUsers.add(new Day_Step_History());
+        arrayOfUsers.add(new Day_Step_History());
         // Create the adapter to convert the array to views
         StepHistoryCellAdapter adapter = new StepHistoryCellAdapter(getContext(), arrayOfUsers);
         // Attach the adapter to a ListView
-        ListView listView = (ListView) view.findViewById(R.id.step_history_list);
-        listView.setAdapter(adapter);
-
-        return view;
-
-
-
+        this.lsView.setAdapter(adapter);
 
     }
 
+    public void showWeekStepHistory() {
+        // call update function for week step history list
+        // change adapter
+        Database db = Database.getInstance((getActivity()));
 
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek();
+        if (this.weekStepHistoryCellAdapter == null) {
+            this.weekStepHistoryCellAdapter = new WeekStepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
+        } else {
+            this.weekStepHistoryCellAdapter.updateList(this.weekHistoryRecords);
+        }
 
+        if (this.weekHistoryRecords == null) {
+            Log.e("STEP_HISTORY", "WeekHistoryRecords null");
+        } else {
+            this.lsView.setAdapter(this.weekStepHistoryCellAdapter);
+        }
+    }
 
+    public void showMonthStepHistory() {
+        Database db = Database.getInstance((getActivity()));
+    }
 
 
 

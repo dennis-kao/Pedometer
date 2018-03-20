@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import de.j4velin.pedometer.obj.StepHistoryWeek;
+import de.j4velin.pedometer.obj.Week_Step_History;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
@@ -308,25 +309,33 @@ public class Database extends SQLiteOpenHelper {
 
     /**
      * Gets all data from the database and sorts the data by week starting on Mondays
-     * @return list of step history data based on StepHistoryWeek object
+     * @return list of step history data based on Week_Step_History object
      */
-    public ArrayList<StepHistoryWeek> getAllStepHistoryByWeek() {
-        ArrayList<StepHistoryWeek> stepHistoryWeekList = null;
-        StepHistoryWeek shw = null;
+    public ArrayList<Week_Step_History> getAllStepHistoryByWeek() {
+        ArrayList<Week_Step_History> weekStepHistoryList = new ArrayList<>();
+        Week_Step_History shw = null;
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         Cursor c = getReadableDatabase()
-                .rawQuery("SELECT * FROM " + DB_NAME + "WHERE ? > 0 ORDER BY ? ASC", new String[] {DATE_COL, DATE_COL});
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
         int totalWeekSteps = 0;
         long datetime = 0;
+        int dateInd = 0;
+        int stepInd = 0;
+
+        while (c.moveToNext()) {
+            Log.d("DATABASE", "Date: " + c.getLong(c.getColumnIndex(DATE_COL)) + " Steps " + c.getInt(c.getColumnIndex(STEPS_COL)));
+        }
 
         try {
-            while (c.moveToNext()) {
-                datetime = c.getColumnIndexOrThrow(DATE_COL);
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                datetime = c.getLong(dateInd);
                 if (datetime > 0) {
                     if (shw == null) {
-                        stepHistoryWeekList = new ArrayList<>();
-                        shw = new StepHistoryWeek();
+                        shw = new Week_Step_History();
                         cal.setTimeInMillis(datetime);
                         shw.setDtStart(datetime);
                         switch (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -358,43 +367,90 @@ public class Database extends SQLiteOpenHelper {
                                 shw.setDtEnd(datetime);
                                 break;
                         }
+                        Log.d("DATABASE", "dtStart:" + shw.getDtStart() + " dtEnd:" + shw.getDtEnd());
                     }
                     if (datetime > shw.getDtEnd()) {
                         shw.setTotalSteps(totalWeekSteps);
-                        stepHistoryWeekList.add(shw);
+                        weekStepHistoryList.add(shw);
 
-                        shw = new StepHistoryWeek();
+                        shw = new Week_Step_History();
                         totalWeekSteps = 0;
                         shw.setDtStart(datetime);
                         shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
+                        Log.d("DATABASE", "dtStart:" + shw.getDtStart() + " dtEnd:" + shw.getDtEnd());
                     }
-                    totalWeekSteps += c.getColumnIndexOrThrow(STEPS_COL);
+                    totalWeekSteps += c.getInt(stepInd);
                 }
-            }
+            } while (c.moveToNext());
             if (totalWeekSteps > 0) {
                 shw.setTotalSteps(totalWeekSteps);
                 shw.setDtEnd(datetime);
-                stepHistoryWeekList.add(shw);
+                weekStepHistoryList.add(shw);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("DATABASE", e.getMessage());
         } finally {
             c.close();
+            if (weekStepHistoryList != null) {
+                Log.d("DATABASE", "weekStepHistoryList Size:" + weekStepHistoryList.size());
+            } else {
+                Log.e("DATABASE", "weekStepHistoryList is null");
+            }
         }
-        return stepHistoryWeekList;
+        return weekStepHistoryList;
     }
 
-    public void updateStepHistoryWeekList(ArrayList<StepHistoryWeek> stepHistoryWeekList) {
-        if (stepHistoryWeekList == null) {
-            stepHistoryWeekList = getAllStepHistoryByWeek();
+    public void updateStepHistoryWeekList(ArrayList<Week_Step_History> weekStepHistoryList) {
+        if (weekStepHistoryList == null) {
+            weekStepHistoryList = this.getAllStepHistoryByWeek();
         } else {
-            Cursor c = getReadableDatabase().rawQuery("SELECT * FROM " + DB_NAME + "WHERE ? > 0 ORDER BY ? ASC", new String[]{DATE_COL, DATE_COL});
+            Cursor c = getReadableDatabase().rawQuery("SELECT * FROM " + DB_NAME + " ORDER BY ? DESC", new String[]{DATE_COL});
             long datetime = 0;
+            int length = 0;
+            int numSteps = 0;
+            Calendar cal = Calendar.getInstance();
             try {
                 c.moveToFirst();
                 datetime = c.getColumnIndexOrThrow(DATE_COL);
                 if (datetime > 0) {
-
+                    cal.setTimeInMillis(datetime);
+                    switch(cal.get(Calendar.DAY_OF_WEEK)) {
+                        case Calendar.MONDAY:
+                            length = 0;
+                            break;
+                        case Calendar.TUESDAY:
+                            length = 1;
+                            break;
+                        case Calendar.WEDNESDAY:
+                            length = 2;
+                            break;
+                        case Calendar.THURSDAY:
+                            length = 3;
+                            break;
+                        case Calendar.FRIDAY:
+                            length = 4;
+                            break;
+                        case Calendar.SATURDAY:
+                            length = 5;
+                            break;
+                        case Calendar.SUNDAY:
+                            length = 6;
+                            break;
+                        default:
+                            break;
+                    }
+                    for (int i = 0; i < length; i++) {
+                        numSteps += c.getColumnIndexOrThrow(STEPS_COL);
+                        c.moveToNext();
+                    }
+                    for (int i = 0; i < weekStepHistoryList.size(); i++) {
+                        if (weekStepHistoryList.get(i).getDtEnd() == datetime) {
+                            weekStepHistoryList.get(i).setTotalSteps(numSteps);
+                            break;
+                        }
+                    }
+                    // if datetime can't be found, must find if needed to add new date to existing
+                    //  week step history or create new week step history object
                 }
             } catch (Exception e) {
                 e.printStackTrace();
