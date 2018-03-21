@@ -47,6 +47,9 @@ public class Fragment_StepHistory extends Fragment {
     private ArrayList<Week_Step_History> weekHistoryRecords = null;
     private WeekStepHistoryCellAdapter weekStepHistoryCellAdapter = null;
 
+    private ArrayList<Month_Step_History> monthHistoryRecords = null;
+    private MonthStepHistoryCellAdapter monthStepHistoryCellAdapter = null;
+
 //    private ArrayList<Month_Step_History> monthHistoryRecords;
 
     public Fragment_StepHistory() {
@@ -126,8 +129,22 @@ public class Fragment_StepHistory extends Fragment {
     }
 
     public void showMonthStepHistory() {
-        Database db = Database.getInstance((getActivity()));
+        //Hard-Coded Values
+
+        // Construct the data source
+        ArrayList<Month_Step_History> arrayOfUsers = new ArrayList<Month_Step_History>();
+        arrayOfUsers.add(new Month_Step_History());
+        arrayOfUsers.add(new Month_Step_History());
+        // Create the adapter to convert the array to views
+        MonthStepHistoryCellAdapter adapter = new MonthStepHistoryCellAdapter(getContext(), arrayOfUsers);
+        // Attach the adapter to a ListView
+        this.lsView.setAdapter(adapter);
+
     }
+
+   /* public void showMonthStepHistory() {
+        Database db = Database.getInstance((getActivity()));
+    }*/
 
 
 
