@@ -36,6 +36,7 @@ public class Week_Step_History {
     public int getAvgSteps() {
         long numDays = 7;
         numDays = (this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1);
+        if (numDays == 0) numDays = 1;
         return (avgSteps > 0) ? avgSteps : (int)(totalSteps/numDays);
     }
 

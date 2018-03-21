@@ -119,7 +119,7 @@ public class Database extends SQLiteOpenHelper {
         try {
             Cursor c = getReadableDatabase().query(DB_NAME, new String[]{"date"}, "date = ?",
                     new String[]{String.valueOf(date)}, null, null, null);
-            if (c.getCount() == 0 && steps >= 0) {
+            if (c.getCount() == 0 ) {//&& steps >= 0) {
 
                 // add 'steps' to yesterdays count
                 addToLastEntry(steps);

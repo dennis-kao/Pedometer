@@ -64,6 +64,7 @@
     <string name="no_sensor">Sensor not found</string>
     <string name="no_sensor_explain">This app requires a dedicated hardware step sensor - which your device does not have. This app won\'t run on your device.</string>
     <string name="permission_external_storage">No permission to access external storage</string>
+    <string name="testData">testData</string>
 
     <!-- These were taken straight from the Google Play APK using reverse engineering tool apktool.jar !-->
     <string name="achievement_boots_made_for_walking">CgkI_pu14sQDEAIQAQ</string>

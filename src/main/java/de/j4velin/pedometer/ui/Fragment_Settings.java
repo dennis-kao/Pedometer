@@ -33,6 +33,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,6 +51,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.PowerReceiver;
@@ -57,6 +60,7 @@ import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
+import de.j4velin.pedometer.util.Util;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
@@ -68,6 +72,14 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.setOptionsMenu();
+        Preference account = findPreference("account");
+        PlaySettingsWrapper
+                .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
+        createTestData();
+    }
+
+    public void setOptionsMenu() {
         addPreferencesFromResource(R.xml.settings);
         findPreference("import").setOnPreferenceClickListener(this);
         findPreference("export").setOnPreferenceClickListener(this);
@@ -101,9 +113,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     }
                 });
 
-        Preference account = findPreference("account");
-        PlaySettingsWrapper
-                .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
 
         final SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
@@ -415,5 +424,21 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                         dialog.dismiss();
                     }
                 }).create().show();
+    }
+
+    public void createTestData() {
+        Database db = Database.getInstance(getActivity());
+        Random ran = new Random();
+
+        int ranSteps = ran.nextInt(1000) + 100;
+
+        for (int i = 0; i < 60; i++)
+        {
+            Log.d("SETTINGS", "CREATING TEST DATA");
+            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), (int) -ranSteps);
+            ranSteps = ran.nextInt(1000) + 100;
+        }
+        db.close();
+
     }
 }
