@@ -435,7 +435,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         for (int i = 0; i < 60; i++)
         {
             Log.d("SETTINGS", "CREATING TEST DATA");
-            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), (int) -gitranSteps);
+            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), (int) -ranSteps);
             ranSteps = ran.nextInt(1000) + 100;
         }
         db.close();
