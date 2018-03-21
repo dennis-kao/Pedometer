@@ -6,59 +6,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/startDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:lines="1"
+            android:text="TextView" />
 
-            <TextView
-                android:id="@+id/startDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="TextView" />
-
-
-            <TextView
-                android:id="@+id/endDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="TextView" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/endDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:lines="1"
+            android:text="TextView" />
 
+        <TextView
+            android:id="@+id/totalStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-            <TextView
-                android:id="@+id/totalStep"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="TextView" />
+        <TextView
+            android:id="@+id/avgStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-            <TextView
-                android:id="@+id/avgStep"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="TextView" />
-
-            <TextView
-                android:id="@+id/bestDay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="TextView" />
-
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/bestDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </LinearLayout>
+
 </LinearLayout>
