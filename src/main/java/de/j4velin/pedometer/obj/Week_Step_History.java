@@ -1,6 +1,8 @@
 package de.j4velin.pedometer.obj;
 
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,7 +48,10 @@ public class Week_Step_History {
     }
 
     public void setAvgSteps() {
-        this.avgSteps = this.totalSteps/7;
+        int numDays;
+        numDays = (int) ((this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1));
+        if (numDays == 0) numDays = 1;
+        this.avgSteps = this.totalSteps/numDays;
     }
 
     public int getDistance() {
@@ -77,27 +82,27 @@ public class Week_Step_History {
         this.dtEnd = dtEnd;
     }
 
-    public String getDtEndString(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        cal.setTimeInMillis(this.dtEnd);
-        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
-        return rtn;
+    public String getDtEndAsDateString() {
+        String dtEnd;
+        Date date = new Date(this.dtEnd);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+        dtEnd = formatter.format(date).toString();
+        return dtEnd;
     }
 
     public long getDtStart() {
         return dtStart;
     }
 
-    public String getDtStartString(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        cal.setTimeInMillis(this.dtStart);
-        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
-        return rtn;
-    }
-
     public void setDtStart(long dtStart) {
         this.dtStart = dtStart;
+    }
+
+    public String getDtStartAsDateString() {
+        String dtStart;
+        Date date = new Date(this.dtStart);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+        dtStart = formatter.format(date).toString();
+        return dtStart;
     }
 }
