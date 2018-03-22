@@ -1,5 +1,6 @@
 package de.j4velin.pedometer.obj;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -76,8 +77,24 @@ public class Week_Step_History {
         this.dtEnd = dtEnd;
     }
 
+    public String getDtEndString(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        cal.setTimeInMillis(this.dtEnd);
+        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
+        return rtn;
+    }
+
     public long getDtStart() {
         return dtStart;
+    }
+
+    public String getDtStartString(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        cal.setTimeInMillis(this.dtStart);
+        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
+        return rtn;
     }
 
     public void setDtStart(long dtStart) {

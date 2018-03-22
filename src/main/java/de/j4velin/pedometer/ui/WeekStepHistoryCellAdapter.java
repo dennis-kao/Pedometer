@@ -48,10 +48,10 @@ public class WeekStepHistoryCellAdapter extends ArrayAdapter<Week_Step_History> 
         TextView bestDay = convertView.findViewById(R.id.bestDay);
 
         cal.setTimeInMillis(stepWeeks.getDtStart());
-        startDate.setText("Start Date:" + Long.toString(stepWeeks.getDtStart()));
+        startDate.setText( stepWeeks.getDtStartString());
 
         cal.setTimeInMillis(stepWeeks.getDtEnd());
-        endDate.setText(Long.toString(stepWeeks.getDtEnd()));
+        endDate.setText(stepWeeks.getDtEndString());
 
         totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getTotalSteps()));
 
