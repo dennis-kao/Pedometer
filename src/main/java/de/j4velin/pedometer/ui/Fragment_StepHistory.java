@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.obj.Day_Step_History;
 import de.j4velin.pedometer.obj.Week_Step_History;
+import de.j4velin.pedometer.obj.Month_Step_History;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,8 +51,6 @@ public class Fragment_StepHistory extends Fragment {
 
     private ArrayList<Month_Step_History> monthHistoryRecords = null;
     private MonthStepHistoryCellAdapter monthStepHistoryCellAdapter = null;
-
-//    private ArrayList<Month_Step_History> monthHistoryRecords;
 
     public Fragment_StepHistory() {
         // Required empty public constructor
@@ -87,8 +87,8 @@ public class Fragment_StepHistory extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment__step_history , container, false);
-        TabLayout recordTypeTab = (TabLayout) view.findViewById(R.id.tab_layout);
-        this.lsView = (ListView) view.findViewById(R.id.step_history_list);
+        TabLayout recordTypeTab = view.findViewById(R.id.tab_layout);
+        this.lsView = view.findViewById(R.id.step_history_list);
 
         recordTypeTab.addOnTabSelectedListener(new StepHistoryFragmentListener(this));
         this.showDayStepHistory();
@@ -96,8 +96,7 @@ public class Fragment_StepHistory extends Fragment {
     }
 
     public void showDayStepHistory() {
-        //Hard-Coded Values
-
+        /*Hard-Coded Values
         // Construct the data source
         ArrayList<Day_Step_History> arrayOfUsers = new ArrayList<Day_Step_History>();
         arrayOfUsers.add(new Day_Step_History());
@@ -105,8 +104,16 @@ public class Fragment_StepHistory extends Fragment {
         // Create the adapter to convert the array to views
         StepHistoryCellAdapter adapter = new StepHistoryCellAdapter(getContext(), arrayOfUsers);
         // Attach the adapter to a ListView
-        this.lsView.setAdapter(adapter);
+        this.lsView.setAdapter(adapter);*/
+        Database db = Database.getInstance((getActivity()));
 
+        this.dayHistoryRecords = db.stepHistoryByDay();
+        this.dayStepHistoryAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
+        if (this.dayHistoryRecords == null)
+            Log.e("STEP_HISTORY", "MonthHistoryRecords null");
+        else{
+            this.lsView.setAdapter(this.dayStepHistoryAdapter);
+        }
     }
 
     public void showWeekStepHistory() {
@@ -129,17 +136,28 @@ public class Fragment_StepHistory extends Fragment {
     }
 
     public void showMonthStepHistory() {
+        /*
         //Hard-Coded Values
 
         // Construct the data source
         ArrayList<Month_Step_History> arrayOfUsers = new ArrayList<Month_Step_History>();
         arrayOfUsers.add(new Month_Step_History());
         arrayOfUsers.add(new Month_Step_History());
+        arrayOfUsers.add(new Month_Step_History());
         // Create the adapter to convert the array to views
         MonthStepHistoryCellAdapter adapter = new MonthStepHistoryCellAdapter(getContext(), arrayOfUsers);
         // Attach the adapter to a ListView
         this.lsView.setAdapter(adapter);
+        */
+        Database db = Database.getInstance((getActivity()));
 
+        this.monthHistoryRecords = db.stepHistoryByMonth();
+        this.monthStepHistoryCellAdapter = new MonthStepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
+        if (this.monthHistoryRecords == null)
+            Log.e("STEP_HISTORY", "MonthHistoryRecords null");
+        else{
+            this.lsView.setAdapter(this.monthStepHistoryCellAdapter);
+        }
     }
 
    /* public void showMonthStepHistory() {

@@ -12,6 +12,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import de.j4velin.pedometer.obj.Day_Step_History;
+
 /**
  * Created by averyspeller on 2018-03-15.
  */
@@ -39,11 +41,11 @@ public class StepHistoryCellAdapter  extends ArrayAdapter<Day_Step_History>{
             }
             // Lookup view for data population
 
-            TextView startDate = (TextView) convertView.findViewById(R.id.startDate);
-            TextView endDate = (TextView) convertView.findViewById(R.id.endDate);
-            TextView totalStep = (TextView) convertView.findViewById(R.id.totalStep);
-            TextView avgStep = (TextView) convertView.findViewById(R.id.avgStep);
-            TextView bestDay = (TextView) convertView.findViewById(R.id.bestDay);
+            TextView startDate = convertView.findViewById(R.id.startDate);
+            TextView endDate = convertView.findViewById(R.id.endDate);
+            TextView totalStep = convertView.findViewById(R.id.totalStep);
+            TextView avgStep = convertView.findViewById(R.id.avgStep);
+            TextView bestDay = convertView.findViewById(R.id.bestDay);
 
 
 
@@ -52,11 +54,11 @@ public class StepHistoryCellAdapter  extends ArrayAdapter<Day_Step_History>{
 
 
 
-            startDate.setText(stepDays.getStartDate());
-            endDate.setText(stepDays.getEndDate());
-            totalStep.setText(stepDays.getTotalStep());
-            avgStep.setText(stepDays.getAvgStep());
-            bestDay.setText(stepDays.getBestDay());
+            startDate.setText(Long.toString(stepDays.getDay()));
+            endDate.setText(stepDays.getDayString());
+            totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getSteps()));
+            avgStep.setText("   Goal Achivied: " + stepDays.getGoal());
+            bestDay.setText("   Distance: 2 km");
 
 
 
@@ -64,11 +66,5 @@ public class StepHistoryCellAdapter  extends ArrayAdapter<Day_Step_History>{
             // Return the completed view to render on screen
             return convertView;
         }
-
-
-
-
-
-
 
 }

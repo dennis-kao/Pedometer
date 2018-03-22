@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import de.j4velin.pedometer.R;
+import de.j4velin.pedometer.obj.Month_Step_History;
 
 import java.util.ArrayList;
 
@@ -42,20 +43,21 @@ public class MonthStepHistoryCellAdapter extends ArrayAdapter<Month_Step_History
         }
         // Lookup view for data population
 
-        TextView startDate = (TextView) convertView.findViewById(R.id.startDate);
-        TextView endDate = (TextView) convertView.findViewById(R.id.endDate);
-        TextView totalStep = (TextView) convertView.findViewById(R.id.totalStep);
-        TextView avgStep = (TextView) convertView.findViewById(R.id.avgStep);
-        TextView bestDay = (TextView) convertView.findViewById(R.id.bestDay);
+        TextView startDate = convertView.findViewById(R.id.startDate);
+        TextView endDate = convertView.findViewById(R.id.endDate);
+        TextView totalStep = convertView.findViewById(R.id.totalStep);
+        TextView avgStep = convertView.findViewById(R.id.avgStep);
+        TextView bestDay = convertView.findViewById(R.id.bestDay);
 
 
         // Populate the data into the template view using the data object
 
 
-        startDate.setText(stepDays.getStartDate());
-        endDate.setText(stepDays.getEndDate());
-        avgStep.setText(stepDays.getAvgStep());
-        bestDay.setText(stepDays.getBestDay());
+        startDate.setText(stepDays.getMonth());
+        endDate.setText(Integer.toString(stepDays.getYear()));
+        avgStep.setText("   Average Steps: " + Long.toString(stepDays.getAvgSteps()));
+        totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getTotalSteps()));
+        bestDay.setText("   Distance: 34km");
 
 
         // Return the completed view to render on screen

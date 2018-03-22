@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.j4velin.pedometer.obj.Day_Step_History;
 import de.j4velin.pedometer.obj.Week_Step_History;
+import de.j4velin.pedometer.obj.Month_Step_History;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
@@ -541,4 +543,116 @@ public class Database extends SQLiteOpenHelper {
         int re = getSteps(-1);
         return re == Integer.MIN_VALUE ? 0 : re;
     }
+
+
+    /**
+     * Sorts data from the database to fit a month view
+     */
+    public ArrayList<Month_Step_History> stepHistoryByMonth(){
+        ArrayList<Month_Step_History> list = new ArrayList<>();
+        Month_Step_History month = null;
+        /*month.setMonth(5);
+        month.setYear(2017);
+        month.setTotalSteps(23123);
+        month.setAvgSteps(23123/29);
+        list.add(month);
+        Month_Step_History mgonth = new Month_Step_History();
+        mgonth.setMonth(5);
+        mgonth.setYear(2017);
+        mgonth.setTotalSteps(23123);
+        mgonth.setAvgSteps(23123/29);
+        list.add(mgonth);
+        return list;*/
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
+
+        long datetime = 0;
+        int dateInd = 0;
+        int stepInd = 0;
+        int currMonth = 0;
+        int tempMonth = -1;
+        int year = 0;
+        int totalSteps = 0;
+        int count = 1;
+        try {
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                datetime = c.getLong(dateInd);
+                cal.setTimeInMillis(datetime);
+                if(currMonth == tempMonth){
+                    tempMonth = cal.get(Calendar.MONTH) + 1;
+                    totalSteps += c.getInt(stepInd);
+                    count++;
+                }
+                else {
+                    if(month == null){
+                        currMonth = cal.get(Calendar.MONTH) + 1;
+                        tempMonth = currMonth;
+                        year = cal.get(Calendar.YEAR);
+                        month = new Month_Step_History();
+                    }else {
+                        month.setMonth(currMonth);
+                        month.setYear(year);
+                        month.setTotalSteps(totalSteps);
+                        month.setAvgSteps(totalSteps / count);
+                        list.add(0, month);
+                        // still need to figure out how to do distance
+                        year = cal.get(Calendar.YEAR);
+                        totalSteps = c.getInt(stepInd);
+                        count = 1;
+                        currMonth = cal.get(Calendar.MONTH) + 1;
+                        tempMonth = currMonth;
+                        month = new Month_Step_History();
+                    }
+                }
+
+            }while(c.moveToNext());
+        } catch (Exception e) {
+            Log.e("DATABASE", e.getMessage());
+        }
+        finally {
+            /*long time = Long.parseLong("1516000800000");
+            cal.setTimeInMillis(time);
+            currMonth = cal.get(Calendar.MONTH) + 1;*/
+            month = new Month_Step_History();
+            month.setMonth(currMonth);
+            month.setYear(year);
+            month.setTotalSteps(totalSteps);
+            month.setAvgSteps(count);
+            list.add(0, month);
+            c.close();
+        }
+        return list;
+    }
+
+    public ArrayList<Day_Step_History> stepHistoryByDay() {
+        ArrayList<Day_Step_History> list = new ArrayList<>();
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
+
+        int dateInd = 0;
+        int stepInd = 0;
+        try{
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                Day_Step_History day = new Day_Step_History();
+                day.setDay(c.getLong(dateInd));
+                day.setSteps(c.getInt(stepInd));
+                day.setGoal();
+                list.add(0, day);
+            }while(c.moveToNext());
+        } catch (Exception e) {
+            Log.e("DATABASE", e.getMessage());
+        } finally {
+            c.close();
+        }
+        return list;
+    }
 }
+

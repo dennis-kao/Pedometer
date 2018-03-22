@@ -89,11 +89,11 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_overview, null);
-        stepsView = (TextView) v.findViewById(R.id.steps);
-        totalView = (TextView) v.findViewById(R.id.total);
-        averageView = (TextView) v.findViewById(R.id.average);
+        stepsView = v.findViewById(R.id.steps);
+        totalView = v.findViewById(R.id.total);
+        averageView = v.findViewById(R.id.average);
 
-        pg = (PieChart) v.findViewById(R.id.graph);
+        pg = v.findViewById(R.id.graph);
 
         // slice for the steps taken today
         sliceCurrent = new PieModel("", 0, Color.parseColor("#99CC00"));
@@ -361,7 +361,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      */
     private void updateBars() {
         SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
-        BarChart barChart = (BarChart) getView().findViewById(R.id.bargraph);
+        BarChart barChart = getView().findViewById(R.id.bargraph);
         if (barChart.getData().size() > 0) barChart.clearChart();
         int steps;
         float distance, stepsize = Fragment_Settings.DEFAULT_STEP_SIZE;
