@@ -41,11 +41,11 @@ public class WeekStepHistoryCellAdapter extends ArrayAdapter<Week_Step_History> 
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.step_history_cell, parent, false);
         }
 
-        TextView startDate = (TextView) convertView.findViewById(R.id.startDate);
-        TextView endDate = (TextView) convertView.findViewById(R.id.endDate);
-        TextView totalStep = (TextView) convertView.findViewById(R.id.totalStep);
-        TextView avgStep = (TextView) convertView.findViewById(R.id.avgStep);
-        TextView bestDay = (TextView) convertView.findViewById(R.id.bestDay);
+        TextView startDate = convertView.findViewById(R.id.startDate);
+        TextView endDate = convertView.findViewById(R.id.endDate);
+        TextView totalStep = convertView.findViewById(R.id.totalStep);
+        TextView avgStep = convertView.findViewById(R.id.avgStep);
+        TextView bestDay = convertView.findViewById(R.id.bestDay);
 
         cal.setTimeInMillis(stepWeeks.getDtStart());
         startDate.setText("Start Date:" + Long.toString(stepWeeks.getDtStart()));
@@ -53,9 +53,11 @@ public class WeekStepHistoryCellAdapter extends ArrayAdapter<Week_Step_History> 
         cal.setTimeInMillis(stepWeeks.getDtEnd());
         endDate.setText(Long.toString(stepWeeks.getDtEnd()));
 
-        totalStep.setText(Integer.toString(stepWeeks.getTotalSteps()));
+        totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getTotalSteps()));
 
-        avgStep.setText(Integer.toString(stepWeeks.getAvgSteps()));
+        avgStep.setText("   Avg Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
+
+        bestDay.setText("   Best Day: everyday is your best day!!");
 
 //        cal.setTimeInMillis(stepWeeks.getBestDay());
 //        bestDay.setText(cal.get(Calendar.DATE));

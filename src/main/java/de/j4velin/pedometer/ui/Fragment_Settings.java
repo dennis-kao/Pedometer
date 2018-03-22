@@ -70,13 +70,14 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+        createTestData();
         super.onCreate(savedInstanceState);
 
         this.setOptionsMenu();
         Preference account = findPreference("account");
         PlaySettingsWrapper
                 .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
-        createTestData();
+        //createTestData();
     }
 
     public void setOptionsMenu() {
@@ -197,8 +198,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             case R.string.step_size:
                 builder = new AlertDialog.Builder(getActivity());
                 v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
-                final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
-                final EditText value = (EditText) v.findViewById(R.id.value);
+                final RadioGroup unit = v.findViewById(R.id.unit);
+                final EditText value = v.findViewById(R.id.value);
                 unit.check(
                         prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
                                 R.id.ft);
@@ -435,7 +436,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         for (int i = 0; i < 60; i++)
         {
             Log.d("SETTINGS", "CREATING TEST DATA");
-            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), (int) -ranSteps);
+            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), -ranSteps);
             ranSteps = ran.nextInt(1000) + 100;
         }
         db.close();
