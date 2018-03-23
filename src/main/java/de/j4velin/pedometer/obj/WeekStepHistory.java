@@ -9,11 +9,8 @@ import java.util.concurrent.TimeUnit;
  * Created by calimr on 2018-03-06.
  */
 
-public class Week_Step_History {
-    private int totalSteps = 0;
+public class WeekStepHistory extends StepHistory{
     private int avgSteps = 0;
-    private int distance = 0;
-    private int totalCalBurned = 0;
     private long dtEnd = 0;
     private long dtStart = 0;
     private long bestDay = 0;
@@ -26,21 +23,17 @@ public class Week_Step_History {
         this.bestDay = bestDay;
     }
 
-    public int getTotalSteps() {
-        return totalSteps;
-    }
-
     public void setTotalSteps(int totalSteps) {
-        this.totalSteps = totalSteps;
+        super.setTotalSteps(totalSteps);
         this.setAvgSteps();
-        this.setDistance();
+        super.setDistance(totalSteps);
     }
 
     public int getAvgSteps() {
         long numDays = 7;
         numDays = (this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1);
         if (numDays == 0) numDays = 1;
-        return (avgSteps > 0) ? avgSteps : (int)(totalSteps/numDays);
+        return (avgSteps > 0) ? avgSteps : (int)(getSteps()/numDays);
     }
 
     public void setAvgSteps(int avgSteps) {
@@ -51,27 +44,7 @@ public class Week_Step_History {
         int numDays;
         numDays = (int) ((this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1));
         if (numDays == 0) numDays = 1;
-        this.avgSteps = this.totalSteps/numDays;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
-    }
-
-    public void setDistance() {
-        this.distance = this.totalSteps; // multiplied by stride length
-    }
-
-    public int getTotalCalBurned() {
-        return totalCalBurned;
-    }
-
-    public void setTotalCalBurned(int totalCalBurned) {
-        this.totalCalBurned = totalCalBurned;
+        this.avgSteps = super.getSteps()/numDays;
     }
 
     public long getDtEnd() {

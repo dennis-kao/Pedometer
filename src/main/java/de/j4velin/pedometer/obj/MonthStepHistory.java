@@ -4,12 +4,10 @@ package de.j4velin.pedometer.obj;
  * Created by Rajbir on 20/03/18.
  */
 
-public class Month_Step_History {
+public class MonthStepHistory extends StepHistory {
     private int month;
     private int year;
-    private int totalSteps = 0;
     private long avgSteps = 0;
-    private int distance = 0;
 
     public String getMonth(){
         switch(month) {
@@ -52,25 +50,11 @@ public class Month_Step_History {
         this.year = year;
     }
 
-    public int getTotalSteps() {
-        return totalSteps;
-    }
-    public void setTotalSteps(int totalSteps) {
-        this.totalSteps = totalSteps;
-    }
-
     public long getAvgSteps() {
         return avgSteps;
     }
     public void setAvgSteps(long avgSteps) {
         this.avgSteps = avgSteps;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
-    public void setDistance(int distance) {
-        this.distance = distance;
     }
 }
 

@@ -31,9 +31,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import de.j4velin.pedometer.obj.Day_Step_History;
-import de.j4velin.pedometer.obj.Week_Step_History;
-import de.j4velin.pedometer.obj.Month_Step_History;
+import de.j4velin.pedometer.obj.DayStepHistory;
+import de.j4velin.pedometer.obj.MonthStepHistory;
+import de.j4velin.pedometer.obj.WeekStepHistory;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
@@ -311,11 +311,11 @@ public class Database extends SQLiteOpenHelper {
 
     /**
      * Gets all data from the database and sorts the data by week starting on Mondays
-     * @return list of step history data based on Week_Step_History object
+     * @return list of step history data based on WeekStepHistory object
      */
-    public ArrayList<Week_Step_History> getAllStepHistoryByWeek() {
-        ArrayList<Week_Step_History> weekStepHistoryList = new ArrayList<>();
-        Week_Step_History shw = null;
+    public ArrayList<WeekStepHistory> getAllStepHistoryByWeek() {
+        ArrayList<WeekStepHistory> weekStepHistoryList = new ArrayList<>();
+        WeekStepHistory shw = null;
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         Cursor c = getReadableDatabase()
@@ -337,7 +337,7 @@ public class Database extends SQLiteOpenHelper {
                 datetime = c.getLong(dateInd);
                 if (datetime > 0) {
                     if (shw == null) {
-                        shw = new Week_Step_History();
+                        shw = new WeekStepHistory();
                         cal.setTimeInMillis(datetime);
                         shw.setDtStart(datetime);
                         switch (cal.get(Calendar.DAY_OF_WEEK)) {
@@ -375,7 +375,7 @@ public class Database extends SQLiteOpenHelper {
                         shw.setTotalSteps(totalWeekSteps);
                         weekStepHistoryList.add(shw);
 
-                        shw = new Week_Step_History();
+                        shw = new WeekStepHistory();
                         totalWeekSteps = 0;
                         shw.setDtStart(datetime);
                         shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
@@ -402,7 +402,7 @@ public class Database extends SQLiteOpenHelper {
         return weekStepHistoryList;
     }
 
-    public void updateStepHistoryWeekList(ArrayList<Week_Step_History> weekStepHistoryList) {
+    public void updateStepHistoryWeekList(ArrayList<WeekStepHistory> weekStepHistoryList) {
         if (weekStepHistoryList == null) {
             weekStepHistoryList = this.getAllStepHistoryByWeek();
         } else {
@@ -548,15 +548,15 @@ public class Database extends SQLiteOpenHelper {
     /**
      * Sorts data from the database to fit a month view
      */
-    public ArrayList<Month_Step_History> stepHistoryByMonth(){
-        ArrayList<Month_Step_History> list = new ArrayList<>();
-        Month_Step_History month = null;
+    public ArrayList<MonthStepHistory> stepHistoryByMonth(){
+        ArrayList<MonthStepHistory> list = new ArrayList<>();
+        MonthStepHistory month = null;
         /*month.setMonth(5);
         month.setYear(2017);
         month.setTotalSteps(23123);
         month.setAvgSteps(23123/29);
         list.add(month);
-        Month_Step_History mgonth = new Month_Step_History();
+        MonthStepHistory mgonth = new MonthStepHistory();
         mgonth.setMonth(5);
         mgonth.setYear(2017);
         mgonth.setTotalSteps(23123);
@@ -593,7 +593,7 @@ public class Database extends SQLiteOpenHelper {
                         currMonth = cal.get(Calendar.MONTH) + 1;
                         tempMonth = currMonth;
                         year = cal.get(Calendar.YEAR);
-                        month = new Month_Step_History();
+                        month = new MonthStepHistory();
                     }else {
                         month.setMonth(currMonth);
                         month.setYear(year);
@@ -606,7 +606,7 @@ public class Database extends SQLiteOpenHelper {
                         count = 1;
                         currMonth = cal.get(Calendar.MONTH) + 1;
                         tempMonth = currMonth;
-                        month = new Month_Step_History();
+                        month = new MonthStepHistory();
                     }
                 }
 
@@ -618,7 +618,7 @@ public class Database extends SQLiteOpenHelper {
             /*long time = Long.parseLong("1516000800000");
             cal.setTimeInMillis(time);
             currMonth = cal.get(Calendar.MONTH) + 1;*/
-            month = new Month_Step_History();
+            month = new MonthStepHistory();
             month.setMonth(currMonth);
             month.setYear(year);
             month.setTotalSteps(totalSteps);
@@ -629,8 +629,8 @@ public class Database extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<Day_Step_History> stepHistoryByDay() {
-        ArrayList<Day_Step_History> list = new ArrayList<>();
+    public ArrayList<DayStepHistory> stepHistoryByDay() {
+        ArrayList<DayStepHistory> list = new ArrayList<>();
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
@@ -641,9 +641,9 @@ public class Database extends SQLiteOpenHelper {
             dateInd = c.getColumnIndexOrThrow(DATE_COL);
             stepInd = c.getColumnIndexOrThrow(STEPS_COL);
             do {
-                Day_Step_History day = new Day_Step_History();
+                DayStepHistory day = new DayStepHistory();
                 day.setDay(c.getLong(dateInd));
-                day.setSteps(c.getInt(stepInd));
+                day.setTotalSteps(c.getInt(stepInd));
                 day.setGoal();
                 list.add(0, day);
             }while(c.moveToNext());
