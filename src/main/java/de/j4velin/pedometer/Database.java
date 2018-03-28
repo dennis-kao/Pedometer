@@ -322,6 +322,9 @@ public class Database extends SQLiteOpenHelper {
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
         int totalWeekSteps = 0;
         long datetime = 0;
+        long bestDay = 0;
+        int bestSteps = 0;
+        int steps;
         int dateInd = 0;
         int stepInd = 0;
 
@@ -381,7 +384,13 @@ public class Database extends SQLiteOpenHelper {
                         shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
                         Log.d("DATABASE", "dtStart:" + shw.getDtStart() + " dtEnd:" + shw.getDtEnd());
                     }
-                    totalWeekSteps += c.getInt(stepInd);
+                    steps = c.getInt(stepInd);
+                    totalWeekSteps += steps;
+                    shw.setBestDay(datetime);
+                    if (steps > bestSteps) {
+                        shw.setBestDay(datetime);
+                        bestSteps = steps;
+                    }
                 }
             } while (c.moveToNext());
             if (totalWeekSteps > 0) {
