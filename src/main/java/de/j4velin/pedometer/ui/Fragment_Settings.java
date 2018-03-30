@@ -67,6 +67,10 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     final static int DEFAULT_GOAL = 10000;
     final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;
     final static String DEFAULT_STEP_UNIT = Locale.getDefault() == Locale.US ? "ft" : "cm";
+    final static float DEFAULT_HEIGHT = Locale.getDefault() == Locale.US ? 67f : 170f;
+    final static String DEFAULT_HEIGHT_UNIT = Locale.getDefault() == Locale.US ? "inches" : "cm";
+    final static float DEFAULT_WEIGHT = Locale.getDefault() == Locale.US ? 68f : 150f;
+    final static String DEFAULT_WEIGHT_UNIT = Locale.getDefault() == Locale.US ? "kg" : "lbs";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -127,6 +131,18 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         stepsize.setSummary(getString(R.string.step_size_summary,
                 prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
                 prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
+
+        Preference height = findPreference("height");
+        height.setOnPreferenceClickListener(this);
+        height.setSummary(getString(R.string.height_size_summary,
+                prefs.getFloat("height_value", DEFAULT_HEIGHT),
+                prefs.getString("height_unit", DEFAULT_HEIGHT_UNIT)));
+
+        Preference weight = findPreference("weight");
+        weight.setOnPreferenceClickListener(this);
+        weight.setSummary(getString(R.string.weight_size_summary,
+                prefs.getFloat("weight_value", DEFAULT_WEIGHT),
+                prefs.getString("weight_unit", DEFAULT_WEIGHT_UNIT)));
 
         setHasOptionsMenu(true);
     }
@@ -218,6 +234,80 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                             preference.setSummary(getString(R.string.step_size_summary,
                                     Float.valueOf(value.getText().toString()),
                                     unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                break;
+            case R.string.height_size:
+                builder = new AlertDialog.Builder(getActivity());
+                v = getActivity().getLayoutInflater().inflate(R.layout.height, null);
+                final RadioGroup unit2 = v.findViewById(R.id.unit);
+                final EditText value2 = v.findViewById(R.id.value);
+                unit2.check(
+                        prefs.getString("height_unit", DEFAULT_HEIGHT_UNIT).equals("cm") ? R.id.cm :
+                                R.id.inches);
+                value2.setText(String.valueOf(prefs.getFloat("height_value", DEFAULT_HEIGHT)));
+                builder.setView(v);
+                builder.setTitle(R.string.set_height_size);
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            prefs.edit().putFloat("height_value",
+                                    Float.valueOf(value2.getText().toString()))
+                                    .putString("height_unit",
+                                            unit2.getCheckedRadioButtonId() == R.id.cm ? "cm" : "inches")
+                                    .apply();
+                            preference.setSummary(getString(R.string.height_size_summary,
+                                    Float.valueOf(value2.getText().toString()),
+                                    unit2.getCheckedRadioButtonId() == R.id.cm ? "cm" : "inches"));
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                break;
+            case R.string.weight_size:
+                builder = new AlertDialog.Builder(getActivity());
+                v = getActivity().getLayoutInflater().inflate(R.layout.weight, null);
+                final RadioGroup unit3 = v.findViewById(R.id.unit);
+                final EditText value3 = v.findViewById(R.id.value);
+                unit3.check(
+                        prefs.getString("weight_unit", DEFAULT_WEIGHT_UNIT).equals("lbs") ? R.id.lbs :
+                                R.id.kg);
+                value3.setText(String.valueOf(prefs.getFloat("weight_value", DEFAULT_WEIGHT)));
+                builder.setView(v);
+                builder.setTitle(R.string.set_weight_size);
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            prefs.edit().putFloat("weight_value",
+                                    Float.valueOf(value3.getText().toString()))
+                                    .putString("weight_unit",
+                                            unit3.getCheckedRadioButtonId() == R.id.lbs ? "lbs" : "kg")
+                                    .apply();
+                            preference.setSummary(getString(R.string.weight_size_summary,
+                                    Float.valueOf(value3.getText().toString()),
+                                    unit3.getCheckedRadioButtonId() == R.id.lbs ? "lbs" : "kg"));
                         } catch (NumberFormatException nfe) {
                             nfe.printStackTrace();
                         }

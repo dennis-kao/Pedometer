@@ -8,6 +8,12 @@
         android:key="stepsize"
         android:title="@string/step_size"/>
     <Preference
+        android:key="height"
+        android:title="@string/height_size"/>
+    <Preference
+        android:key="weight"
+        android:title="@string/weight_size"/>
+    <Preference
         android:key="account"
         android:summary="@string/sign_in"
         android:title="@string/account"/>
