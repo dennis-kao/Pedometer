@@ -94,7 +94,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 endDate.setText(Integer.toString(stepMonth.getYear()));
                 avgStep.setText("   Average Steps: " + Long.toString(stepMonth.getAvgSteps()));
                 totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
-                bestDay.setText("   Best Day: ");
+                bestDay.setText("   Best Day: " + stepMonth.getBestDayString());
                 distance.setText("   Distance: " + Integer.toString(stepMonth.getDistance()) + "km");
                 calories.setText("   Calories: " + Integer.toString(stepMonth.getCalories()));
             }
