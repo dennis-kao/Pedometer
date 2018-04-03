@@ -1,4 +1,6 @@
 package de.j4velin.pedometer.obj;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Comparator;
 
 /**
@@ -6,7 +8,7 @@ import java.util.Comparator;
  */
 
 public abstract class StepHistory {
-    private int distance;
+    private float distance;
     private int calories;
     private int totalSteps;
 
@@ -18,12 +20,17 @@ public abstract class StepHistory {
         this.totalSteps = totalSteps;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public void setDistance(float distance) {
+        // formatting to only capture up to the 3rd decimal place
+        String distString;
+        NumberFormat formatter = new DecimalFormat("#.###");
+        distString = formatter.format(distance);
+
+        this.distance = Float.parseFloat(distString);
     }
 
     public int getSteps(){return totalSteps;}
-    public int getDistance(){return distance;}
+    public float getDistance(){return distance;}
     public int getCalories(){return calories;}
 
 

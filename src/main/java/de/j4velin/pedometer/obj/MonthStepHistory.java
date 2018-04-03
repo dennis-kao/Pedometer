@@ -22,7 +22,7 @@ public class MonthStepHistory extends StepHistory {
         this.setTotalSteps(totalSteps);
         this.avgSteps = avgSteps;
         this.bestDay = bestDay;
-        this.setDistance((int) distance);
+        this.setDistance(distance);
         this.calculateMedian(stepsForTheMonth);
         this.calculateStdDev(stepsForTheMonth);
     }

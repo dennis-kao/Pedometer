@@ -62,7 +62,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 startDate.setText(stepDays.getDayString());
                 endDate.setVisibility(TextView.INVISIBLE);
                 totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getSteps()));
-                avgStep.setText("   Distance: " + Integer.toString(stepDays.getDistance()) + " km");
+                avgStep.setText("   Distance: " + Float.toString(stepDays.getDistance()) + " km");
                 bestDay.setText("   Calories: " + Integer.toString(stepDays.getCalories()));
                 distance.setText("   Goal Achieved: " + stepDays.getGoal());
                 calories.setVisibility(TextView.INVISIBLE);
@@ -81,7 +81,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getSteps()));
                 avgStep.setText("   Average Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
                 bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString());
-                distance.setText("   Distance: " + Integer.toString(stepWeeks.getDistance()) + " km");
+                distance.setText("   Distance: " + Float.toString(stepWeeks.getDistance()) + " km");
                 calories.setText("   Calories: " + Integer.toString(stepWeeks.getCalories()));
 
             }
@@ -95,7 +95,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 avgStep.setText("   Average Steps: " + Long.toString(stepMonth.getAvgSteps()));
                 totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
                 bestDay.setText("   Best Day: " + stepMonth.getBestDayString());
-                distance.setText("   Distance: " + Integer.toString(stepMonth.getDistance()) + "km");
+                distance.setText("   Distance: " + Float.toString(stepMonth.getDistance()) + "km");
                 calories.setText("   Calories: " + Integer.toString(stepMonth.getCalories()));
             }
 

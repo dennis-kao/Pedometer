@@ -378,7 +378,7 @@ public class Database extends SQLiteOpenHelper {
 
                         //converting and adding distance from centimeters to kilometers
                         totalDistance = (float)((totalWeekSteps*stepsize) / 100000);
-                        shw.setDistance((int)totalDistance);
+                        shw.setDistance(totalDistance);
 
                         //converting distance into miles to calculate calories per mile
                         totalDistance = (float)(totalDistance * 0.621371);
@@ -407,7 +407,7 @@ public class Database extends SQLiteOpenHelper {
                 //converting and adding distance from centimeters to kilometers
                 totalDistance = totalWeekSteps * stepsize;
                 totalDistance = totalDistance/100000;
-                shw.setDistance((int)totalDistance);
+                shw.setDistance(totalDistance);
 
                 //converting distance into miles to calculate calories per mile
                 totalDistance = (float)(totalDistance * 0.621371);
@@ -595,7 +595,6 @@ public class Database extends SQLiteOpenHelper {
 
         // 160 is hard-coded weight until we can get weight properly from settings
         float caloriesPerMile = (float)(0.57 * 160);
-        float totalDistance = 0;
         int dateInd = 0;
         int stepInd = 0;
 
@@ -609,7 +608,7 @@ public class Database extends SQLiteOpenHelper {
                     day.setDay(c.getLong(dateInd));
                     day.setTotalSteps(c.getInt(stepInd));
                     day.setGoal();
-                    day.setDistance( (int)(c.getInt(stepInd)*stepsize) / 100000);
+                    day.setDistance((c.getInt(stepInd)*stepsize) / 100000);
                     day.setCalories((int) (day.getDistance() * caloriesPerMile));
                     list.add(0, day);
                 }
