@@ -1,6 +1,9 @@
 package de.j4velin.pedometer.obj;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Rajbir on 22/03/18.
@@ -9,6 +12,7 @@ import java.util.Calendar;
 public class DayStepHistory extends StepHistory {
     private float goal;
     private long day;
+    final private DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
 
     public String getGoal(){
         String rtn = goal + "%";
@@ -25,10 +29,9 @@ public class DayStepHistory extends StepHistory {
     }
 
     public String getDayString(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        cal.setTimeInMillis(this.day);
-        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
-        return rtn;
+        String dateString;
+        Date dateObj = new Date(this.day);
+        dateString = this.formatter.format(dateObj);
+        return dateString;
     }
 }

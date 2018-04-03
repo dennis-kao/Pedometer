@@ -51,17 +51,21 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
             TextView totalStep = convertView.findViewById(R.id.totalStep);
             TextView avgStep = convertView.findViewById(R.id.avgStep);
             TextView bestDay = convertView.findViewById(R.id.bestDay);
+            TextView distance = convertView.findViewById(R.id.distance);
+            TextView calories = convertView.findViewById(R.id.calories);
 
             // Populate the data into the template view using the data object
             if (stepHistory instanceof DayStepHistory) {
 
                 DayStepHistory stepDays = (DayStepHistory) stepHistory;
 
-                startDate.setText(Long.toString(stepDays.getDay()));
-                endDate.setText(stepDays.getDayString());
+                startDate.setText(stepDays.getDayString());
+                endDate.setVisibility(TextView.INVISIBLE);
                 totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getSteps()));
-                avgStep.setText("   Goal Achieved: " + stepDays.getGoal());
-                bestDay.setText("   Distance: 2 km");
+                avgStep.setText("   Distance: " + Integer.toString(stepDays.getDistance()) + " km");
+                bestDay.setText("   Calories: " + Integer.toString(stepDays.getCalories()));
+                distance.setText("   Goal Achieved: " + stepDays.getGoal());
+                calories.setVisibility(TextView.INVISIBLE);
             }
             else if (stepHistory instanceof WeekStepHistory)
             {
@@ -72,11 +76,13 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 cal.setTimeInMillis(stepWeeks.getDtStart());
                 cal.setTimeInMillis(stepWeeks.getDtEnd());
 
-                startDate.setText( stepWeeks.getDtStartAsDateString());
-                endDate.setText(stepWeeks.getDtEndAsDateString());
+                startDate.setText("   Start: " + stepWeeks.getDtStartAsDateString());
+                endDate.setText("   End: " + stepWeeks.getDtEndAsDateString());
                 totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getSteps()));
-                avgStep.setText("   Avg Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
-                bestDay.setText("   Best Day: everyday is your best day!!");
+                avgStep.setText("   Average Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
+                bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString());
+                distance.setText("   Distance: " + Integer.toString(stepWeeks.getDistance()) + " km");
+                calories.setText("   Calories: " + Integer.toString(stepWeeks.getCalories()));
 
             }
             else if (stepHistory instanceof MonthStepHistory)
@@ -88,7 +94,9 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 endDate.setText(Integer.toString(stepMonth.getYear()));
                 avgStep.setText("   Average Steps: " + Long.toString(stepMonth.getAvgSteps()));
                 totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
-                bestDay.setText("   Distance: 34km");
+                bestDay.setText("   Best Day: " + stepMonth.getBestDayString());
+                distance.setText("   Distance: " + Integer.toString(stepMonth.getDistance()) + "km");
+                calories.setText("   Calories: " + Integer.toString(stepMonth.getCalories()));
             }
 
             // Return the completed view to render on screen
