@@ -18,6 +18,7 @@ public class WeekStepHistory extends StepHistory{
     private long bestDay = 0;
     private double stdDev;
     private double median;
+    private DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
 
     public long getBestDay() {
         return bestDay;
@@ -30,8 +31,7 @@ public class WeekStepHistory extends StepHistory{
     public String getBestDayAsDateString() {
         String bestDay;
         Date date = new Date(this.bestDay);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        bestDay = formatter.format(date).toString();
+        bestDay = this.formatter.format(date).toString();
         return bestDay;
     }
 
@@ -70,8 +70,7 @@ public class WeekStepHistory extends StepHistory{
     public String getDtEndAsDateString() {
         String dtEnd;
         Date date = new Date(this.dtEnd);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        dtEnd = formatter.format(date).toString();
+        dtEnd = this.formatter.format(date).toString();
         return dtEnd;
     }
 
@@ -86,8 +85,7 @@ public class WeekStepHistory extends StepHistory{
     public String getDtStartAsDateString() {
         String dtStart;
         Date date = new Date(this.dtStart);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        dtStart = formatter.format(date).toString();
+        dtStart = this.formatter.format(date).toString();
         return dtStart;
     }
 
@@ -101,7 +99,7 @@ public class WeekStepHistory extends StepHistory{
         double variance = 0;
         for(int i :data)
             variance += (i-this.avgSteps)*(i-this.avgSteps);
-        variance =  variance/(data.length-1);
+        variance =  variance/(getNumDays()-1);
 
         this.stdDev =  Math.sqrt(variance);
     }
@@ -116,9 +114,9 @@ public class WeekStepHistory extends StepHistory{
         Arrays.sort(data);
 
         if (data.length % 2 == 0) {
-            this.median = (data[(data.length / 2) - 1] + data[data.length / 2]) / 2.0;
+            this.median = (data[(getNumDays() / 2) - 1] + data[getNumDays() / 2]) / 2.0;
         }
-        this.median =  data[data.length / 2];
+        this.median =  data[getNumDays() / 2];
     }
 
     /*Comparator for sorting the list by date*/

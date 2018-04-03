@@ -329,9 +329,12 @@ public class Database extends SQLiteOpenHelper {
         int steps;
         int dateInd = 0;
         int stepInd = 0;
+        int stepsInWeek[] = new int[7];
+        int index;
 
         try {
             weight = 160; // hard-coded weight in pounds
+            index = 0;
             caloriesPerMile = (float)(weight * 0.57);
             c.moveToFirst();
             dateInd = c.getColumnIndexOrThrow(DATE_COL);
@@ -383,17 +386,23 @@ public class Database extends SQLiteOpenHelper {
                         //converting distance into miles to calculate calories per mile
                         totalDistance = (float)(totalDistance * 0.621371);
                         shw.setCalories((int)(caloriesPerMile * totalDistance));
+                        shw.calculateStdDev(stepsInWeek);
+                        shw.calculateMedian(stepsInWeek);
+                        index = 0;
+                        stepsInWeek = new int[7];
 
                         weekStepHistoryList.add(0, shw);
 
                         shw = new WeekStepHistory();
+                        bestSteps = 0;
                         totalWeekSteps = 0;
                         shw.setDtStart(datetime);
                         shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
                     }
                     steps = c.getInt(stepInd);
+                    stepsInWeek[index] = steps;
+                    index++;
                     totalWeekSteps += steps;
-                    shw.setBestDay(datetime);
                     if (steps > bestSteps) {
                         shw.setBestDay(datetime);
                         bestSteps = steps;
@@ -412,6 +421,9 @@ public class Database extends SQLiteOpenHelper {
                 //converting distance into miles to calculate calories per mile
                 totalDistance = (float)(totalDistance * 0.621371);
                 shw.setCalories((int)(caloriesPerMile * totalDistance));
+
+                shw.calculateMedian(stepsInWeek);
+                shw.calculateStdDev(stepsInWeek);
                 weekStepHistoryList.add(0, shw);
             }
         } catch (Exception e) {
