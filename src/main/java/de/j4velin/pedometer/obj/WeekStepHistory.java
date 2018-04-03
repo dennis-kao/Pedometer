@@ -42,10 +42,7 @@ public class WeekStepHistory extends StepHistory{
     }
 
     public int getAvgSteps() {
-        long numDays = 7;
-        numDays = (this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1);
-        if (numDays == 0) numDays = 1;
-        return (avgSteps > 0) ? avgSteps : (int)(getSteps()/numDays);
+        return (avgSteps > 0) ? avgSteps : (int)(getSteps()/getNumDays());
     }
 
     public void setAvgSteps(int avgSteps) {
@@ -53,10 +50,13 @@ public class WeekStepHistory extends StepHistory{
     }
 
     public void setAvgSteps() {
-        int numDays;
-        numDays = (int) ((this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1));
-        if (numDays == 0) numDays = 1;
-        this.avgSteps = super.getSteps()/numDays;
+        this.avgSteps = super.getSteps()/getNumDays();
+    }
+
+    private int getNumDays() {
+        int numDays = 0;
+        numDays = (int) ((this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1)) + 1;
+        return (numDays > 0) ? numDays : 7;
     }
 
     public long getDtEnd() {
