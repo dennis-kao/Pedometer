@@ -60,8 +60,8 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 startDate.setText(Long.toString(stepDays.getDay()));
                 endDate.setText(stepDays.getDayString());
                 totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getSteps()));
-                avgStep.setText("   Goal Achieved: " + stepDays.getGoalStr());
-                bestDay.setText("   Distance: " + Float.toString(stepDays.getDistance()) + " km");
+                avgStep.setText("   Goal Achieved: " + stepDays.getGoal());
+                bestDay.setText("   Distance: 2 km");
             }
             else if (stepHistory instanceof WeekStepHistory)
             {
@@ -76,7 +76,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 endDate.setText(stepWeeks.getDtEndAsDateString());
                 totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getSteps()));
                 avgStep.setText("   Avg Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
-                bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString());
+                bestDay.setText("   Best Day: everyday is your best day!!");
 
             }
             else if (stepHistory instanceof MonthStepHistory)
@@ -88,7 +88,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 endDate.setText(Integer.toString(stepMonth.getYear()));
                 avgStep.setText("   Average Steps: " + Long.toString(stepMonth.getAvgSteps()));
                 totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
-                bestDay.setText("   Best Day: " + stepMonth.getBestDayString());
+                bestDay.setText("   Distance: 34km");
             }
 
             // Return the completed view to render on screen

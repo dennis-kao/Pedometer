@@ -1,7 +1,6 @@
 package de.j4velin.pedometer.ui;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 import android.support.design.widget.TabLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -95,10 +93,7 @@ public class Fragment_StepHistory extends Fragment {
     public void showDayStepHistory() {
 
         Database db = Database.getInstance((getActivity()));
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.dayHistoryRecords = db.stepHistoryByDay(stepsize);
+        this.dayHistoryRecords = db.stepHistoryByDay();
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
@@ -112,10 +107,7 @@ public class Fragment_StepHistory extends Fragment {
         // change adapter
         Database db = Database.getInstance((getActivity()));
 
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize);
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek();
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
         if (this.weekHistoryRecords == null) {
@@ -129,10 +121,7 @@ public class Fragment_StepHistory extends Fragment {
 
         Database db = Database.getInstance((getActivity()));
 
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize);
+        this.monthHistoryRecords = db.stepHistoryByMonth();
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
 
         if (this.monthHistoryRecords == null)
@@ -180,5 +169,4 @@ public class Fragment_StepHistory extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }
