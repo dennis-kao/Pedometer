@@ -18,6 +18,7 @@ package de.j4velin.pedometer;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -321,18 +322,20 @@ public class Database extends SQLiteOpenHelper {
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
         int totalWeekSteps = 0;
+        float totalDistance = 0;
+        int weight = 0;
+        int stepSize = 0;
         long datetime = 0;
-        long bestDay = 0;
         int bestSteps = 0;
+        float caloriesPerMile = 0;
         int steps;
         int dateInd = 0;
         int stepInd = 0;
 
-        while (c.moveToNext()) {
-            Log.d("DATABASE", "Date: " + c.getLong(c.getColumnIndex(DATE_COL)) + " Steps " + c.getInt(c.getColumnIndex(STEPS_COL)));
-        }
-
         try {
+            stepSize = 75;// hard-coded step size in cm
+            weight = 160; // hard-coded weight in pounds
+            caloriesPerMile = (float)(weight * 0.57);
             c.moveToFirst();
             dateInd = c.getColumnIndexOrThrow(DATE_COL);
             stepInd = c.getColumnIndexOrThrow(STEPS_COL);
@@ -372,17 +375,25 @@ public class Database extends SQLiteOpenHelper {
                                 shw.setDtEnd(datetime);
                                 break;
                         }
-                        Log.d("DATABASE", "dtStart:" + shw.getDtStart() + " dtEnd:" + shw.getDtEnd());
                     }
                     if (datetime > shw.getDtEnd()) {
                         shw.setTotalSteps(totalWeekSteps);
-                        weekStepHistoryList.add(shw);
+
+                        //converting and adding distance from centimeters to kilometers
+                        totalDistance = totalWeekSteps * stepSize;
+                        totalDistance = totalDistance/100000;
+                        shw.setDistance((int)totalDistance);
+
+                        //converting distance into miles to calculate calories per mile
+                        totalDistance = (float)(totalDistance * 0.621371);
+                        shw.setCalories((int)(caloriesPerMile * totalDistance));
+
+                        weekStepHistoryList.add(0, shw);
 
                         shw = new WeekStepHistory();
                         totalWeekSteps = 0;
                         shw.setDtStart(datetime);
                         shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
-                        Log.d("DATABASE", "dtStart:" + shw.getDtStart() + " dtEnd:" + shw.getDtEnd());
                     }
                     steps = c.getInt(stepInd);
                     totalWeekSteps += steps;
@@ -394,81 +405,25 @@ public class Database extends SQLiteOpenHelper {
                 }
             } while (c.moveToNext());
             if (totalWeekSteps > 0) {
-                shw.setTotalSteps(totalWeekSteps);
                 shw.setDtEnd(datetime);
-                weekStepHistoryList.add(shw);
+                shw.setTotalSteps(totalWeekSteps);
+
+                //converting and adding distance from centimeters to kilometers
+                totalDistance = totalWeekSteps * stepSize;
+                totalDistance = totalDistance/100000;
+                shw.setDistance((int)totalDistance);
+
+                //converting distance into miles to calculate calories per mile
+                totalDistance = (float)(totalDistance * 0.621371);
+                shw.setCalories((int)(caloriesPerMile * totalDistance));
+                weekStepHistoryList.add(0, shw);
             }
         } catch (Exception e) {
             Log.e("DATABASE", e.getMessage());
         } finally {
             c.close();
-            if (weekStepHistoryList != null) {
-                Log.d("DATABASE", "weekStepHistoryList Size:" + weekStepHistoryList.size());
-            } else {
-                Log.e("DATABASE", "weekStepHistoryList is null");
-            }
         }
         return weekStepHistoryList;
-    }
-
-    public void updateStepHistoryWeekList(ArrayList<WeekStepHistory> weekStepHistoryList) {
-        if (weekStepHistoryList == null) {
-            weekStepHistoryList = this.getAllStepHistoryByWeek();
-        } else {
-            Cursor c = getReadableDatabase().rawQuery("SELECT * FROM " + DB_NAME + " ORDER BY ? DESC", new String[]{DATE_COL});
-            long datetime = 0;
-            int length = 0;
-            int numSteps = 0;
-            Calendar cal = Calendar.getInstance();
-            try {
-                c.moveToFirst();
-                datetime = c.getColumnIndexOrThrow(DATE_COL);
-                if (datetime > 0) {
-                    cal.setTimeInMillis(datetime);
-                    switch(cal.get(Calendar.DAY_OF_WEEK)) {
-                        case Calendar.MONDAY:
-                            length = 0;
-                            break;
-                        case Calendar.TUESDAY:
-                            length = 1;
-                            break;
-                        case Calendar.WEDNESDAY:
-                            length = 2;
-                            break;
-                        case Calendar.THURSDAY:
-                            length = 3;
-                            break;
-                        case Calendar.FRIDAY:
-                            length = 4;
-                            break;
-                        case Calendar.SATURDAY:
-                            length = 5;
-                            break;
-                        case Calendar.SUNDAY:
-                            length = 6;
-                            break;
-                        default:
-                            break;
-                    }
-                    for (int i = 0; i < length; i++) {
-                        numSteps += c.getColumnIndexOrThrow(STEPS_COL);
-                        c.moveToNext();
-                    }
-                    for (int i = 0; i < weekStepHistoryList.size(); i++) {
-                        if (weekStepHistoryList.get(i).getDtEnd() == datetime) {
-                            weekStepHistoryList.get(i).setTotalSteps(numSteps);
-                            break;
-                        }
-                    }
-                    // if datetime can't be found, must find if needed to add new date to existing
-                    //  week step history or create new week step history object
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                c.close();
-            }
-        }
     }
 
     /**
@@ -578,6 +533,9 @@ public class Database extends SQLiteOpenHelper {
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
         long datetime = 0;
+        // 160 is hard-coded weight until we can get weight properly from settings
+        float caloriesPerMile = (float)(160 * 0.57);
+        float totalDistance = 0;
         int dateInd = 0;
         int stepInd = 0;
         int currMonth = 0;
@@ -595,6 +553,10 @@ public class Database extends SQLiteOpenHelper {
                 if(currMonth == tempMonth){
                     tempMonth = cal.get(Calendar.MONTH) + 1;
                     totalSteps += c.getInt(stepInd);
+
+                    // sets distance to calculate intially distance in centimeters
+                    // 75 cm will be hard-coded until we can get step size properly
+                    totalDistance += (c.getInt(stepInd) * 75);
                     count++;
                 }
                 else {
@@ -607,9 +569,16 @@ public class Database extends SQLiteOpenHelper {
                         month.setMonth(currMonth);
                         month.setYear(year);
                         month.setTotalSteps(totalSteps);
+
+                        // to calculate distance in kilometers, divide by 10 000
+                        totalDistance = totalDistance/100000;
+                        month.setDistance((int)totalDistance);
+
+                        // multiply totalDistance by 0.621371 to get distance in miles from kilometers
+                        month.setCalories((int)(caloriesPerMile * (totalDistance * 0.621371)));
                         month.setAvgSteps(totalSteps / count);
+
                         list.add(0, month);
-                        // still need to figure out how to do distance
                         year = cal.get(Calendar.YEAR);
                         totalSteps = c.getInt(stepInd);
                         count = 1;
@@ -631,6 +600,12 @@ public class Database extends SQLiteOpenHelper {
             month.setMonth(currMonth);
             month.setYear(year);
             month.setTotalSteps(totalSteps);
+            // to calculate distance in kilometers, divide by 100 000
+            totalDistance = (month.getSteps() * 75)/100000;
+            month.setDistance((int)totalDistance);
+
+            // multiply totalDistance by 0.621371 to get distance in miles from kilometers
+            month.setCalories((int)(caloriesPerMile * (totalDistance * 0.621371)));
             month.setAvgSteps(count);
             list.add(0, month);
             c.close();
@@ -643,6 +618,9 @@ public class Database extends SQLiteOpenHelper {
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
+        // 160 is hard-coded weight until we can get weight properly from settings
+        float caloriesPerMile = (float)(0.57 * 160);
+        float totalDistance = 0;
         int dateInd = 0;
         int stepInd = 0;
         try{
@@ -653,6 +631,15 @@ public class Database extends SQLiteOpenHelper {
                 DayStepHistory day = new DayStepHistory();
                 day.setDay(c.getLong(dateInd));
                 day.setTotalSteps(c.getInt(stepInd));
+
+                // sets distance to calculate intially distance in centimeters
+                // 75 cm will be hard-coded until we can get step size properly
+                totalDistance = c.getInt(stepInd) * 75;
+                day.setDistance((int)(totalDistance/100000));
+
+                // converting distance into miles to calculate for calories
+                totalDistance = (float)((totalDistance/100000) * 0.621371);
+                day.setCalories((int) (totalDistance * caloriesPerMile));
                 day.setGoal();
                 list.add(0, day);
             }while(c.moveToNext());
