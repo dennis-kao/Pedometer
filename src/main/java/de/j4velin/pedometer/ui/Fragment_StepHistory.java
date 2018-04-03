@@ -1,6 +1,7 @@
 package de.j4velin.pedometer.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,12 +13,13 @@ import android.widget.ListView;
 import android.support.design.widget.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
-import de.j4velin.pedometer.obj.Day_Step_History;
-import de.j4velin.pedometer.obj.Week_Step_History;
-import de.j4velin.pedometer.obj.Month_Step_History;
+import de.j4velin.pedometer.obj.DayStepHistory;
+import de.j4velin.pedometer.obj.MonthStepHistory;
+import de.j4velin.pedometer.obj.WeekStepHistory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,18 +41,13 @@ public class Fragment_StepHistory extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-//    private StepHistoryFragmentListener shfListener;
-
     private ListView lsView;
 
-    private ArrayList<Day_Step_History> dayHistoryRecords = null;
-    private StepHistoryCellAdapter dayStepHistoryAdapter = null;
+    private ArrayList<DayStepHistory> dayHistoryRecords = null;
+    private ArrayList<WeekStepHistory> weekHistoryRecords = null;
+    private ArrayList<MonthStepHistory> monthHistoryRecords = null;
 
-    private ArrayList<Week_Step_History> weekHistoryRecords = null;
-    private WeekStepHistoryCellAdapter weekStepHistoryCellAdapter = null;
-
-    private ArrayList<Month_Step_History> monthHistoryRecords = null;
-    private MonthStepHistoryCellAdapter monthStepHistoryCellAdapter = null;
+    private StepHistoryCellAdapter stepHistoryCellAdapter = null;
 
     public Fragment_StepHistory() {
         // Required empty public constructor
@@ -96,23 +93,17 @@ public class Fragment_StepHistory extends Fragment {
     }
 
     public void showDayStepHistory() {
-        /*Hard-Coded Values
-        // Construct the data source
-        ArrayList<Day_Step_History> arrayOfUsers = new ArrayList<Day_Step_History>();
-        arrayOfUsers.add(new Day_Step_History());
-        arrayOfUsers.add(new Day_Step_History());
-        // Create the adapter to convert the array to views
-        StepHistoryCellAdapter adapter = new StepHistoryCellAdapter(getContext(), arrayOfUsers);
-        // Attach the adapter to a ListView
-        this.lsView.setAdapter(adapter);*/
-        Database db = Database.getInstance((getActivity()));
 
-        this.dayHistoryRecords = db.stepHistoryByDay();
-        this.dayStepHistoryAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
+        Database db = Database.getInstance((getActivity()));
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+        this.dayHistoryRecords = db.stepHistoryByDay(stepsize);
+        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
-            Log.e("STEP_HISTORY", "MonthHistoryRecords null");
+            Log.e("STEP_HISTORY", "DayHistoryRecords null");
         else{
-            this.lsView.setAdapter(this.dayStepHistoryAdapter);
+            this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
     }
 
@@ -121,50 +112,35 @@ public class Fragment_StepHistory extends Fragment {
         // change adapter
         Database db = Database.getInstance((getActivity()));
 
-        this.weekHistoryRecords = db.getAllStepHistoryByWeek();
-        if (this.weekStepHistoryCellAdapter == null) {
-            this.weekStepHistoryCellAdapter = new WeekStepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
-        } else {
-            this.weekStepHistoryCellAdapter.updateList(this.weekHistoryRecords);
-        }
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize);
+        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
         if (this.weekHistoryRecords == null) {
             Log.e("STEP_HISTORY", "WeekHistoryRecords null");
         } else {
-            this.lsView.setAdapter(this.weekStepHistoryCellAdapter);
+            this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
     }
 
     public void showMonthStepHistory() {
-        /*
-        //Hard-Coded Values
 
-        // Construct the data source
-        ArrayList<Month_Step_History> arrayOfUsers = new ArrayList<Month_Step_History>();
-        arrayOfUsers.add(new Month_Step_History());
-        arrayOfUsers.add(new Month_Step_History());
-        arrayOfUsers.add(new Month_Step_History());
-        // Create the adapter to convert the array to views
-        MonthStepHistoryCellAdapter adapter = new MonthStepHistoryCellAdapter(getContext(), arrayOfUsers);
-        // Attach the adapter to a ListView
-        this.lsView.setAdapter(adapter);
-        */
         Database db = Database.getInstance((getActivity()));
 
-        this.monthHistoryRecords = db.stepHistoryByMonth();
-        this.monthStepHistoryCellAdapter = new MonthStepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize);
+        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
+
         if (this.monthHistoryRecords == null)
             Log.e("STEP_HISTORY", "MonthHistoryRecords null");
         else{
-            this.lsView.setAdapter(this.monthStepHistoryCellAdapter);
+            this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
     }
-
-   /* public void showMonthStepHistory() {
-        Database db = Database.getInstance((getActivity()));
-    }*/
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -204,4 +180,5 @@ public class Fragment_StepHistory extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
