@@ -202,7 +202,8 @@ public class Fragment_StepHistory extends Fragment {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
         float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.dayHistoryRecords = db.stepHistoryByDay(stepsize);
+        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
@@ -221,7 +222,8 @@ public class Fragment_StepHistory extends Fragment {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
         float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize);
+        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
         if (this.weekHistoryRecords == null) {
@@ -240,7 +242,8 @@ public class Fragment_StepHistory extends Fragment {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
         float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize);
+        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
         this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
 
         if (this.monthHistoryRecords == null)

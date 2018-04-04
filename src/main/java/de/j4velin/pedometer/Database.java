@@ -313,7 +313,7 @@ public class Database extends SQLiteOpenHelper {
      * Gets all data from the database and sorts the data by week starting on Mondays
      * @return list of step history data based on WeekStepHistory object
      */
-    public ArrayList<WeekStepHistory> getAllStepHistoryByWeek(float stepsize) {
+    public ArrayList<WeekStepHistory> getAllStepHistoryByWeek(float stepsize, float weight) {
         ArrayList<WeekStepHistory> weekStepHistoryList = new ArrayList<>();
         WeekStepHistory shw = null;
         Calendar cal = Calendar.getInstance();
@@ -322,7 +322,6 @@ public class Database extends SQLiteOpenHelper {
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
         int totalWeekSteps = 0;
         float totalDistance = 0;
-        int weight = 0;
         long datetime = 0;
         int bestSteps = 0;
         float caloriesPerMile = 0;
@@ -331,7 +330,6 @@ public class Database extends SQLiteOpenHelper {
         int stepInd = 0;
 
         try {
-            weight = 160; // hard-coded weight in pounds
             caloriesPerMile = (float)(weight * 0.57);
             c.moveToFirst();
             dateInd = c.getColumnIndexOrThrow(DATE_COL);
@@ -508,7 +506,7 @@ public class Database extends SQLiteOpenHelper {
     /**
      * Sorts data from the database to fit a month view
      */
-    public ArrayList<MonthStepHistory> stepHistoryByMonth(float stepsize){
+    public ArrayList<MonthStepHistory> stepHistoryByMonth(float stepsize, float weight){
         ArrayList<MonthStepHistory> list = new ArrayList<>();
         MonthStepHistory month = null;
         Calendar cal = Calendar.getInstance();
@@ -518,7 +516,7 @@ public class Database extends SQLiteOpenHelper {
 
         long datetime = 0;
         // 160 is hard-coded weight until we can get weight properly from settings
-        float caloriesPerMile = (float)(160 * 0.57);
+        float caloriesPerMile = (float)(weight * 0.57);
         int dateInd = 0;
         int stepInd = 0;
         int currMonth = 0;
@@ -537,22 +535,24 @@ public class Database extends SQLiteOpenHelper {
             do {
                 datetime = c.getLong(dateInd);
                 cal.setTimeInMillis(datetime);
+                tempMonth = cal.get(Calendar.MONTH) + 1;
                 if(c.getInt(stepInd) > bestDaySteps){
                     bestDay = datetime;
                     bestDaySteps = c.getInt(stepInd);
                 }
                 if(currMonth == tempMonth){
-                    stepsForTheMonth[count] = c.getInt(stepInd);
-                    tempMonth = cal.get(Calendar.MONTH) + 1;
-                    totalSteps += c.getInt(stepInd);
-                    count++;
+                    if(c.getInt(stepInd) > 0) {
+                        stepsForTheMonth[count] = c.getInt(stepInd);
+                        totalSteps += c.getInt(stepInd);
+                        count++;
+                    }
                 }
                 else {
                     if(month == null){
                         currMonth = cal.get(Calendar.MONTH) + 1;
-                        tempMonth = currMonth;
                         year = cal.get(Calendar.YEAR);
                         month = new MonthStepHistory();
+
                     }else {
                         month.setup(currMonth, year, totalSteps, (totalSteps / count), bestDay, ((totalSteps*stepsize) / 100000), stepsForTheMonth);
 
@@ -563,17 +563,16 @@ public class Database extends SQLiteOpenHelper {
 
                         //reset variables
                         year = cal.get(Calendar.YEAR);
+                        stepsForTheMonth = new int[31];
                         totalSteps = c.getInt(stepInd);
                         count = 1;
-                        bestDay = 0;
-                        bestDaySteps = 0;
-                        currMonth = cal.get(Calendar.MONTH) + 1;
-                        tempMonth = currMonth;
+                        stepsForTheMonth[count] = c.getInt(stepInd);
+                        bestDay = datetime;
+                        bestDaySteps = c.getInt(stepInd);
+                        currMonth = tempMonth;
                         month = new MonthStepHistory();
-                        stepsForTheMonth = new int[31];
                     }
                 }
-
             }while(c.moveToNext());
         } catch (Exception e) {
             Log.e("DATABASE", e.getMessage());
@@ -588,13 +587,13 @@ public class Database extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<DayStepHistory> stepHistoryByDay(float stepsize) {
+    public ArrayList<DayStepHistory> stepHistoryByDay(float stepsize, float weight) {
         ArrayList<DayStepHistory> list = new ArrayList<>();
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
         // 160 is hard-coded weight until we can get weight properly from settings
-        float caloriesPerMile = (float)(0.57 * 160);
+        float caloriesPerMile = (float)(0.57 * weight);
         int dateInd = 0;
         int stepInd = 0;
 
