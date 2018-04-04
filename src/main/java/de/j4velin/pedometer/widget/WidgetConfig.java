@@ -47,10 +47,10 @@ public class WidgetConfig extends Activity implements OnClickListener {
         if (extras != null) {
             setContentView(R.layout.widgetconfig);
 
-            ColorPreviewButton textcolor = (ColorPreviewButton) findViewById(R.id.textcolor);
+            ColorPreviewButton textcolor = findViewById(R.id.textcolor);
             textcolor.setOnClickListener(this);
             textcolor.setColor(Color.WHITE);
-            ColorPreviewButton bgcolor = (ColorPreviewButton) findViewById(R.id.bgcolor);
+            ColorPreviewButton bgcolor = findViewById(R.id.bgcolor);
             bgcolor.setOnClickListener(this);
             bgcolor.setColor(Color.TRANSPARENT);
 

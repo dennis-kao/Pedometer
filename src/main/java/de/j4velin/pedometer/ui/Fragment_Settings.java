@@ -33,6 +33,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,6 +51,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.PowerReceiver;
@@ -57,17 +60,31 @@ import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
+import de.j4velin.pedometer.util.Util;
 
 public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
 
     final static int DEFAULT_GOAL = 10000;
     final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;
     final static String DEFAULT_STEP_UNIT = Locale.getDefault() == Locale.US ? "ft" : "cm";
+    final static float DEFAULT_HEIGHT = Locale.getDefault() == Locale.US ? 67f : 170f;
+    final static String DEFAULT_HEIGHT_UNIT = Locale.getDefault() == Locale.US ? "inches" : "cm";
+    final static float DEFAULT_WEIGHT = Locale.getDefault() == Locale.US ? 68f : 160f;
+    final static String DEFAULT_WEIGHT_UNIT = Locale.getDefault() == Locale.US ? "kg" : "lbs";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+        createTestData();
         super.onCreate(savedInstanceState);
 
+        this.setOptionsMenu();
+        Preference account = findPreference("account");
+        PlaySettingsWrapper
+                .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
+        //createTestData();
+    }
+
+    public void setOptionsMenu() {
         addPreferencesFromResource(R.xml.settings);
         findPreference("import").setOnPreferenceClickListener(this);
         findPreference("export").setOnPreferenceClickListener(this);
@@ -101,9 +118,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     }
                 });
 
-        Preference account = findPreference("account");
-        PlaySettingsWrapper
-                .setupAccountSetting(account, savedInstanceState, (Activity_Main) getActivity());
 
         final SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
@@ -117,6 +131,18 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
         stepsize.setSummary(getString(R.string.step_size_summary,
                 prefs.getFloat("stepsize_value", DEFAULT_STEP_SIZE),
                 prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT)));
+
+        Preference height = findPreference("height");
+        height.setOnPreferenceClickListener(this);
+        height.setSummary(getString(R.string.height_size_summary,
+                prefs.getFloat("height_value", DEFAULT_HEIGHT),
+                prefs.getString("height_unit", DEFAULT_HEIGHT_UNIT)));
+
+        Preference weight = findPreference("weight");
+        weight.setOnPreferenceClickListener(this);
+        weight.setSummary(getString(R.string.weight_size_summary,
+                prefs.getFloat("weight_value", DEFAULT_WEIGHT),
+                prefs.getString("weight_unit", DEFAULT_WEIGHT_UNIT)));
 
         setHasOptionsMenu(true);
     }
@@ -188,8 +214,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             case R.string.step_size:
                 builder = new AlertDialog.Builder(getActivity());
                 v = getActivity().getLayoutInflater().inflate(R.layout.stepsize, null);
-                final RadioGroup unit = (RadioGroup) v.findViewById(R.id.unit);
-                final EditText value = (EditText) v.findViewById(R.id.value);
+                final RadioGroup unit = v.findViewById(R.id.unit);
+                final EditText value = v.findViewById(R.id.value);
                 unit.check(
                         prefs.getString("stepsize_unit", DEFAULT_STEP_UNIT).equals("cm") ? R.id.cm :
                                 R.id.ft);
@@ -208,6 +234,80 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                             preference.setSummary(getString(R.string.step_size_summary,
                                     Float.valueOf(value.getText().toString()),
                                     unit.getCheckedRadioButtonId() == R.id.cm ? "cm" : "ft"));
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                break;
+            case R.string.height_size:
+                builder = new AlertDialog.Builder(getActivity());
+                v = getActivity().getLayoutInflater().inflate(R.layout.height, null);
+                final RadioGroup unit2 = v.findViewById(R.id.unit);
+                final EditText value2 = v.findViewById(R.id.value);
+                unit2.check(
+                        prefs.getString("height_unit", DEFAULT_HEIGHT_UNIT).equals("cm") ? R.id.cm :
+                                R.id.inches);
+                value2.setText(String.valueOf(prefs.getFloat("height_value", DEFAULT_HEIGHT)));
+                builder.setView(v);
+                builder.setTitle(R.string.set_height_size);
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            prefs.edit().putFloat("height_value",
+                                    Float.valueOf(value2.getText().toString()))
+                                    .putString("height_unit",
+                                            unit2.getCheckedRadioButtonId() == R.id.cm ? "cm" : "inches")
+                                    .apply();
+                            preference.setSummary(getString(R.string.height_size_summary,
+                                    Float.valueOf(value2.getText().toString()),
+                                    unit2.getCheckedRadioButtonId() == R.id.cm ? "cm" : "inches"));
+                        } catch (NumberFormatException nfe) {
+                            nfe.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+                break;
+            case R.string.weight_size:
+                builder = new AlertDialog.Builder(getActivity());
+                v = getActivity().getLayoutInflater().inflate(R.layout.weight, null);
+                final RadioGroup unit3 = v.findViewById(R.id.unit);
+                final EditText value3 = v.findViewById(R.id.value);
+                unit3.check(
+                        prefs.getString("weight_unit", DEFAULT_WEIGHT_UNIT).equals("lbs") ? R.id.lbs :
+                                R.id.kg);
+                value3.setText(String.valueOf(prefs.getFloat("weight_value", DEFAULT_WEIGHT)));
+                builder.setView(v);
+                builder.setTitle(R.string.set_weight_size);
+                builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            prefs.edit().putFloat("weight_value",
+                                    Float.valueOf(value3.getText().toString()))
+                                    .putString("weight_unit",
+                                            unit3.getCheckedRadioButtonId() == R.id.lbs ? "lbs" : "kg")
+                                    .apply();
+                            preference.setSummary(getString(R.string.weight_size_summary,
+                                    Float.valueOf(value3.getText().toString()),
+                                    unit3.getCheckedRadioButtonId() == R.id.lbs ? "lbs" : "kg"));
                         } catch (NumberFormatException nfe) {
                             nfe.printStackTrace();
                         }
@@ -415,5 +515,21 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                         dialog.dismiss();
                     }
                 }).create().show();
+    }
+
+    public void createTestData() {
+        Database db = Database.getInstance(getActivity());
+        Random ran = new Random();
+
+        int ranSteps = ran.nextInt(1000) + 100;
+
+        for (int i = 0; i < 60; i++)
+        {
+            Log.d("SETTINGS", "CREATING TEST DATA");
+            db.insertNewDay(Util.getToday() - (i * TimeUnit.DAYS.toMillis(1)), -ranSteps);
+            ranSteps = ran.nextInt(1000) + 100;
+        }
+        db.close();
+
     }
 }

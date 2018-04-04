@@ -22,18 +22,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.j4velin.pedometer.obj.DayStepHistory;
+import de.j4velin.pedometer.obj.MonthStepHistory;
+import de.j4velin.pedometer.obj.WeekStepHistory;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
 public class Database extends SQLiteOpenHelper {
 
     private final static String DB_NAME = "steps";
+    private final static String DATE_COL = "date";
+    private final static String STEPS_COL = "steps";
     private final static int DB_VERSION = 2;
 
     private static Database instance;
@@ -113,7 +121,7 @@ public class Database extends SQLiteOpenHelper {
         try {
             Cursor c = getReadableDatabase().query(DB_NAME, new String[]{"date"}, "date = ?",
                     new String[]{String.valueOf(date)}, null, null, null);
-            if (c.getCount() == 0 && steps >= 0) {
+            if (c.getCount() == 0 ) {//&& steps >= 0) {
 
                 // add 'steps' to yesterdays count
                 addToLastEntry(steps);
@@ -302,6 +310,130 @@ public class Database extends SQLiteOpenHelper {
     }
 
     /**
+     * Gets all data from the database and sorts the data by week starting on Mondays
+     * @return list of step history data based on WeekStepHistory object
+     */
+    public ArrayList<WeekStepHistory> getAllStepHistoryByWeek(float stepsize, float weight) {
+        ArrayList<WeekStepHistory> weekStepHistoryList = new ArrayList<>();
+        WeekStepHistory shw = null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
+        int totalWeekSteps = 0;
+        float totalDistance = 0;
+        long datetime = 0;
+        int bestSteps = 0;
+        float caloriesPerMile = 0;
+        int steps;
+        int dateInd = 0;
+        int stepInd = 0;
+        int stepsInWeek[] = new int[7];
+        int index;
+
+        try {
+            index = 0;
+            caloriesPerMile = (float)(weight * 0.57);
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                datetime = c.getLong(dateInd);
+                if (datetime > 0) {
+                    if (shw == null) {
+                        shw = new WeekStepHistory();
+                        cal.setTimeInMillis(datetime);
+                        shw.setDtStart(datetime);
+                        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+                            case Calendar.MONDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(6)));
+                                break;
+
+                            case Calendar.TUESDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(5)));
+                                break;
+
+                            case Calendar.WEDNESDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(4)));
+                                break;
+
+                            case Calendar.THURSDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(3)));
+                                break;
+
+                            case Calendar.FRIDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(2)));
+                                break;
+
+                            case Calendar.SATURDAY:
+                                shw.setDtEnd(datetime + (TimeUnit.DAYS.toMillis(1)));
+                                break;
+
+                            case Calendar.SUNDAY:
+                                shw.setDtEnd(datetime);
+                                break;
+                        }
+                    }
+                    if (datetime > shw.getDtEnd()) {
+                        shw.setTotalSteps(totalWeekSteps);
+
+                        //converting and adding distance from centimeters to kilometers
+                        totalDistance = (float)((totalWeekSteps*stepsize) / 100000);
+                        shw.setDistance(totalDistance);
+
+                        //converting distance into miles to calculate calories per mile
+                        totalDistance = (float)(totalDistance * 0.621371);
+                        shw.setCalories((int)(caloriesPerMile * totalDistance));
+                        shw.calculateStdDev(stepsInWeek);
+                        shw.calculateMedian(stepsInWeek);
+                        index = 0;
+                        stepsInWeek = new int[7];
+
+                        weekStepHistoryList.add(0, shw);
+
+                        shw = new WeekStepHistory();
+                        bestSteps = 0;
+                        totalWeekSteps = 0;
+                        shw.setDtStart(datetime);
+                        shw.setDtEnd(datetime + TimeUnit.DAYS.toMillis(6));
+                    }
+                    steps = c.getInt(stepInd);
+                    stepsInWeek[index] = steps;
+                    index++;
+                    totalWeekSteps += steps;
+                    if (steps > bestSteps) {
+                        shw.setBestDay(datetime);
+                        shw.setBestDaySteps(steps);
+                        bestSteps = steps;
+                    }
+                }
+            } while (c.moveToNext());
+            if (totalWeekSteps > 0) {
+                shw.setDtEnd(datetime);
+                shw.setTotalSteps(totalWeekSteps);
+
+                //converting and adding distance from centimeters to kilometers
+                totalDistance = totalWeekSteps * stepsize;
+                totalDistance = totalDistance/100000;
+                shw.setDistance(totalDistance);
+
+                //converting distance into miles to calculate calories per mile
+                totalDistance = (float)(totalDistance * 0.621371);
+                shw.setCalories((int)(caloriesPerMile * totalDistance));
+
+                shw.calculateMedian(stepsInWeek);
+                shw.calculateStdDev(stepsInWeek);
+                weekStepHistoryList.add(0, shw);
+            }
+        } catch (Exception e) {
+            Log.e("DATABASE", e.getMessage());
+        } finally {
+            c.close();
+        }
+        return weekStepHistoryList;
+    }
+
+    /**
      * Removes all entries with negative values.
      * <p/>
      * Only call this directly after boot, otherwise it might remove the current
@@ -382,4 +514,126 @@ public class Database extends SQLiteOpenHelper {
         int re = getSteps(-1);
         return re == Integer.MIN_VALUE ? 0 : re;
     }
+
+
+    /**
+     * Sorts data from the database to fit a month view
+     */
+    public ArrayList<MonthStepHistory> stepHistoryByMonth(float stepsize, float weight){
+        ArrayList<MonthStepHistory> list = new ArrayList<>();
+        MonthStepHistory month = null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
+
+        long datetime = 0;
+        // 160 is hard-coded weight until we can get weight properly from settings
+        float caloriesPerMile = (float)(weight * 0.57);
+        int dateInd = 0;
+        int stepInd = 0;
+        int currMonth = 0;
+        int tempMonth = -1;
+        int year = 0;
+        int totalSteps = 0;
+        int count = 1;
+        ArrayList<Integer> stepsForTheMonth = new ArrayList<>();
+        //int[] stepsForTheMonth = new int[31];
+
+        long bestDay = 0;
+        int bestDaySteps = 0;
+        try {
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                datetime = c.getLong(dateInd);
+                cal.setTimeInMillis(datetime);
+                tempMonth = cal.get(Calendar.MONTH) + 1;
+                if(c.getInt(stepInd) > bestDaySteps){
+                    bestDay = datetime;
+                    bestDaySteps = c.getInt(stepInd);
+                }
+                if(currMonth == tempMonth){
+                    if(c.getInt(stepInd) > 0) {
+                        stepsForTheMonth.add(c.getInt(stepInd));
+                        totalSteps += c.getInt(stepInd);
+                        count++;
+                    }
+                }
+                else {
+                    if(month == null){
+                        currMonth = cal.get(Calendar.MONTH) + 1;
+                        tempMonth = currMonth;
+                        year = cal.get(Calendar.YEAR);
+                        month = new MonthStepHistory();
+
+                    }else {
+                        month.setup(currMonth, year, totalSteps, (totalSteps / count), bestDay, ((totalSteps*stepsize) / 100000), stepsForTheMonth);
+
+                        // multiply totalDistance by 0.621371 to get distance in miles from kilometers
+                        month.setCalories((int)(caloriesPerMile * (((totalSteps*stepsize) / 100000) * 0.621371)));
+                        month.setBestDaySteps(bestDaySteps);
+                        list.add(0, month);
+
+                        //reset variables
+                        year = cal.get(Calendar.YEAR);
+                        stepsForTheMonth = new ArrayList<>();
+                        totalSteps = c.getInt(stepInd);
+                        count = 1;
+                        stepsForTheMonth.add(c.getInt(stepInd));
+                        bestDay = datetime;
+                        bestDaySteps = c.getInt(stepInd);
+                        currMonth = tempMonth;
+                        month = new MonthStepHistory();
+                    }
+                }
+            }while(c.moveToNext());
+        } catch (Exception e) {
+            Log.e("DATABASE", e.getMessage());
+        }
+        finally {
+            month = new MonthStepHistory();
+            month.setup(currMonth, year, totalSteps, (totalSteps / count), bestDay, ((totalSteps*stepsize) / 100000), stepsForTheMonth);
+            month.setCalories((int)(caloriesPerMile * (((totalSteps*stepsize) / 100000) * 0.621371)));
+            month.setBestDaySteps(bestDaySteps);
+            list.add(0, month);
+            c.close();
+        }
+        return list;
+    }
+
+    public ArrayList<DayStepHistory> stepHistoryByDay(float stepsize, float weight) {
+        ArrayList<DayStepHistory> list = new ArrayList<>();
+        Cursor c = getReadableDatabase()
+                .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
+
+        // 160 is hard-coded weight until we can get weight properly from settings
+        float caloriesPerMile = (float)(0.57 * weight);
+        int dateInd = 0;
+        int stepInd = 0;
+
+        try{
+            c.moveToFirst();
+            dateInd = c.getColumnIndexOrThrow(DATE_COL);
+            stepInd = c.getColumnIndexOrThrow(STEPS_COL);
+            do {
+                if (c.getLong(stepInd) > 0){
+                    DayStepHistory day = new DayStepHistory();
+                    day.setDay(c.getLong(dateInd));
+                    day.setTotalSteps(c.getInt(stepInd));
+                    day.setGoal();
+                    day.setDistance((c.getInt(stepInd)*stepsize) / 100000);
+                    day.setCalories((int) (day.getDistance() * caloriesPerMile));
+                    list.add(0, day);
+                }
+            }while(c.moveToNext());
+        } catch (Exception e) {
+            Log.e("DATABASE", e.getMessage());
+        } finally {
+            c.close();
+        }
+        return list;
+    }
 }
+

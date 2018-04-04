@@ -4,10 +4,14 @@
     <string name="app_name">Pedometer</string>
     <string name="goal">Goal</string>
     <string name="step_size">Step size</string>
+    <string name="height_size">Height</string>
+    <string name="weight_size">Weight</string>
     <string name="about">About</string>
     <string name="account">Account</string>
     <string name="goal_summary">Current goal: %,d steps</string>
     <string name="step_size_summary">Current step size: %1$.2f %2$s</string>
+    <string name="height_size_summary">Current height: %1$.2f %2$s</string>
+    <string name="weight_size_summary">Current weight: %1$.2f %2$s</string>
     <string name="sign_in">Sign in with your Google account to use the Achievements and Leaderboards features</string>
     <string name="signed_in">Signed in as %s</string>
     <string name="export_summary">Save your data in a .csv file</string>
@@ -17,6 +21,8 @@
     <string name="notification">Show notification</string>
     <string name="set_goal">Set goal</string>
     <string name="set_step_size">Set step size</string>
+    <string name="set_height_size">Set height</string>
+    <string name="set_weight_size">Set weight</string>
     <string name="sign_out">Sign out</string>
     <string name="file_cant_read">Error: %s can not be read</string>
     <string name="error_file">Error accessing the file: %s</string>
@@ -64,6 +70,7 @@
     <string name="no_sensor">Sensor not found</string>
     <string name="no_sensor_explain">This app requires a dedicated hardware step sensor - which your device does not have. This app won\'t run on your device.</string>
     <string name="permission_external_storage">No permission to access external storage</string>
+    <string name="testData">testData</string>
 
     <!-- These were taken straight from the Google Play APK using reverse engineering tool apktool.jar !-->
     <string name="achievement_boots_made_for_walking">CgkI_pu14sQDEAIQAQ</string>
@@ -97,10 +104,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="left">Left</string>
-    <string name="center">Center</string>
-    <string name="right">Right</string>
-    <string name="history">HISTORY</string>
     <string name="day">Day</string>
     <string name="week">Week</string>
     <string name="month">Month</string>

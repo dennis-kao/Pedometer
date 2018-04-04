@@ -45,7 +45,7 @@ import de.j4velin.pedometer.util.Util;
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         Fragment_SplitCount.OnFragmentInteractionListener,
-        Fragment_StepHistory.OnFragmentInteractionListener{
+        Fragment_StepHistory.OnFragmentInteractionListener {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
