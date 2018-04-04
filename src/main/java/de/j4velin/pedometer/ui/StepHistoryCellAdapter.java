@@ -8,6 +8,8 @@ import de.j4velin.pedometer.R;
 import android.content.Context;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,6 +35,7 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            NumberFormat formatter = new DecimalFormat("#.##");
             this.position = position;
             this.convertView = convertView;
             this.parent = parent;
@@ -79,11 +82,10 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
                 startDate.setText("   Start: " + stepWeeks.getDtStartAsDateString());
                 endDate.setText("   End: " + stepWeeks.getDtEndAsDateString());
                 totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getSteps()));
-                avgStep.setText("   Average Steps: " + Integer.toString(stepWeeks.getAvgSteps()));
-                bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString());
+                avgStep.setText(String.format("   Average Steps: %d\t Std. Dev: %.3f\t Median:%.3f", stepWeeks.getAvgSteps(), stepWeeks.getStdDev(), stepWeeks.getMedian()));
+                bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString() + " (" + Integer.toString(stepWeeks.getBestDaySteps()) + ")");
                 distance.setText("   Distance: " + Float.toString(stepWeeks.getDistance()) + " km");
                 calories.setText("   Calories: " + Integer.toString(stepWeeks.getCalories()));
-
             }
             else if (stepHistory instanceof MonthStepHistory)
             {
@@ -92,9 +94,9 @@ public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter
 
                 startDate.setText(stepMonth.getMonth());
                 endDate.setText(Integer.toString(stepMonth.getYear()));
-                avgStep.setText("   Average Steps: " + Long.toString(stepMonth.getAvgSteps()));
+                avgStep.setText(String.format("   Average Steps: %d\t Std. Dev: %.3f\t Median: %.3f", stepMonth.getAvgSteps(), stepMonth.getStdDev(), stepMonth.getMedian()));
                 totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
-                bestDay.setText("   Best Day: " + stepMonth.getBestDayString());
+                bestDay.setText("   Best Day: " + stepMonth.getBestDayString() + " (" + Integer.toString(stepMonth.getBestDaySteps()) + ")");
                 distance.setText("   Distance: " + Float.toString(stepMonth.getDistance()) + " km");
                 calories.setText("   Calories: " + Integer.toString(stepMonth.getCalories()));
             }
