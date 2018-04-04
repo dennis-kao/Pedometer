@@ -23,7 +23,7 @@ public abstract class StepHistory {
     public void setDistance(float distance) {
         // formatting to only capture up to the 3rd decimal place
         String distString;
-        NumberFormat formatter = new DecimalFormat("#.###");
+        NumberFormat formatter = new DecimalFormat("#.##");
         distString = formatter.format(distance);
 
         this.distance = Float.parseFloat(distString);

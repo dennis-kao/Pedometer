@@ -140,7 +140,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
 
         // register a sensorlistener to live update the UI if a step is taken
         if (!prefs.contains("pauseCount")) {
-            SensorManager sm =
+            /*SensorManager sm =
                     (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
             Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
             if (sensor == null) {
@@ -160,7 +160,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                         }).create().show();
             } else {
                 sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
-            }
+            }*/
         }
 
         since_boot -= pauseDifference;
