@@ -1,7 +1,11 @@
 package de.j4velin.pedometer.obj;
 
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by Rajbir on 22/03/18.
@@ -11,19 +15,20 @@ public class DayStepHistory extends StepHistory {
     private float goal;
     private long day;
 
-    public String getGoalStr(){
-        if(goal == 0){
-            setGoal();
-        }
-        String rtn = goal + "%";
-        return rtn;
-    }
+
     public float getGoal() {
         return goal;
     }
-    public  void setGoal(){
-        this.goal = ( (float) super.getSteps() / (float) 10000) * 100;}
+    public  void setGoal() {
+        float temp = ((float) super.getSteps() / (float) 10000) * 100;
+        // formatting to only capture up to the 2nd decimal place
+        String distString;
+        NumberFormat formatter = new DecimalFormat("#.##");
+        distString = formatter.format(temp);
 
+        this.goal = Float.parseFloat(distString);
+
+    }
     public long getDay() {
         return day;
     }
@@ -32,11 +37,9 @@ public class DayStepHistory extends StepHistory {
     }
 
     public String getDayString(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        cal.setTimeInMillis(this.day);
-        String rtn = "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
-        return rtn;
+        Date date = new Date(this.day);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+        return formatter.format(date).toString();
     }
 
 

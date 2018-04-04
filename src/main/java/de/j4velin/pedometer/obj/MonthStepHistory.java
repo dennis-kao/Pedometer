@@ -1,8 +1,10 @@
 package de.j4velin.pedometer.obj;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by Rajbir on 20/03/18.
@@ -82,11 +84,13 @@ public class MonthStepHistory extends StepHistory {
         if(this.bestDay <= 0){
             return "n/a";
         }
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-        cal.setTimeInMillis(this.bestDay);
-        return "   " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR);
+        String rtn;
+        Date date = new Date(this.bestDay);
+        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+        rtn = formatter.format(date).toString();
+        return rtn;
     }
+
 
     public double getStdDev() {
         return stdDev;

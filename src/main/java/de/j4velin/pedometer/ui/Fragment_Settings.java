@@ -69,7 +69,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
     final static String DEFAULT_STEP_UNIT = Locale.getDefault() == Locale.US ? "ft" : "cm";
     final static float DEFAULT_HEIGHT = Locale.getDefault() == Locale.US ? 67f : 170f;
     final static String DEFAULT_HEIGHT_UNIT = Locale.getDefault() == Locale.US ? "inches" : "cm";
-    final static float DEFAULT_WEIGHT = Locale.getDefault() == Locale.US ? 68f : 150f;
+    final static float DEFAULT_WEIGHT = Locale.getDefault() == Locale.US ? 68f : 160f;
     final static String DEFAULT_WEIGHT_UNIT = Locale.getDefault() == Locale.US ? "kg" : "lbs";
 
     @Override
