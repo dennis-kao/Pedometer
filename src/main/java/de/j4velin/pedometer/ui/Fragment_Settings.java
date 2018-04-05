@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +59,7 @@ import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.PowerReceiver;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
+import de.j4velin.pedometer.obj.DayStepHistory;
 import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
 import de.j4velin.pedometer.util.Util;
@@ -463,6 +465,7 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 
     private void writeToFile(final File f) {
         BufferedWriter out;
+
         try {
             f.createNewFile();
             out = new BufferedWriter(new FileWriter(f));
@@ -479,6 +482,8 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
             return;
         }
         Database db = Database.getInstance(getActivity());
+        ArrayList<DayStepHistory> history = db.stepHistoryByDay((float) 79.265, (float)173);
+
         Cursor c =
                 db.query(new String[]{"date", "steps"}, "date > 0", null, null, null, "date", null);
         try {
@@ -489,6 +494,18 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
                     c.moveToNext();
                 }
             }
+
+            for (int i = 0; i < history.size(); i++) {
+                DayStepHistory d = history.get(i);
+
+                String caloriesString = Integer.toString(d.getCalories());
+                String distanceString = Float.toString(d.getDistance());
+
+                String outString = "Calories: " + caloriesString + " Distance: " + distanceString + " Total Step " + Integer.toString(d.getSteps()) + "\n";
+
+                out.append(outString);
+            }
+
             out.flush();
             out.close();
         } catch (IOException e) {
