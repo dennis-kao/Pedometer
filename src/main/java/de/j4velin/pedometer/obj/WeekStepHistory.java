@@ -133,10 +133,10 @@ public class WeekStepHistory extends StepHistory{
     public static Comparator<WeekStepHistory> WeekDateComparator = new Comparator<WeekStepHistory>() {
 
         public int compare(WeekStepHistory m1, WeekStepHistory m2) {
-            int week1 = (int) m1.getDtStart();
-            int week2 = (int) m2.getDtStart();
+            long week1 =  m1.getDtStart();
+            long week2 =  m2.getDtStart();
 
-            return week1 - week2;
+            return (int)(week1 - week2);
 
         }};
 
