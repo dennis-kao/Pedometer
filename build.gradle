@@ -12,7 +12,7 @@ buildscript {
             classpath rootProject.ext.gradle_classpath
         } else {
             logger.warn('classpath not found in rootProject')
-            classpath 'com.android.tools.build:gradle:3.0.1'
+            classpath 'com.android.tools.build:gradle:3.1.0'
         }
     }
 }
@@ -28,7 +28,7 @@ android {
     } else {
         logger.warn('compileSdkVersion not found in rootProject')
         compileSdkVersion = 27
-        buildToolsVersion = "27.0.2"
+        buildToolsVersion = "27.0.3"
     }
 
     defaultConfig {
@@ -80,19 +80,19 @@ repositories {
 
 dependencies {
     implementation 'com.android.support:support-v4:27.0.2'
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.github.j4velin.colorpicker:colorpicker:1.20.6'
-    compile 'com.github.j4velin.EazeGraph:EazeGraph:1.0.2'
-    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.github.j4velin.colorpicker:colorpicker:1.20.6'
+    implementation 'com.github.j4velin.EazeGraph:EazeGraph:1.0.2'
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
 //    playCompile 'com.google.android.gms:play-services-fitness:11.8.0'
 //    playCompile 'com.google.android.gms:play-services-games:11.8.0'
 //    playCompile 'com.google.android.gms:play-services-identity:11.8.0'
-    compile 'com.google.android.gms:play-services-fitness:11.8.0'
-    compile 'com.google.android.gms:play-services-games:11.8.0'
-    compile 'com.google.android.gms:play-services-identity:11.8.0'
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.google.android.gms:play-services-fitness:11.8.0'
+    implementation 'com.google.android.gms:play-services-games:11.8.0'
+    implementation 'com.google.android.gms:play-services-identity:11.8.0'
+    implementation 'com.github.clans:fab:1.6.4'
 }
 
 def props = new Properties()

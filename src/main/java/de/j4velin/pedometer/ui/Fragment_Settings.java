@@ -74,7 +74,6 @@ public class Fragment_Settings extends PreferenceFragment implements OnPreferenc
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
-        createTestData();
         super.onCreate(savedInstanceState);
 
         this.setOptionsMenu();

@@ -100,13 +100,14 @@
                     android:gravity="center_horizontal"
                     android:text="HISTORY"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="invisible" />
 
                 <ListView
                     android:id="@+id/split_count_history_list"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
         </LinearLayout>
