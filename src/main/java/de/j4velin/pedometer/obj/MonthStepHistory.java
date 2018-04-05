@@ -2,7 +2,9 @@ package de.j4velin.pedometer.obj;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -13,12 +15,13 @@ import java.util.Date;
 public class MonthStepHistory extends StepHistory {
     private int month;
     private int year;
+    private int bestDaySteps;
     private long avgSteps;
     private long bestDay;
     private double stdDev;
     private double median;
 
-    public void setup(int month, int year, int totalSteps, long avgSteps, long bestDay, float distance, int[] stepsForTheMonth){
+    public void setup(int month, int year, int totalSteps, long avgSteps, long bestDay, float distance, ArrayList<Integer> stepsForTheMonth){
         this.month = month;
         this.year = year;
         this.setTotalSteps(totalSteps);
@@ -27,6 +30,14 @@ public class MonthStepHistory extends StepHistory {
         this.setDistance(distance);
         this.calculateMedian(stepsForTheMonth);
         this.calculateStdDev(stepsForTheMonth);
+    }
+
+    public int getBestDaySteps() {
+        return bestDaySteps;
+    }
+
+    public void setBestDaySteps(int bestDaySteps) {
+        this.bestDaySteps = bestDaySteps;
     }
 
     public String getMonth(){
@@ -98,11 +109,11 @@ public class MonthStepHistory extends StepHistory {
     public void setStdDev(double stdDev) {
         this.stdDev = stdDev;
     }
-    public void calculateStdDev(int[] data){
+    public void calculateStdDev(ArrayList<Integer> data){
         double variance = 0;
         for(int i :data)
             variance += (i-this.avgSteps)*(i-this.avgSteps);
-        variance =  variance/(data.length-1);
+        variance =  variance/(data.size()-1);
 
         this.stdDev =  Math.sqrt(variance);
     }
@@ -113,13 +124,13 @@ public class MonthStepHistory extends StepHistory {
     public void setMedian(double median) {
         this.median = median;
     }
-    public void calculateMedian( int[] data) {
-        Arrays.sort(data);
+    public void calculateMedian( ArrayList<Integer> data) {
+        Collections.sort(data);
 
-        if (data.length % 2 == 0) {
-            this.median = (data[(data.length / 2) - 1] + data[data.length / 2]) / 2.0;
+        if (data.size() % 2 == 0) {
+            this.median = (data.get((data.size() / 2) - 1) + data.get(data.size() / 2)) / 2.0;
         }
-        this.median =  data[data.length / 2];
+        this.median =  data.get(data.size() / 2);
     }
 
     /*Comparator for sorting the list by date*/
@@ -159,8 +170,8 @@ public class MonthStepHistory extends StepHistory {
     public static Comparator<MonthStepHistory> MonthBestDayComparator = new Comparator<MonthStepHistory>() {
 
         public int compare(MonthStepHistory m1, MonthStepHistory m2) {
-            int month1 = (int) m1.getBestDay();
-            int month2 = (int) m2.getBestDay();
+            int month1 = (int) m1.getBestDaySteps();
+            int month2 = (int) m2.getBestDaySteps();
 
             return month1 - month2;
 

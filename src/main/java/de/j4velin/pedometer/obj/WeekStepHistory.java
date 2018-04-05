@@ -13,12 +13,21 @@ import java.util.concurrent.TimeUnit;
 
 public class WeekStepHistory extends StepHistory{
     private int avgSteps = 0;
+    private int bestDaySteps = 0;
     private long dtEnd = 0;
     private long dtStart = 0;
     private long bestDay = 0;
     private double stdDev;
     private double median;
     private DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+
+    public int getBestDaySteps() {
+        return bestDaySteps;
+    }
+
+    public void setBestDaySteps(int bestDaySteps) {
+        this.bestDaySteps = bestDaySteps;
+    }
 
     public long getBestDay() {
         return bestDay;
@@ -101,6 +110,7 @@ public class WeekStepHistory extends StepHistory{
             variance += (i-this.avgSteps)*(i-this.avgSteps);
         variance =  variance/(getNumDays()-1);
 
+
         this.stdDev =  Math.sqrt(variance);
     }
 
@@ -157,8 +167,8 @@ public class WeekStepHistory extends StepHistory{
     public static Comparator<WeekStepHistory> WeekBestDayComparator = new Comparator<WeekStepHistory>() {
 
         public int compare(WeekStepHistory m1, WeekStepHistory m2) {
-            int week1 = (int) m1.getBestDay();
-            int week2 = (int) m2.getBestDay();
+            int week1 = (int) m1.getBestDaySteps();
+            int week2 = (int) m2.getBestDaySteps();
 
             return week1 - week2;
 

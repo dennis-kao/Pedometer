@@ -403,6 +403,7 @@ public class Database extends SQLiteOpenHelper {
                     totalWeekSteps += steps;
                     if (steps > bestSteps) {
                         shw.setBestDay(datetime);
+                        shw.setBestDaySteps(steps);
                         bestSteps = steps;
                     }
                 }
@@ -536,7 +537,8 @@ public class Database extends SQLiteOpenHelper {
         int year = 0;
         int totalSteps = 0;
         int count = 1;
-        int[] stepsForTheMonth = new int[31];
+        ArrayList<Integer> stepsForTheMonth = new ArrayList<>();
+        //int[] stepsForTheMonth = new int[31];
 
         long bestDay = 0;
         int bestDaySteps = 0;
@@ -554,7 +556,7 @@ public class Database extends SQLiteOpenHelper {
                 }
                 if(currMonth == tempMonth){
                     if(c.getInt(stepInd) > 0) {
-                        stepsForTheMonth[count] = c.getInt(stepInd);
+                        stepsForTheMonth.add(c.getInt(stepInd));
                         totalSteps += c.getInt(stepInd);
                         count++;
                     }
@@ -571,15 +573,15 @@ public class Database extends SQLiteOpenHelper {
 
                         // multiply totalDistance by 0.621371 to get distance in miles from kilometers
                         month.setCalories((int)(caloriesPerMile * (((totalSteps*stepsize) / 100000) * 0.621371)));
-
+                        month.setBestDaySteps(bestDaySteps);
                         list.add(0, month);
 
                         //reset variables
                         year = cal.get(Calendar.YEAR);
-                        stepsForTheMonth = new int[31];
+                        stepsForTheMonth = new ArrayList<>();
                         totalSteps = c.getInt(stepInd);
                         count = 1;
-                        stepsForTheMonth[count] = c.getInt(stepInd);
+                        stepsForTheMonth.add(c.getInt(stepInd));
                         bestDay = datetime;
                         bestDaySteps = c.getInt(stepInd);
                         currMonth = tempMonth;
@@ -594,6 +596,7 @@ public class Database extends SQLiteOpenHelper {
             month = new MonthStepHistory();
             month.setup(currMonth, year, totalSteps, (totalSteps / count), bestDay, ((totalSteps*stepsize) / 100000), stepsForTheMonth);
             month.setCalories((int)(caloriesPerMile * (((totalSteps*stepsize) / 100000) * 0.621371)));
+            month.setBestDaySteps(bestDaySteps);
             list.add(0, month);
             c.close();
         }
