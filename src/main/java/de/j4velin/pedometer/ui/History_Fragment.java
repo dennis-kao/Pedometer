@@ -17,7 +17,6 @@ import com.github.clans.fab.FloatingActionButton;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -28,12 +27,12 @@ import de.j4velin.pedometer.obj.WeekStepHistory;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Fragment_StepHistory.OnFragmentInteractionListener} interface
+ * {@link History_Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Fragment_StepHistory#newInstance} factory method to
+ * Use the {@link History_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_StepHistory extends Fragment {
+public class History_Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,9 +58,9 @@ public class Fragment_StepHistory extends Fragment {
     private FloatingActionButton medianButton;
     private FloatingActionButton bestDayButton;
 
-    private StepHistoryCellAdapter stepHistoryCellAdapter = null;
+    private HistoryCellAdapter stepHistoryCellAdapter = null;
 
-    public Fragment_StepHistory() {
+    public History_Fragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +70,11 @@ public class Fragment_StepHistory extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_StepHistory.
+     * @return A new instance of fragment History_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Fragment_StepHistory newInstance(String param1, String param2) {
-        Fragment_StepHistory fragment = new Fragment_StepHistory();
+    public static History_Fragment newInstance(String param1, String param2) {
+        History_Fragment fragment = new History_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -131,13 +130,13 @@ public class Fragment_StepHistory extends Fragment {
 
         //  feed to adapter and change the view
         if (currentTimeFrame == 0)  {
-            this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
         }
         else if (currentTimeFrame == 1) {
-            this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
         }
         else {
-            this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
         }
 
         this.lsView.setAdapter(this.stepHistoryCellAdapter);
@@ -177,11 +176,11 @@ public class Fragment_StepHistory extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment__step_history , container, false);
+        View view =  inflater.inflate(R.layout.fragment_step_history , container, false);
         recordTypeTab = view.findViewById(R.id.tab_layout);
         this.lsView = view.findViewById(R.id.step_history_list);
 
-        recordTypeTab.addOnTabSelectedListener(new StepHistoryFragmentListener(this));
+        recordTypeTab.addOnTabSelectedListener(new HistoryFragmentListener(this));
         this.showDayStepHistory();
 
         fabMenu = (FloatingActionMenu) view.findViewById(R.id.fab);
@@ -201,10 +200,10 @@ public class Fragment_StepHistory extends Fragment {
         Database db = Database.getInstance((getActivity()));
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
+        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
-        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.dayHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
         else{
@@ -221,10 +220,10 @@ public class Fragment_StepHistory extends Fragment {
 
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
+        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
-        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.weekHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
         if (this.weekHistoryRecords == null) {
             Log.e("STEP_HISTORY", "WeekHistoryRecords null");
@@ -241,10 +240,10 @@ public class Fragment_StepHistory extends Fragment {
 
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Fragment_Settings.DEFAULT_WEIGHT);
+        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
+        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
-        this.stepHistoryCellAdapter = new StepHistoryCellAdapter(getContext(), this.monthHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
 
         if (this.monthHistoryRecords == null)
             Log.e("STEP_HISTORY", "MonthHistoryRecords null");

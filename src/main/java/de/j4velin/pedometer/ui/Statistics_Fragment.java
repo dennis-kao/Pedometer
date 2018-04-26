@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 Thomas Hoffmann
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,13 +39,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+
 import org.eazegraph.lib.charts.BarChart;
-import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.BarModel;
-import org.eazegraph.lib.models.PieModel;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -57,16 +61,15 @@ import de.j4velin.pedometer.SensorListener;
 import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 
-public class Fragment_Overview extends Fragment implements SensorEventListener {
+public class Statistics_Fragment extends Fragment implements SensorEventListener {
 
     private TextView stepsView, totalView, averageView;
-
-    private PieModel sliceGoal, sliceCurrent;
-    private PieChart pg;
 
     private int todayOffset, total_start, goal, since_boot, total_days;
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
     private boolean showSteps = true;
+
+   PieChart chart;
 
     /**
      * Initial Creation of the overview fragment
@@ -92,28 +95,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         stepsView = v.findViewById(R.id.steps);
         totalView = v.findViewById(R.id.total);
         averageView = v.findViewById(R.id.average);
+        chart = (PieChart) v.findViewById(R.id.progress_chart);
 
-        pg = v.findViewById(R.id.graph);
+        //Settings_Fragment.DEFAULT_GOAL
 
-        // slice for the steps taken today
-        sliceCurrent = new PieModel("", 0, Color.parseColor("#99CC00"));
-        pg.addPieSlice(sliceCurrent);
-
-        // slice for the "missing" steps until reaching the goal
-        sliceGoal = new PieModel("", Fragment_Settings.DEFAULT_GOAL, Color.parseColor("#CC0000"));
-        pg.addPieSlice(sliceGoal);
-
-        pg.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                showSteps = !showSteps;
-                stepsDistanceChanged();
-            }
-        });
-
-        pg.setDrawValueInPie(false);
-        pg.setUsePieRotation(true);
-        pg.startAnimation();
         return v;
     }
 
@@ -134,13 +119,13 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
-        goal = prefs.getInt("goal", Fragment_Settings.DEFAULT_GOAL);
+        goal = prefs.getInt("goal", Settings_Fragment.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
         int pauseDifference = since_boot - prefs.getInt("pauseCount", since_boot);
 
         // register a sensorlistener to live update the UI if a step is taken
         if (!prefs.contains("pauseCount")) {
-            /*SensorManager sm =
+            SensorManager sm =
                     (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
             Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
             if (sensor == null) {
@@ -160,7 +145,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
                         }).create().show();
             } else {
                 sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
-            }*/
+            }
         }
 
         since_boot -= pauseDifference;
@@ -178,11 +163,13 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      * the pie graph as well as the pie and the bars graphs.
      */
     private void stepsDistanceChanged() {
+
+        //  update the steps label
         if (showSteps) {
             ((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
         } else {
             String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
-                    .getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT);
+                    .getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT);
             if (unit.equals("cm")) {
                 unit = "km";
             } else {
@@ -191,6 +178,7 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             ((TextView) getView().findViewById(R.id.unit)).setText(unit);
         }
 
+        //  now update the graphs
         updatePie();
         updateBars();
     }
@@ -314,22 +302,28 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
     private void updatePie() {
         if (BuildConfig.DEBUG) Logger.log("UI - update steps: " + since_boot);
         // todayOffset might still be Integer.MIN_VALUE on first start
+
+        List<PieEntry> entries = new ArrayList<>();
+
+//        entries.add(new PieEntry(18.5f, "Green"));
+//        entries.add(new PieEntry(26.7f, "Yellow"));
+//        entries.add(new PieEntry(24.0f, "Red"));
+//        entries.add(new PieEntry(30.8f, "Blue"));
+
         int steps_today = Math.max(todayOffset + since_boot, 0);
-        sliceCurrent.setValue(steps_today);
-        if (goal - steps_today > 0) {
-            // goal not reached yet
-            if (pg.getData().size() == 1) {
+
+        if (steps_today < goal) {
                 // can happen if the goal value was changed: old goal value was
                 // reached but now there are some steps missing for the new goal
-                pg.addPieSlice(sliceGoal);
-            }
-            sliceGoal.setValue(goal - steps_today);
+                float completed = (float) steps_today / (float) goal * 100;
+                float remaining = 1 - completed;
+                entries.add(new PieEntry(completed, "Completed"));
+                entries.add(new PieEntry(remaining, "Remaining"));
         } else {
             // goal reached
-            pg.clearChart();
-            pg.addPieSlice(sliceCurrent);
+            entries.add(new PieEntry(100, "Completed"));
         }
-        pg.update();
+
         if (showSteps) {
             stepsView.setText(formatter.format(steps_today));
             totalView.setText(formatter.format(total_start + steps_today));
@@ -338,10 +332,10 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
             // update only every 10 steps when displaying distance
             SharedPreferences prefs =
                     getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-            float stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+            float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
             float distance_today = steps_today * stepsize;
             float distance_total = (total_start + steps_today) * stepsize;
-            if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
+            if (prefs.getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT)
                     .equals("cm")) {
                 distance_today /= 100000;
                 distance_total /= 100000;
@@ -360,18 +354,19 @@ public class Fragment_Overview extends Fragment implements SensorEventListener {
      * be called when switching from step count to distance.
      */
     private void updateBars() {
+
         SimpleDateFormat df = new SimpleDateFormat("E", Locale.getDefault());
         BarChart barChart = getView().findViewById(R.id.bargraph);
         if (barChart.getData().size() > 0) barChart.clearChart();
         int steps;
-        float distance, stepsize = Fragment_Settings.DEFAULT_STEP_SIZE;
+        float distance, stepsize = Settings_Fragment.DEFAULT_STEP_SIZE;
         boolean stepsize_cm = true;
         if (!showSteps) {
             // load some more settings if distance is needed
             SharedPreferences prefs =
                     getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-            stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
-            stepsize_cm = prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT)
+            stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
+            stepsize_cm = prefs.getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT)
                     .equals("cm");
         }
         barChart.setShowDecimal(!showSteps); // show decimal in distance view only

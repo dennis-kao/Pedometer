@@ -62,7 +62,7 @@ import de.j4velin.pedometer.util.API23Wrapper;
 import de.j4velin.pedometer.util.PlaySettingsWrapper;
 import de.j4velin.pedometer.util.Util;
 
-public class Fragment_Settings extends PreferenceFragment implements OnPreferenceClickListener {
+public class Settings_Fragment extends PreferenceFragment implements OnPreferenceClickListener {
 
     final static int DEFAULT_GOAL = 10000;
     final static float DEFAULT_STEP_SIZE = Locale.getDefault() == Locale.US ? 2.5f : 75f;

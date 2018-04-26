@@ -32,11 +32,9 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
 import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.GoogleFit;
 import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
 
 /**
  * Created by dkao on 2/11/2018.
@@ -44,8 +42,8 @@ import de.j4velin.pedometer.util.Util;
 
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        Fragment_SplitCount.OnFragmentInteractionListener,
-        Fragment_StepHistory.OnFragmentInteractionListener {
+        Count_Fragment.OnFragmentInteractionListener,
+        History_Fragment.OnFragmentInteractionListener {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -74,7 +72,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 
         if (savedInstanceState == null) {
             // Create new fragment and transaction
-            Fragment newFragment = new Fragment_Overview();
+            Fragment newFragment = new Statistics_Activity();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this
@@ -153,12 +151,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         switch (item.getItemId()) {
             case R.id.action_statistics:
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_Overview()).addToBackStack(null)
+                        .replace(R.id.container, new Statistics_Activity()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_Settings()).addToBackStack(null)
+                        .replace(R.id.container, new Settings_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_leaderboard:
@@ -178,7 +176,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
                                     getFragmentManager().beginTransaction()
-                                            .replace(R.id.container, new Fragment_Settings())
+                                            .replace(R.id.container, new Settings_Fragment())
                                             .addToBackStack(null).commit();
                                 }
                             });
@@ -224,12 +222,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 break;
             case R.id.action_split_count:
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_SplitCount()).addToBackStack(null)
+                        .replace(R.id.container, new Count_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_step_history:
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_StepHistory()).addToBackStack(null)
+                        .replace(R.id.container, new History_Fragment()).addToBackStack(null)
                         .commit();
                 break;
         }

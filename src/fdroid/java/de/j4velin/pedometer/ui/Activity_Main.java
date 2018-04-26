@@ -23,7 +23,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,8 +34,8 @@ import android.widget.TextView;
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
-import de.j4velin.pedometer.ui.Fragment_Overview;
-import de.j4velin.pedometer.ui.Fragment_Settings;
+import de.j4velin.pedometer.ui.Settings_Fragment;
+import de.j4velin.pedometer.ui.Statistics_Activity;
 
 public class Activity_Main extends FragmentActivity {
 
@@ -46,7 +45,7 @@ public class Activity_Main extends FragmentActivity {
         startService(new Intent(this, SensorListener.class));
         if (b == null) {
             // Create new fragment and transaction
-            Fragment newFragment = new Fragment_Overview();
+            Fragment newFragment = new Statistics_Activity();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this
@@ -81,7 +80,7 @@ public class Activity_Main extends FragmentActivity {
                 break;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
+                        .replace(android.R.id.content, new Settings_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_leaderboard:

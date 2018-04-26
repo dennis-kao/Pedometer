@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="175sp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/robotocondensed"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="Daily Goal" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/progress_chart"
+                android:layout_width="150sp"
+                android:layout_height="150sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="300sp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/robotocondensed"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:text="Weekly Goal" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/weekly_goal"
+                android:layout_width="300sp"
+                android:layout_height="300sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

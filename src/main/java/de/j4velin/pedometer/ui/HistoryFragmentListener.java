@@ -8,10 +8,10 @@ import android.util.Log;
  * Created by calimr on 2018-03-19.
  */
 
-public class StepHistoryFragmentListener implements TabLayout.OnTabSelectedListener {
-    private Fragment_StepHistory parent;
+public class HistoryFragmentListener implements TabLayout.OnTabSelectedListener {
+    private History_Fragment parent;
 
-    public StepHistoryFragmentListener(Fragment_StepHistory parent) {
+    public HistoryFragmentListener(History_Fragment parent) {
         super();
         this.parent = parent;
     }

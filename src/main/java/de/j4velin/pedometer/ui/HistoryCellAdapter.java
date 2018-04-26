@@ -22,13 +22,13 @@ import de.j4velin.pedometer.obj.WeekStepHistory;
  * Created by averyspeller on 2018-03-15.
  */
 
-public class StepHistoryCellAdapter <T extends StepHistory> extends ArrayAdapter<T>{
+public class HistoryCellAdapter<T extends StepHistory> extends ArrayAdapter<T>{
 
     private int position;
     private View convertView;
     private ViewGroup parent;
 
-    public StepHistoryCellAdapter(Context context, ArrayList<T> stepHistory) {
+    public HistoryCellAdapter(Context context, ArrayList<T> stepHistory) {
             super(context, 0, stepHistory);
         }
 

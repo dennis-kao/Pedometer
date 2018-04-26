@@ -4,7 +4,7 @@
     android:id="@+id/step_history"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.j4velin.pedometer.ui.Fragment_StepHistory">
+    tools:context="de.j4velin.pedometer.ui.History_Fragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -40,4 +40,12 @@
             android:layout_height="match_parent" />
 
     </LinearLayout>
+    <com.github.clans.fab.FloatingActionMenu android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/fab"
+        fab:menu_icon="@drawable/ic_list_black_24dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="bottom|right"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"/>
 </FrameLayout>

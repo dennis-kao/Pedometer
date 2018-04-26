@@ -18,12 +18,12 @@ import de.j4velin.pedometer.util.Util;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Fragment_SplitCount.OnFragmentInteractionListener} interface
+ * {@link Count_Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Fragment_SplitCount#newInstance} factory method to
+ * Use the {@link Count_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_SplitCount extends Fragment {
+public class Count_Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,7 +42,7 @@ public class Fragment_SplitCount extends Fragment {
 
     private TextView stepsText, distanceText;
 
-    public Fragment_SplitCount() {
+    public Count_Fragment() {
         // Required empty public constructor
         totalSteps = 0;
     }
@@ -53,11 +53,11 @@ public class Fragment_SplitCount extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_SplitCount.
+     * @return A new instance of fragment Count_Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Fragment_SplitCount newInstance(String param1, String param2) {
-        Fragment_SplitCount fragment = new Fragment_SplitCount();
+    public static Count_Fragment newInstance(String param1, String param2) {
+        Count_Fragment fragment = new Count_Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,10 +91,10 @@ public class Fragment_SplitCount extends Fragment {
         distance = newDistance;
 
         distanceText
-                .setText(Fragment_Overview.formatter.format(newDistance));
+                .setText(Statistics_Activity.formatter.format(newDistance));
 
         stepsText
-                .setText(Fragment_Overview.formatter.format(newSteps));
+                .setText(Statistics_Activity.formatter.format(newSteps));
     }
 
     @Override
@@ -120,12 +120,12 @@ public class Fragment_SplitCount extends Fragment {
         split_date = prefs.getLong("split_date", -1);
         split_steps = prefs.getInt("split_steps", totalSteps);
         stepsText = d.findViewById(R.id.steps);
-        stepsText.setText(Fragment_Overview.formatter.format(totalSteps - split_steps));
-        stepsize = prefs.getFloat("stepsize_value", Fragment_Settings.DEFAULT_STEP_SIZE);
+        stepsText.setText(Statistics_Activity.formatter.format(totalSteps - split_steps));
+        stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
         distance = (totalSteps - split_steps) * stepsize;
 
         //shows steps taken in kilometer
-        if (prefs.getString("stepsize_unit", Fragment_Settings.DEFAULT_STEP_UNIT).equals("cm")) {
+        if (prefs.getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT).equals("cm")) {
             distance /= 100000;
             ((TextView) d.findViewById(R.id.distanceunit)).setText("km");
         } else {
@@ -135,7 +135,7 @@ public class Fragment_SplitCount extends Fragment {
         }
 
         distanceText =  d.findViewById(R.id.distance);
-        distanceText.setText(Fragment_Overview.formatter.format(distance));
+        distanceText.setText(Statistics_Activity.formatter.format(distance));
 
         //  split date is used to determine if a split count is active
         split_active = split_date > 0;
@@ -209,6 +209,6 @@ public class Fragment_SplitCount extends Fragment {
 //    public boolean onOptionsItemSelected(final MenuItem item)
 //    {
 //
-//        return ((Fragment_Overview) getContext()).onOptionsItemSelected(item);
+//        return ((Statistics_Fragment) getContext()).onOptionsItemSelected(item);
 //    }
 }
