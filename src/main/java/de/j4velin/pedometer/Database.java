@@ -608,7 +608,6 @@ public class Database extends SQLiteOpenHelper {
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
-        // 160 is hard-coded weight until we can get weight properly from settings
         float caloriesPerMile = (float)(0.57 * weight);
         int dateInd = 0;
         int stepInd = 0;

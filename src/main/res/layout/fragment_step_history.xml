@@ -34,12 +34,18 @@
                 android:text="@string/month" />
         </android.support.design.widget.TabLayout>
 
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
         <ListView
             android:id="@+id/step_history_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </LinearLayout>
+
     <com.github.clans.fab.FloatingActionMenu android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/fab"

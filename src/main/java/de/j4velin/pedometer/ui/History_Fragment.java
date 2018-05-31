@@ -2,9 +2,11 @@ package de.j4velin.pedometer.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +16,19 @@ import android.support.design.widget.TabLayout;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
-
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -44,7 +56,9 @@ public class History_Fragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ListView lsView;
+
     private TabLayout recordTypeTab;
+    private int tabPos;
 
     private ArrayList<DayStepHistory> dayHistoryRecords = null;
     private ArrayList<WeekStepHistory> weekHistoryRecords = null;
@@ -59,6 +73,16 @@ public class History_Fragment extends Fragment {
     private FloatingActionButton bestDayButton;
 
     private HistoryCellAdapter stepHistoryCellAdapter = null;
+    private Typeface robotoCondensedLight;
+
+    private SharedPreferences prefs;
+
+    private float stepsize;
+    private float weight;
+
+    private Database db;
+
+    protected BarChart mChart;
 
     public History_Fragment() {
         // Required empty public constructor
@@ -91,6 +115,14 @@ public class History_Fragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setHasOptionsMenu(true);
+
+        robotoCondensedLight = getResources().getFont(R.font.robotocondensed_light);
+
+        //GRAB USER DATA
+        prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
+        weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
+        db = Database.getInstance((getActivity()));
     }
 
     public void sortListener(String option) {
@@ -180,7 +212,37 @@ public class History_Fragment extends Fragment {
         recordTypeTab = view.findViewById(R.id.tab_layout);
         this.lsView = view.findViewById(R.id.step_history_list);
 
-        recordTypeTab.addOnTabSelectedListener(new HistoryFragmentListener(this));
+        recordTypeTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                tabPos = tab.getPosition();
+
+                switch(tabPos) {
+                    case 0:
+                        showDayStepHistory();
+                        break;
+                    case 1:
+                        showWeekStepHistory();
+                        break;
+                    case 2:
+                        showMonthStepHistory();
+                        break;
+                    default:
+                        Log.e("STEP_HISTORY_TAB_LAYOUT", "Unexpected Tab selected: " + tab.getPosition());
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         this.showDayStepHistory();
 
         fabMenu = (FloatingActionMenu) view.findViewById(R.id.fab);
@@ -192,17 +254,73 @@ public class History_Fragment extends Fragment {
         bestDayButton = setupButton("Best Day");
 
         setOptions("day");
+
+        mChart = view.findViewById(R.id.chart);
+        //mChart.setOnChartValueSelectedListener(this);
+
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(true);
+
+        mChart.getDescription().setEnabled(false);
+
+        // if more than 60 entries are displayed in the chart, no values will be
+        // drawn
+        mChart.setMaxVisibleValueCount(60);
+
+        // scaling can now only be done on x- and y-axis separately
+        mChart.setPinchZoom(false);
+
+        mChart.setDrawGridBackground(false);
+        // mChart.setDrawYLabels(false);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTypeface(robotoCondensedLight);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        //xAxis.setValueFormatter(xAxisFormatter);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.setTypeface(robotoCondensedLight);
+        leftAxis.setLabelCount(8, false);
+        //leftAxis.setValueFormatter(custom);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setTypeface(robotoCondensedLight);
+        rightAxis.setLabelCount(8, false);
+        //rightAxis.setValueFormatter(custom);
+        rightAxis.setSpaceTop(15f);
+        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+        Legend l = mChart.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setForm(Legend.LegendForm.SQUARE);
+        l.setFormSize(9f);
+        l.setTextSize(11f);
+        l.setXEntrySpace(4f);
+        // l.setExtra(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
+        // "def", "ghj", "ikl", "mno" });
+        // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
+        // "def", "ghj", "ikl", "mno" });
+
+        // mChart.setDrawLegend(false);
+
+        //setData(4, 5.0f);
         return view;
     }
 
     public void showDayStepHistory() {
 
-        Database db = Database.getInstance((getActivity()));
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
+
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
@@ -214,14 +332,7 @@ public class History_Fragment extends Fragment {
     }
 
     public void showWeekStepHistory() {
-        // call update function for week step history list
-        // change adapter
-        Database db = Database.getInstance((getActivity()));
 
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
@@ -236,13 +347,8 @@ public class History_Fragment extends Fragment {
 
     public void showMonthStepHistory() {
 
-        Database db = Database.getInstance((getActivity()));
-
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-        float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
-        float weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
+
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
 
         if (this.monthHistoryRecords == null)
@@ -291,5 +397,67 @@ public class History_Fragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+//    private ArrayList<BarEntry> getBarEntries() {
+//
+//        if (recordTypeTab.get)
+//    }
+
+    private void setData(int listIndex) {
+
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+
+//        for (int i = (int) start; i < start + count + 1; i++) {
+//            float mult = (range + 1);
+//            float val = (float) (Math.random() * mult);
+//
+//
+//            yVals1.add(new BarEntry(i, val));
+//
+//        }
+
+        BarDataSet set1;
+
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) mChart.getData().getDataSetByIndex(0);
+            set1.setValues(yVals1);
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
+        } else {
+            set1 = new BarDataSet(yVals1, "The year 2017");
+
+            set1.setDrawIcons(false);
+
+            Context mContext = getContext();
+
+            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+
+            /*int startColor = ContextCompat.getColor(this, android.R.color.holo_blue_dark);
+            int endColor = ContextCompat.getColor(this, android.R.color.holo_blue_bright);
+            set1.setGradientColor(startColor, endColor);*/
+//
+//            int startColor1 = ContextCompat.getColor(mContext, android.R.color.holo_orange_light);
+//            int startColor2 = ContextCompat.getColor(mContext, android.R.color.holo_blue_light);
+//            int startColor3 = ContextCompat.getColor(mContext, android.R.color.holo_orange_light);
+//            int startColor4 = ContextCompat.getColor(mContext, android.R.color.holo_green_light);
+//            int startColor5 = ContextCompat.getColor(mContext, android.R.color.holo_red_light);
+//            int endColor1 = ContextCompat.getColor(mContext, android.R.color.holo_blue_dark);
+//            int endColor2 = ContextCompat.getColor(mContext, android.R.color.holo_purple);
+//            int endColor3 = ContextCompat.getColor(mContext, android.R.color.holo_green_dark);
+//            int endColor4 = ContextCompat.getColor(mContext, android.R.color.holo_red_dark);
+//            int endColor5 = ContextCompat.getColor(mContext, android.R.color.holo_orange_dark);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setValueTypeface(robotoCondensedLight);
+            data.setBarWidth(0.9f);
+
+            mChart.setData(data);
+        }
     }
 }

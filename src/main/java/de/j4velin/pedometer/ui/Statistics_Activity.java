@@ -1,7 +1,9 @@
 package de.j4velin.pedometer.ui;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,24 +12,41 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.xiaochen.progressroundbutton.AnimButtonLayout;
+import com.xiaochen.progressroundbutton.AnimDownloadProgressButton;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -39,15 +58,19 @@ import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.R;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.daimajia.numberprogressbar.OnProgressBarListener;
+
+
 public class Statistics_Activity extends Fragment implements SensorEventListener {
 
     private int todayOffset, total_start, goal, since_boot, total_days;
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
-    private PieChart dailyGoalChart, weeklyGoalChart;
-//    private final Typeface robotoLight = getResources().getFont(R.font.roboto_light),
-//            robotoBold = getResources().getFont(R.font.roboto_bold),
-//            robotoThin = getResources().getFont(R.font.roboto_thin),
-//            robotoMedium = getResources().getFont(R.font.roboto_medium);
+    private TextView date, calories, distance;
+
+    final int[] dailyColors = {Color.rgb(25,114,120), Color.rgb(239,45,86)};
+    ArrayList<Integer> colors = new ArrayList<Integer>();
+    NumberProgressBar dailyProgresBar;
 
     public void createTestData() {
         Database db = Database.getInstance(getActivity());
@@ -62,13 +85,8 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
             ranSteps = ran.nextInt(1000) + 100;
         }
         db.close();
-
     }
 
-    /**
-     * Initial Creation of the overview fragment
-     * @param savedInstanceState
-     */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,29 +94,15 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         createTestData();
     }
 
-    private void setupPieChart(PieChart chart) {
-//        dailyGoalChart.setEntryLabelTextSize(15);
-//        dailyGoalChart.setEntryLabelTypeface(getResources().getFont(R.font.robotocondensed_regular));
-        chart.setCenterTextSize(20);
-        chart.setHoleRadius(70);
-        chart.setTransparentCircleRadius(65);
-        chart.setCenterTextTypeface(getResources().getFont(R.font.robotocondensed_regular));
-        chart.setDrawHoleEnabled(true);
-        chart.setHoleColor(Color.TRANSPARENT);
-        chart.getDescription().setEnabled(false);
-        chart.getLegend().setEnabled(false);
-        chart.setDrawEntryLabels(false);
-    }
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.statistics1, null);
 
-        dailyGoalChart = (PieChart) v.findViewById(R.id.progress_chart);
-        weeklyGoalChart = (PieChart) v.findViewById(R.id.weekly_goal);
-        setupPieChart(dailyGoalChart);
-        setupPieChart(weeklyGoalChart);
+        calories = v.findViewById(R.id.calories);
+        date = v.findViewById(R.id.date);
+        distance = v.findViewById(R.id.distance);
+
         return v;
     }
 
@@ -109,14 +113,17 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
     public void onResume() {
         super.onResume();
 
+        //  update the day text if needed
+        String dateText = new SimpleDateFormat("EEEE MMMM dd").format(new Date());
         Database db = Database.getInstance(getActivity());
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+
+        date.setText(dateText);
 
         if (BuildConfig.DEBUG) db.logState();
         // read todays offset
         todayOffset = db.getSteps(Util.getToday());
-
-        SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
         goal = prefs.getInt("goal", Settings_Fragment.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
@@ -155,8 +162,6 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         db.close();
 
         updateDailyProgress();
-        updateWeeklyProgress();
-        //stepsDistanceChanged();
     }
 
     /**
@@ -187,100 +192,72 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         // won't happen
     }
 
+    private float getCurrentProgress() {
+        int steps_today = Math.max(todayOffset + since_boot, 0);
+        return (float) steps_today / (float) goal;
+    }
+
     public void updateDailyProgress() {
 
-        List<PieEntry> entries = new ArrayList<>();
-        int steps_today = Math.max(todayOffset + since_boot, 0);
+    }
 
-        if (goal > steps_today) {
+    public void updateWeeklyProgress(BarChart week) {
 
-            float completed = (float) steps_today / (float) goal * 100;
-            float remaining = 100 - completed;
+        BarDataSet set;
+        ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
 
-            entries.add(new PieEntry(completed, "Completed"));
-            entries.add(new PieEntry(remaining, "Remaining"));
-        } else {
-            entries.add(new PieEntry(100.00f, "Completed"));
+        Database db = Database.getInstance(getActivity());
+        List<Pair<Long, Integer>> last = db.getLastEntries(7);
+        db.close();
+
+        for (int i = 0; i < last.size(); i++) {
+            Pair<Long, Integer> day = last.get(i);
+            yVals.add(new BarEntry(i, day.second));
         }
 
-        dailyGoalChart.setCenterText(generateCenterSpannableText(goal, steps_today));
+        if (week.getData() != null && week.getData().getDataSetCount() > 0) {
 
-        PieDataSet set = new PieDataSet(entries, "");
-        final int[] MY_COLORS = {Color.rgb(25,114,120), Color.rgb(239,45,86)};
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+            set = (BarDataSet) week.getData().getDataSetByIndex(0);
+            set.setValues(yVals);
 
-        for(int c: MY_COLORS) colors.add(c);
-
-        set.setColors(colors);
-        set.setValueFormatter(new PercentFormatter());
-        set.setDrawValues(false);
-
-        PieData data = new PieData(set);
-//        data.setValueTextColor(Color.parseColor("#ffffff"));
-//        data.setValueTextSize(15f);
-//        data.setValueTypeface(getResources().getFont(R.font.roboto_bold));
-
-        dailyGoalChart.setData(data);
-        dailyGoalChart.invalidate(); // refresh
-    }
-
-    public void updateWeeklyProgress() {
-
-        List<PieEntry> entries = new ArrayList<>();
-        int steps_today = Math.max(todayOffset + since_boot, 0);
-
-        if (goal > steps_today) {
-
-            float completed = (float) steps_today / (float) goal * 100;
-            float remaining = 100 - completed;
-
-            entries.add(new PieEntry(completed, "Completed"));
-            entries.add(new PieEntry(remaining, "Remaining"));
-        } else {
-            entries.add(new PieEntry(100.00f, "Completed"));
+            week.getData().notifyDataChanged();
+            week.notifyDataSetChanged();
         }
+        else {
+            set = new BarDataSet(yVals, "Steps");
+            set.setColors(ColorTemplate.MATERIAL_COLORS);
 
-        PieDataSet set = new PieDataSet(entries, "");
-        final int[] MY_COLORS = {Color.rgb(25,114,120), Color.rgb(239,45,86)};
-        ArrayList<Integer> colors = new ArrayList<Integer>();
+            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+            dataSets.add(set);
 
-        for(int c: MY_COLORS) colors.add(c);
+            BarData data = new BarData(dataSets);
 
-        set.setColors(colors);
-        set.setValueFormatter(new PercentFormatter());
-        set.setDrawValues(false);
-
-        PieData data = new PieData(set);
-//        data.setValueTextColor(Color.parseColor("#ffffff"));
-//        data.setValueTextSize(15f);
-//        data.setValueTypeface(getResources().getFont(R.font.roboto_bold));
-
-        weeklyGoalChart.setData(data);
-        weeklyGoalChart.invalidate(); // refresh
+            week.setData(data);
+        }
     }
 
-    private SpannableString generateCenterSpannableText(int goal, int steps_taken) {
-
-        String goalText = NumberFormat.getNumberInstance(Locale.US).format(goal);
-        String stepsTakenText = NumberFormat.getNumberInstance(Locale.US).format(steps_taken);
-        String stepsLabel = String.format("%s\n/%s\nSTEPS", stepsTakenText, goalText);
-        SpannableString s = new SpannableString(stepsLabel);
-
-        //  formats the completed steps text
-        s.setSpan(new RelativeSizeSpan(2.5f), 0, stepsTakenText.length(), 0);
-        s.setSpan(new StyleSpan(Typeface.BOLD), 0, stepsTakenText.length(), 0);
-
-        // formats the "goal" text
-        s.setSpan(new RelativeSizeSpan(1.0f), stepsTakenText.length() + 1, goalText.length() + stepsTakenText.length() + 2,  0);
-        s.setSpan(new StyleSpan(Typeface.BOLD), stepsTakenText.length() + 1,goalText.length() + stepsTakenText.length() + 2, 0);
-
-        // formats the STEPS text
-        s.setSpan(new RelativeSizeSpan(0.8f), goalText.length() + stepsTakenText.length() + 3, s.length(),  0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), goalText.length() + stepsTakenText.length() + 3, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), goalText.length() + stepsTakenText.length() + 3, s.length(), 0);
-
-        return s;
-    }
+//    private SpannableString generateCenterSpannableText(int goal, int steps_taken) {
+//
+//        String goalText = NumberFormat.getNumberInstance(Locale.US).format(goal);
+//        String stepsTakenText = NumberFormat.getNumberInstance(Locale.US).format(steps_taken);
+//        String stepsLabel = String.format("%s\n\n/%s\nSTEPS", stepsTakenText, goalText);
+//        SpannableString s = new SpannableString(stepsLabel);
+//
+//        //  formats the completed steps text
+//        s.setSpan(new RelativeSizeSpan(3.0f), 0, stepsTakenText.length(), 0);
+//        s.setSpan(new StyleSpan(Typeface.BOLD), 0, stepsTakenText.length(), 0);
+//
+//        // formats the "goal" text
+//        s.setSpan(new RelativeSizeSpan(1.0f), stepsTakenText.length() + 2, goalText.length() + stepsTakenText.length() + 3,  0);
+//        s.setSpan(new StyleSpan(Typeface.BOLD), stepsTakenText.length() + 2, goalText.length() + stepsTakenText.length() + 3, 0);
+//
+//        // formats the STEPS text
+//        s.setSpan(new RelativeSizeSpan(0.8f), s.length() - 5, s.length(),  0);
+//        s.setSpan(new StyleSpan(Typeface.NORMAL), s.length() - 5, s.length(), 0);
+//        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 5, s.length(), 0);
+//
+//        return s;
+//    }
 
 
     /**
@@ -306,6 +283,6 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
             db.close();
         }
         since_boot = (int) event.values[0];
-        //updatePie();
+        updateDailyProgress();
     }
 }
