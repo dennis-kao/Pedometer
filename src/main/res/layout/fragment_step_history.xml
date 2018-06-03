@@ -34,11 +34,6 @@
                 android:text="@string/month" />
         </android.support.design.widget.TabLayout>
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
         <ListView
             android:id="@+id/step_history_list"
             android:layout_width="match_parent"

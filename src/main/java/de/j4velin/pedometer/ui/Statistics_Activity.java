@@ -13,6 +13,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -58,19 +60,15 @@ import de.j4velin.pedometer.util.Logger;
 import de.j4velin.pedometer.util.Util;
 import de.j4velin.pedometer.R;
 
-import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.daimajia.numberprogressbar.OnProgressBarListener;
-
-
 public class Statistics_Activity extends Fragment implements SensorEventListener {
 
     private int todayOffset, total_start, goal, since_boot, total_days;
     public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
     private TextView date, calories, distance;
 
-    final int[] dailyColors = {Color.rgb(25,114,120), Color.rgb(239,45,86)};
-    ArrayList<Integer> colors = new ArrayList<Integer>();
-    NumberProgressBar dailyProgresBar;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public void createTestData() {
         Database db = Database.getInstance(getActivity());
@@ -89,7 +87,9 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
         createTestData();
     }
@@ -97,11 +97,18 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
         final View v = inflater.inflate(R.layout.statistics1, null);
 
-        calories = v.findViewById(R.id.calories);
-        date = v.findViewById(R.id.date);
-        distance = v.findViewById(R.id.distance);
+        mRecyclerView = v.findViewById(R.id.cellList);
+        mRecyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new ProgressCellAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
         return v;
     }
@@ -114,12 +121,10 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         super.onResume();
 
         //  update the day text if needed
-        String dateText = new SimpleDateFormat("EEEE MMMM dd").format(new Date());
         Database db = Database.getInstance(getActivity());
         SharedPreferences prefs =
                 getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
-        date.setText(dateText);
 
         if (BuildConfig.DEBUG) db.logState();
         // read todays offset

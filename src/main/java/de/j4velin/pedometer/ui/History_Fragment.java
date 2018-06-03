@@ -82,8 +82,6 @@ public class History_Fragment extends Fragment {
 
     private Database db;
 
-    protected BarChart mChart;
-
     public History_Fragment() {
         // Required empty public constructor
     }
@@ -255,65 +253,6 @@ public class History_Fragment extends Fragment {
 
         setOptions("day");
 
-        mChart = view.findViewById(R.id.chart);
-        //mChart.setOnChartValueSelectedListener(this);
-
-        mChart.setDrawBarShadow(false);
-        mChart.setDrawValueAboveBar(true);
-
-        mChart.getDescription().setEnabled(false);
-
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
-        mChart.setMaxVisibleValueCount(60);
-
-        // scaling can now only be done on x- and y-axis separately
-        mChart.setPinchZoom(false);
-
-        mChart.setDrawGridBackground(false);
-        // mChart.setDrawYLabels(false);
-
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTypeface(robotoCondensedLight);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // only intervals of 1 day
-        xAxis.setLabelCount(7);
-        //xAxis.setValueFormatter(xAxisFormatter);
-
-        YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setTypeface(robotoCondensedLight);
-        leftAxis.setLabelCount(8, false);
-        //leftAxis.setValueFormatter(custom);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setDrawGridLines(false);
-        rightAxis.setTypeface(robotoCondensedLight);
-        rightAxis.setLabelCount(8, false);
-        //rightAxis.setValueFormatter(custom);
-        rightAxis.setSpaceTop(15f);
-        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-
-        Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setForm(Legend.LegendForm.SQUARE);
-        l.setFormSize(9f);
-        l.setTextSize(11f);
-        l.setXEntrySpace(4f);
-        // l.setExtra(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
-        // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
-        // "def", "ghj", "ikl", "mno" });
-
-        // mChart.setDrawLegend(false);
-
-        //setData(4, 5.0f);
         return view;
     }
 
@@ -397,67 +336,5 @@ public class History_Fragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-//    private ArrayList<BarEntry> getBarEntries() {
-//
-//        if (recordTypeTab.get)
-//    }
-
-    private void setData(int listIndex) {
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-
-//        for (int i = (int) start; i < start + count + 1; i++) {
-//            float mult = (range + 1);
-//            float val = (float) (Math.random() * mult);
-//
-//
-//            yVals1.add(new BarEntry(i, val));
-//
-//        }
-
-        BarDataSet set1;
-
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) mChart.getData().getDataSetByIndex(0);
-            set1.setValues(yVals1);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-        } else {
-            set1 = new BarDataSet(yVals1, "The year 2017");
-
-            set1.setDrawIcons(false);
-
-            Context mContext = getContext();
-
-            set1.setColors(ColorTemplate.MATERIAL_COLORS);
-
-            /*int startColor = ContextCompat.getColor(this, android.R.color.holo_blue_dark);
-            int endColor = ContextCompat.getColor(this, android.R.color.holo_blue_bright);
-            set1.setGradientColor(startColor, endColor);*/
-//
-//            int startColor1 = ContextCompat.getColor(mContext, android.R.color.holo_orange_light);
-//            int startColor2 = ContextCompat.getColor(mContext, android.R.color.holo_blue_light);
-//            int startColor3 = ContextCompat.getColor(mContext, android.R.color.holo_orange_light);
-//            int startColor4 = ContextCompat.getColor(mContext, android.R.color.holo_green_light);
-//            int startColor5 = ContextCompat.getColor(mContext, android.R.color.holo_red_light);
-//            int endColor1 = ContextCompat.getColor(mContext, android.R.color.holo_blue_dark);
-//            int endColor2 = ContextCompat.getColor(mContext, android.R.color.holo_purple);
-//            int endColor3 = ContextCompat.getColor(mContext, android.R.color.holo_green_dark);
-//            int endColor4 = ContextCompat.getColor(mContext, android.R.color.holo_red_dark);
-//            int endColor5 = ContextCompat.getColor(mContext, android.R.color.holo_orange_dark);
-
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setValueTypeface(robotoCondensedLight);
-            data.setBarWidth(0.9f);
-
-            mChart.setData(data);
-        }
     }
 }

@@ -96,9 +96,11 @@ public class SensorListener extends Service implements SensorEventListener {
     private void updateIfNecessary() {
         if (steps > lastSaveSteps + SAVE_OFFSET_STEPS ||
                 (steps > 0 && System.currentTimeMillis() > lastSaveTime + SAVE_OFFSET_TIME)) {
+
             if (BuildConfig.DEBUG) Logger.log(
                     "saving steps: steps=" + steps + " lastSave=" + lastSaveSteps +
                             " lastSaveTime=" + new Date(lastSaveTime));
+
             Database db = Database.getInstance(this);
             if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
                 int pauseDifference = steps -
