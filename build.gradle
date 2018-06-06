@@ -32,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.j4velin.pedometer"
+        applicationId "de.j4velin.de.dkao.de.dkao.pedometer"
         vectorDrawables.useSupportLibrary = true
     }
 

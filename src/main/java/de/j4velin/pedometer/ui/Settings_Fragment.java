@@ -94,7 +94,7 @@ public class Settings_Fragment extends PreferenceFragment implements OnPreferenc
                     @Override
                     public boolean onPreferenceChange(final Preference preference,
                                                       final Object newValue) {
-                        getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                        getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE).edit()
                                 .putBoolean("notification", (Boolean) newValue).commit();
 
                         getActivity().startService(new Intent(getActivity(), SensorListener.class)
@@ -120,7 +120,7 @@ public class Settings_Fragment extends PreferenceFragment implements OnPreferenc
 
 
         final SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+                getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
 
         Preference goal = findPreference("goal");
         goal.setOnPreferenceClickListener(this);
@@ -179,7 +179,7 @@ public class Settings_Fragment extends PreferenceFragment implements OnPreferenc
         AlertDialog.Builder builder;
         View v;
         final SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+                getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
         switch (preference.getTitleRes()) {
             case R.string.goal:
                 builder = new AlertDialog.Builder(getActivity());

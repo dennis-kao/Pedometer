@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//package de.j4velin.pedometer.ui;
+//package de.j4velin.de.dkao.de.dkao.pedometer.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;

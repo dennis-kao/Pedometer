@@ -15,10 +15,8 @@
  */
 package de.j4velin.pedometer.ui;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -40,8 +38,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import org.eazegraph.lib.charts.BarChart;
@@ -117,7 +113,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
         todayOffset = db.getSteps(Util.getToday());
 
         SharedPreferences prefs =
-                getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+                getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
 
         goal = prefs.getInt("goal", Settings_Fragment.DEFAULT_GOAL);
         since_boot = db.getCurrentSteps(); // do not use the value from the sharedPreferences
@@ -168,7 +164,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
         if (showSteps) {
             ((TextView) getView().findViewById(R.id.unit)).setText(getString(R.string.steps));
         } else {
-            String unit = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
+            String unit = getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
                     .getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT);
             if (unit.equals("cm")) {
                 unit = "km";
@@ -212,7 +208,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
         inflater.inflate(R.menu.main, menu);
         MenuItem pause = menu.getItem(0);
         Drawable d;
-        if (getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
+        if (getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
                 .contains("pauseCount")) { // currently paused
             pause.setTitle(R.string.resume);
             d = getResources().getDrawable(R.drawable.ic_resume);
@@ -237,7 +233,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
                 SensorManager sm =
                         (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
                 Drawable d;
-                if (getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE)
+                if (getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
                         .contains("pauseCount")) { // currently paused -> now resumed
                     sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
                             SensorManager.SENSOR_DELAY_UI, 0);
@@ -331,7 +327,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
         } else {
             // update only every 10 steps when displaying distance
             SharedPreferences prefs =
-                    getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+                    getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
             float stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
             float distance_today = steps_today * stepsize;
             float distance_total = (total_start + steps_today) * stepsize;
@@ -364,7 +360,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
         if (!showSteps) {
             // load some more settings if distance is needed
             SharedPreferences prefs =
-                    getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+                    getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
             stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
             stepsize_cm = prefs.getString("stepsize_unit", Settings_Fragment.DEFAULT_STEP_UNIT)
                     .equals("cm");

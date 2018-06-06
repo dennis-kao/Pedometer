@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,19 +15,8 @@ import android.support.design.widget.TabLayout;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
@@ -117,7 +105,7 @@ public class History_Fragment extends Fragment {
         robotoCondensedLight = getResources().getFont(R.font.robotocondensed_light);
 
         //GRAB USER DATA
-        prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        prefs = getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
         stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
         weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         db = Database.getInstance((getActivity()));

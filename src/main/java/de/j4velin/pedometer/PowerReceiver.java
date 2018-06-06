@@ -25,7 +25,7 @@ public class PowerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         SharedPreferences prefs =
-                context.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                context.getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_MULTI_PROCESS);
         if (Intent.ACTION_POWER_CONNECTED.equals(intent.getAction()) &&
                 !prefs.contains("pauseCount")) {
             // if power connected & not already paused, then pause now

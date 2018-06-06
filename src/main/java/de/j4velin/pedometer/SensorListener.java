@@ -104,12 +104,12 @@ public class SensorListener extends Service implements SensorEventListener {
             Database db = Database.getInstance(this);
             if (db.getSteps(Util.getToday()) == Integer.MIN_VALUE) {
                 int pauseDifference = steps -
-                        getSharedPreferences("pedometer", Context.MODE_PRIVATE)
+                        getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
                                 .getInt("pauseCount", steps);
                 db.insertNewDay(Util.getToday(), steps - pauseDifference);
                 if (pauseDifference > 0) {
                     // update pauseCount for the new day
-                    getSharedPreferences("pedometer", Context.MODE_PRIVATE).edit()
+                    getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE).edit()
                             .putInt("pauseCount", steps).commit();
                 }
             }
@@ -138,7 +138,7 @@ public class SensorListener extends Service implements SensorEventListener {
                 steps = db.getCurrentSteps();
                 db.close();
             }
-            SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
             if (prefs.contains("pauseCount")) { // resume counting
                 int difference = steps -
                         prefs.getInt("pauseCount", steps); // number of steps taken during the pause
@@ -224,7 +224,7 @@ public class SensorListener extends Service implements SensorEventListener {
      */
     private void updateNotificationState() {
         if (BuildConfig.DEBUG) Logger.log("SensorListener updateNotificationState");
-        SharedPreferences prefs = getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
         NotificationManager nm =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (prefs.getBoolean("notification", true)) {
@@ -287,6 +287,6 @@ public class SensorListener extends Service implements SensorEventListener {
 
         // enable batching with delay of max 5 min
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-                SensorManager.SENSOR_DELAY_NORMAL, (int) (5 * MICROSECONDS_IN_ONE_MINUTE));
+                SensorManager.SENSOR_DELAY_FASTEST, 0);
     }
 }

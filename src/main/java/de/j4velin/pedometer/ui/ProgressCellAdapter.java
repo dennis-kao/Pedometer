@@ -1,6 +1,5 @@
 package de.j4velin.pedometer.ui;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.app.progresviews.ProgressLine;
-import com.xiaochen.progressroundbutton.AnimButtonLayout;
-import com.xiaochen.progressroundbutton.AnimDownloadProgressButton;
 
 import de.j4velin.pedometer.R;
 
@@ -32,16 +27,13 @@ public class ProgressCellAdapter extends RecyclerView.Adapter<ProgressCellAdapte
         private ProgressBar progressLine;
         private TextView numText, infoText;
 
-        public ViewHolder(View v, int goalCompleted) {
+        public ViewHolder(View v) {
             super(v);
 
             icon = v.findViewById(R.id.icon);
             progressLine = v.findViewById(R.id.progressLine);
             numText = v.findViewById(R.id.numText);
             infoText = v.findViewById(R.id.infoText);
-
-            //format text
-            //numText.
         }
 
         public void updateProgress(int numerator, int denominator) {
@@ -61,7 +53,7 @@ public class ProgressCellAdapter extends RecyclerView.Adapter<ProgressCellAdapte
                                                    int viewType) {
 
         View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_cell, parent, false);
-        ViewHolder vh = new ViewHolder(v, 20);
+        ViewHolder vh = new ViewHolder(v);
 
         return vh;
     }

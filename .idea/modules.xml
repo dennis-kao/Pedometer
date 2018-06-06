@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/w18-sec-3-group-3-project.iml" filepath="$PROJECT_DIR$/.idea/modules/w18-sec-3-group-3-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Pedometer.iml" filepath="$PROJECT_DIR$/Pedometer.iml" />
     </modules>
   </component>
 </project>

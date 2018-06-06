@@ -3,8 +3,8 @@
     package="de.j4velin.pedometer"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="152"
-    android:versionName="1.5.2">
+    android:versionCode="100"
+    android:versionName="1.0.0">
 
     <uses-sdk
         android:minSdkVersion="26"
@@ -24,12 +24,12 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:replace="label">
 
-        <meta-data
-            android:name="com.google.android.gms.games.APP_ID"
-            android:value="@string/app_id" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <!--<meta-data-->
+            <!--android:name="com.google.android.gms.games.APP_ID"-->
+            <!--android:value="@string/app_id" />-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.gms.version"-->
+            <!--android:value="@integer/google_play_services_version" />-->
 
         <activity
             android:name="de.j4velin.pedometer.ui.Activity_Main"
@@ -59,7 +59,7 @@
             android:name=".ShutdownRecevier">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN"/>
-                <action android:name="de.j4velin.ACTION_SHUTDOWN"/>
+                <action android:name="de.j4velin.pedometer.ACTION_SHUTDOWN"/>
             </intent-filter>
         </receiver>
 

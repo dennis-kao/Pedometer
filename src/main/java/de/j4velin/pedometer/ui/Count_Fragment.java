@@ -113,7 +113,7 @@ public class Count_Fragment extends Fragment {
         final Context c = getContext();
 
         final SharedPreferences prefs =
-                c.getSharedPreferences("pedometer", Context.MODE_MULTI_PROCESS);
+                c.getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_MULTI_PROCESS);
 
         updateStepsAndDistanceData();
 
