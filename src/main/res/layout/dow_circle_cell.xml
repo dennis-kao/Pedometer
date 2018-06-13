@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_gravity="center_vertical"
-    android:layout_marginHorizontal="3dp">
+    android:layout_marginHorizontal="5dp">
     
     <de.j4velin.pedometer.ui.CircularProgressBar
         android:layout_gravity="center"

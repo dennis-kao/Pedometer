@@ -13,7 +13,7 @@ import de.j4velin.pedometer.R;
 public class ProgressCellAdapter extends RecyclerView.Adapter<ProgressCellAdapter.ViewHolder> {
 
     private static final String TAG = "ProgressCellAdapter";
-    private static final String[] categories = {"daily calories", "daily distance", "daily active minutes"};
+    private static final String[] categories = {"daily calories", "daily distance", "daily active minutes", "placeholder"};
     private static final int[] icons = {R.drawable.ic_footsteps};
     private int steps;
 

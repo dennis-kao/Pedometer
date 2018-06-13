@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +102,7 @@ public class History_Fragment extends Fragment {
         }
         setHasOptionsMenu(true);
 
-        robotoCondensedLight = getResources().getFont(R.font.robotocondensed_light);
+        //robotoCondensedLight = getResources().getFont(R.font.robotocondensed_light);
 
         //GRAB USER DATA
         prefs = getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);

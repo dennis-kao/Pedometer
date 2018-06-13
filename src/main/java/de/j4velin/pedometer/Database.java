@@ -284,16 +284,16 @@ public class Database extends SQLiteOpenHelper {
         return result;
     }
 
-    public List<Pair<Long, Integer>> getLastEntriesProgress(int nEntries, int goal) {
+    public List<Pair<Long, Float>> getLastEntriesProgress(int nEntries, int goal) {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"date", "steps"}, "date > 0", null, null, null,
                         "date DESC", String.valueOf(nEntries));
         int max = c.getCount();
-        List<Pair<Long, Integer>> result = new ArrayList<>(max);
+        List<Pair<Long, Float>> result = new ArrayList<>(max);
         if (c.moveToFirst()) {
             do {
 
-                int percent = (int) ((float) c.getInt(1) / (float) goal * 100);
+                float percent = (float) c.getInt(1) / (float) goal * 100;
                 //Logger.log("Time, steps, percent: " + Long.toString(c.getLong(0)) + " " +  Integer.toString(c.getInt(1))+ " " +Integer.toString(percent));
                 result.add(new Pair<>(c.getLong(0), percent));
             } while (c.moveToNext());

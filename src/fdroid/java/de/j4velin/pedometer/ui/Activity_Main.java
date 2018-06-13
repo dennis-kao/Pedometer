@@ -18,7 +18,7 @@
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,7 +46,7 @@ public class Activity_Main extends FragmentActivity {
         if (b == null) {
             // Create new fragment and transaction
             Fragment newFragment = new Statistics_Activity();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this
             // fragment,

@@ -113,6 +113,10 @@ public class CircularProgressBar extends View {
         return (mMaxSweepAngle / mMaxProgress) * progress;
     }
 
+    private float calcSweepAngleFromProgress(float progress) {
+        return (mMaxSweepAngle / mMaxProgress) * progress;
+    }
+
     private int calcProgressFromSweepAngle(float sweepAngle) {
         return (int) ((sweepAngle * mMaxProgress) / mMaxSweepAngle);
     }
@@ -123,7 +127,20 @@ public class CircularProgressBar extends View {
      */
     public void setProgress(int progress) {
 
-        //Logger.log("Progress: " + Integer.toString(progress));
+        ValueAnimator animator = ValueAnimator.ofFloat(mSweepAngle, calcSweepAngleFromProgress(progress));
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.setDuration(mAnimationDuration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mSweepAngle = (float) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        animator.start();
+    }
+
+    public void setProgress(float progress) {
 
         ValueAnimator animator = ValueAnimator.ofFloat(mSweepAngle, calcSweepAngleFromProgress(progress));
         animator.setInterpolator(new DecelerateInterpolator());

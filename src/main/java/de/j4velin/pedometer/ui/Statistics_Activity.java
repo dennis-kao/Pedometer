@@ -1,7 +1,7 @@
 package de.j4velin.pedometer.ui;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -88,23 +88,14 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        //createTestData();
+        createTestData();
     }
 
     private void setupProgressCells(View v) {
         DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), VERTICAL);
-        progressCellLayoutManager = new LinearLayoutManager(getContext()) {
-
-            @Override
-            public boolean canScrollVertically() {
-                //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
-                return false && super.canScrollVertically();
-            }
-        };
+        progressCellLayoutManager = new LinearLayoutManager(getContext());
         progressCellAdapter = new ProgressCellAdapter();
-
         progressCellView = v.findViewById(R.id.cellList);
-
         progressCellView.setHasFixedSize(true);
         progressCellView.addItemDecoration(itemDecor);
         progressCellView.setLayoutManager(progressCellLayoutManager);
@@ -115,11 +106,19 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
 
         //  READ WEEK DATA FROM DB AND PASS TO ADAPTER
         Database db = Database.getInstance(getActivity());
-        List<Pair<Long, Integer>> wp = db.getLastEntriesProgress(7, goal);
+        List<Pair<Long, Float>> wp = db.getLastEntriesProgress(7, goal);
         db.close();
 
         weeklyCellView = v.findViewById(R.id.weeklyProgressList);
-        weeklyCellLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        weeklyCellLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)  {
+
+            @Override
+            public boolean canScrollHorizontally                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      () {
+                //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
+                return false;
+            }
+
+        };
         weeklyCellView.setLayoutManager(weeklyCellLayoutManager);
         weeklyCellAdapter = new DayOfWeekCellAdapter(wp);
         weeklyCellView.setAdapter(weeklyCellAdapter);
@@ -207,6 +206,9 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
     @Override
     public void onPause() {
         super.onPause();
+
+        dailyStepsProgressBar.onPauseSurfaceView();
+
         try {
             SensorManager sm =
                     (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -217,8 +219,6 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         Database db = Database.getInstance(getActivity());
         db.saveCurrentSteps(since_boot);
         db.close();
-
-        dailyStepsProgressBar.onPauseSurfaceView();
     }
 
     /**
@@ -238,7 +238,7 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
 
     public void updateDailyProgress() {
 
-        int percent = (int) ((float) since_boot / (float) goal * 100);
+        float percent = ((float) since_boot / (float) goal * 100);
         dailyStepsProgressBar.setProgress(percent, since_boot);
     }
 
@@ -315,6 +315,8 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         if (event.values[0] > Integer.MAX_VALUE || event.values[0] == 0) {
             return;
         }
+
+        //  Update UI then write changes to DB
 
         since_boot = (int) event.values[0];
         updateDailyProgress();

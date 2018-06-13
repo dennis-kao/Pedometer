@@ -16,7 +16,7 @@ import de.j4velin.pedometer.util.Logger;
 public class DayOfWeekCellAdapter extends RecyclerView.Adapter<DayOfWeekCellAdapter.ViewHolder> {
 
     private static final String TAG = "DayOfWeekCellAdapter";
-    private List<Pair<Long, Integer>> weekProgress;
+    private List<Pair<Long, Float>> weekProgress;
     final String[] strDays = new String[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thusday",
             "Friday", "Saturday" };
 
@@ -42,7 +42,7 @@ public class DayOfWeekCellAdapter extends RecyclerView.Adapter<DayOfWeekCellAdap
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DayOfWeekCellAdapter(List<Pair<Long, Integer>> wp) {
+    public DayOfWeekCellAdapter(List<Pair<Long, Float>> wp) {
         weekProgress = wp;
     }
 
@@ -72,12 +72,12 @@ public class DayOfWeekCellAdapter extends RecyclerView.Adapter<DayOfWeekCellAdap
     @Override
     public void onBindViewHolder(DayOfWeekCellAdapter.ViewHolder holder, int position) {
 
-        Pair<Long, Integer> dayRecord = weekProgress.get(position);
+        Pair<Long, Float> dayRecord = weekProgress.get(position);
 
         //calc time, generate string of day, grab first character
         String getDayOfWeek = calcEpochDayOfWeek(dayRecord.first);
 
-        Logger.log("PROGRESS: " + Integer.toString(dayRecord.second));
+        //Logger.log("PROGRESS: " + Integer.toString(dayRecord.second));
 
         holder.dowChar.setText(Character.toString(getDayOfWeek.charAt(0)));
         holder.dowCircle.setProgress(dayRecord.second);

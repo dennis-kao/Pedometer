@@ -3,21 +3,29 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -45,6 +53,10 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         Count_Fragment.OnFragmentInteractionListener,
         History_Fragment.OnFragmentInteractionListener {
 
+    private GoogleApiClient mGoogleApiClient;
+    private final static int RC_RESOLVE = 1;
+    private final static int RC_LEADERBOARDS = 2;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -58,29 +70,48 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 
     };
 
-    private GoogleApiClient mGoogleApiClient;
-    private final static int RC_RESOLVE = 1;
-    private final static int RC_LEADERBOARDS = 2;
+//    /**
+//     * Creates the expanded view of the option menu and sets the pause/resume icon
+//     * to the approriate icon
+//     * @param menu
+//     * @param inflater
+//     */
+//    @Override
+//    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+//        inflater.inflate(R.menu.main, menu);
+//        MenuItem pause = menu.getItem(0);
+//        Drawable d;
+//        if (this.getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
+//                .contains("pauseCount")) { // currently paused
+//            pause.setTitle(R.string.resume);
+//            d = getResources().getDrawable(R.drawable.ic_resume);
+//        } else {
+//            pause.setTitle(R.string.pause);
+//            d = getResources().getDrawable(R.drawable.ic_pause);
+//        }
+//        d.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+//        pause.setIcon(d);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.AppTheme); //  remove splash screen, default is AppTheme.Launcher
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navbar_fragments);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_list_black_24dp);
 
         if (savedInstanceState == null) {
-            // Create new fragment and transaction
+
             Fragment newFragment = new Statistics_Activity();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-            // Replace whatever is in the fragment_container view with this
-            // fragment,
-            // and add the transaction to the back stack
             transaction.replace(R.id.container, newFragment);
-
-            // Commit the transaction
             transaction.commit();
         }
 
@@ -90,7 +121,6 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         builder.addApi(Fitness.HISTORY_API);
         builder.addApi(Fitness.RECORDING_API);
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
-
         mGoogleApiClient = builder.build();
 
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 23 && PermissionChecker
@@ -150,14 +180,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
     public boolean optionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_statistics:
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new Statistics_Activity()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Settings_Fragment()).addToBackStack(null)
-                        .commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.container, new Settings_Fragment()).addToBackStack(null).commit();
                 break;
             case R.id.action_leaderboard:
             case R.id.action_achievements:
@@ -221,12 +249,12 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 builder.create().show();
                 break;
             case R.id.action_split_count:
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new Count_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_step_history:
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new History_Fragment()).addToBackStack(null)
                         .commit();
                 break;

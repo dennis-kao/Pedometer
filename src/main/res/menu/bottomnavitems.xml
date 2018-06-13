@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <group android:checkableBehavior="single">
     <item
         android:id="@+id/action_statistics"
         android:icon="@drawable/ic_24"
@@ -12,4 +12,5 @@
         android:id="@+id/action_split_count"
         android:icon="@drawable/ic_directions_run_black_24dp"
         android:title="@string/split_count"/>
+    </group>
 </menu>
