@@ -4,49 +4,66 @@
     android:id="@+id/step_history"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.j4velin.pedometer.ui.History_Fragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context="de.j4velin.pedometer.ui.History_Fragment"
+    android:paddingHorizontal="@dimen/activity_horizontal_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/activity_vertical_margin">
 
-            <android.support.design.widget.TabItem
+            <TextView
+                android:id="@+id/group_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/day" />
+                android:text="Group by: "
+                android:textSize="15dp"
+                android:layout_alignParentLeft="true"
+                android:fontFamily="@font/roboto_regular"/>
 
-            <android.support.design.widget.TabItem
+            <Spinner
+                android:id="@+id/date_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/week" />
+                android:layout_toRightOf="@+id/group_label"/>
 
-            <android.support.design.widget.TabItem
+            <Spinner
+                android:id="@+id/sort_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/month" />
-        </android.support.design.widget.TabLayout>
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:id="@+id/sort_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by: "
+                android:textSize="15dp"
+                android:layout_toLeftOf="@id/sort_spinner"
+                android:fontFamily="@font/roboto_regular"/>
+        </RelativeLayout>
+
+        <View style="@style/VertDivider"/>
 
         <ListView
             android:id="@+id/step_history_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-    <com.github.clans.fab.FloatingActionMenu android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/fab"
-        fab:menu_icon="@drawable/ic_list_black_24dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="bottom|right"
-        xmlns:fab="http://schemas.android.com/apk/res-auto"/>
+    <!--<com.github.clans.fab.FloatingActionMenu-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/fab"-->
+        <!--fab:menu_icon="@drawable/ic_list_black_24dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--xmlns:fab="http://schemas.android.com/apk/res-auto"/>-->
 </FrameLayout>

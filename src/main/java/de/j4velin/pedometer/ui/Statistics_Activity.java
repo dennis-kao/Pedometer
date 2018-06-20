@@ -1,6 +1,9 @@
 package de.j4velin.pedometer.ui;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -88,14 +91,14 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-        createTestData();
+        //createTestData();
     }
 
     private void setupProgressCells(View v) {
         DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), VERTICAL);
         progressCellLayoutManager = new LinearLayoutManager(getContext());
         progressCellAdapter = new ProgressCellAdapter();
-        progressCellView = v.findViewById(R.id.cellList);
+        //progressCellView = v.findViewById(R.id.cellList);
         progressCellView.setHasFixedSize(true);
         progressCellView.addItemDecoration(itemDecor);
         progressCellView.setLayoutManager(progressCellLayoutManager);
@@ -111,13 +114,10 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
 
         weeklyCellView = v.findViewById(R.id.weeklyProgressList);
         weeklyCellLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)  {
-
             @Override
             public boolean canScrollHorizontally                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      () {
-                //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
                 return false;
             }
-
         };
         weeklyCellView.setLayoutManager(weeklyCellLayoutManager);
         weeklyCellAdapter = new DayOfWeekCellAdapter(wp);
@@ -135,7 +135,7 @@ public class Statistics_Activity extends Fragment implements SensorEventListener
                 getActivity().getSharedPreferences("de.j4velin.pedometer", Context.MODE_PRIVATE);
         goal = prefs.getInt("goal", Settings_Fragment.DEFAULT_GOAL);
 
-        setupProgressCells(v);
+        //setupProgressCells(v);
         setupWeeklyProgressCells(v);
 
         dailyStepsProgressBar = v.findViewById(R.id.dailyStepsProgressBar);

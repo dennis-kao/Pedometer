@@ -52,7 +52,7 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
     private boolean mRoundedCorners = true;     // Set to true if rounded corners should be applied to outline ends
 
     //  Colors
-    private int mProgressColor = Color.RED;   // Outline color
+    private int mProgressColor = Color.parseColor("#ff5555");   // Outline color
     private int mTextColor = Color.BLACK;       // Progress text color
     private int backgroundCircleColor = Color.parseColor("#B3d3d3d3");  // 70% transparent grey
 
@@ -93,8 +93,8 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
 
         font = Typeface.createFromAsset(context.getAssets(), "font/robotocondensed_regular.ttf");
 
-        this.setZOrderOnTop(true);
-        this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        this.setZOrderOnTop(false);
+        //this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
     }
 
     public void onResumeSurfaceView() {
@@ -133,7 +133,8 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
         initMeasurments();
         super.onDraw(canvas);
 
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); //clear the previous frame
+        canvas.drawColor(Color.parseColor("#fffafafa"));    //  background color of AppTheme light
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); //clear the previous frame
 
         drawBackgroundArc(canvas);
         drawProgressArc(canvas);

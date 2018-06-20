@@ -18,15 +18,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.PermissionChecker;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,6 +46,9 @@ import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
@@ -57,18 +68,9 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
     private final static int RC_RESOLVE = 1;
     private final static int RC_LEADERBOARDS = 2;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            //  Achievements and leaderboards will crash the app since PlayServices has yet to be
-            //  imported properly
-            return optionsItemSelected(item);
-        }
-
-    };
 
 //    /**
 //     * Creates the expanded view of the option menu and sets the pause/resume icon
@@ -93,6 +95,63 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 //        pause.setIcon(d);
 //    }
 
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    private void setupTab(String label, int drawable, int tabPos) {
+        TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabOne.setText(label);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0);
+        tabOne.setCompoundDrawablePadding(20);
+        tabLayout.getTabAt(tabPos).setCustomView(tabOne);
+    }
+
+    private void createTabs() {
+        String labels[] = {"HOME", "HISTORY", "COUNT"};
+        int drawables[] = {R.drawable.ic_baseline_home_24px,
+                R.drawable.ic_baseline_history_24px,
+                R.drawable.ic_directions_run_black_24dp};
+
+        for (int i = 0; i < labels.length; i++) {
+            setupTab(labels[i], drawables[i], i);
+        }
+    }
+
+    private void createViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new Statistics_Activity(), "Home");
+        adapter.addFrag(new History_Fragment(), "History");
+        adapter.addFrag(new Count_Fragment(), "Count");
+        viewPager.setAdapter(adapter);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -100,20 +159,20 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navbar_fragments);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_list_black_24dp);
+        viewPager = findViewById(R.id.container);
+        createViewPager(viewPager);
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        createTabs();
 
-        if (savedInstanceState == null) {
-
-            Fragment newFragment = new Statistics_Activity();
-            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            transaction.replace(R.id.container, newFragment);
-            transaction.commit();
-        }
+//        if (savedInstanceState == null) {
+//
+//            Fragment newFragment = new Statistics_Activity();
+//            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//            transaction.replace(R.id.container, newFragment);
+//            transaction.commit();
+//        }
 
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());

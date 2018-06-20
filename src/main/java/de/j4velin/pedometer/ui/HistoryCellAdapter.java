@@ -104,9 +104,4 @@ public class HistoryCellAdapter<T extends StepHistory> extends ArrayAdapter<T>{
             // Return the completed view to render on screen
             return convertView;
         }
-
-//    public void updateList(ArrayList<StepHistory> stepHistory) {
-//        this.clear();
-//        this.addAll(stepHistory);
-//    }
 }

@@ -10,8 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.design.widget.TabLayout;
+import android.widget.Spinner;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.FloatingActionButton;
@@ -33,35 +37,17 @@ import de.j4velin.pedometer.obj.WeekStepHistory;
  * create an instance of this fragment.
  */
 public class History_Fragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private ListView lsView;
 
-    private TabLayout recordTypeTab;
-    private int tabPos;
+    private Spinner dateSpinner;
+    private Spinner sortSpinner;
 
     private ArrayList<DayStepHistory> dayHistoryRecords = null;
     private ArrayList<WeekStepHistory> weekHistoryRecords = null;
     private ArrayList<MonthStepHistory> monthHistoryRecords = null;
-
-    private FloatingActionMenu fabMenu;
-    private FloatingActionButton stepButton;
-    private FloatingActionButton dateButton;
-    private FloatingActionButton goalButton;
-    private FloatingActionButton stdDevButton;
-    private FloatingActionButton medianButton;
-    private FloatingActionButton bestDayButton;
-
     private HistoryCellAdapter stepHistoryCellAdapter = null;
-    private Typeface robotoCondensedLight;
 
     private SharedPreferences prefs;
 
@@ -85,24 +71,16 @@ public class History_Fragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static History_Fragment newInstance(String param1, String param2) {
         History_Fragment fragment = new History_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        setHasOptionsMenu(true);
-
-        //robotoCondensedLight = getResources().getFont(R.font.robotocondensed_light);
 
         //GRAB USER DATA
         prefs = getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
@@ -111,34 +89,34 @@ public class History_Fragment extends Fragment {
         db = Database.getInstance((getActivity()));
     }
 
-    public void sortListener(String option) {
+    public void sortListener(int option) {
 
-        int currentTimeFrame = recordTypeTab.getSelectedTabPosition();
+        int currentTimeFrame = dateSpinner.getSelectedItemPosition();
 
         //  sort the appropriate ArrayList
         switch (option) {
-            case "Step":
+            case 0:
                 if (currentTimeFrame == 0) dayHistoryRecords.sort(DayStepHistory.StepComparator);
                 else if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.StepComparator);
                 else monthHistoryRecords.sort(MonthStepHistory.StepComparator);
                 break;
-            case "Date":
+            case 1:
                 if (currentTimeFrame == 0) dayHistoryRecords.sort(DayStepHistory.DayDateComparator);
                 else if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.WeekDateComparator);
                 else monthHistoryRecords.sort(MonthStepHistory.MonthDateComparator);
                 break;
-            case "Goal":
+            case 2:
                 if (currentTimeFrame == 0) dayHistoryRecords.sort(DayStepHistory.DayGoalComparator);
                 break;
-            case "Median":
+            case 3:
                 if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.WeekMedianComparator);
                 else monthHistoryRecords.sort(MonthStepHistory.MonthMedianComparator);
                 break;
-            case "Best Day":
+            case 4:
                 if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.WeekBestDayComparator);
                 else monthHistoryRecords.sort(MonthStepHistory.MonthBestDayComparator);
                 break;
-            case "Std. Dev.":
+            case 5:
                 if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.WeekStdDevComparator);
                 else monthHistoryRecords.sort(MonthStepHistory.MonthStdDevComparator);
                 break;
@@ -160,50 +138,57 @@ public class History_Fragment extends Fragment {
         this.lsView.setAdapter(this.stepHistoryCellAdapter);
     }
 
-    public FloatingActionButton setupButton(String buttonText) {
-        final FloatingActionButton newButton = new FloatingActionButton((getContext()));
-        newButton.setLabelText(buttonText);
-        newButton.setButtonSize(FloatingActionButton.SIZE_MINI);
-        newButton.setOnClickListener(new View.OnClickListener() {
+    public Spinner setupSpinner(View view, int id, int arrayID, AdapterView.OnItemSelectedListener listener) {
+        Spinner s = view.findViewById(id);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                arrayID, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        s.setAdapter(adapter);
+        s.setOnItemSelectedListener(listener);
+        s.setSelection(0);
+
+        return s;
+    }
+
+    public Spinner setupSpinner(View view, int id, ArrayAdapter<String> adapter, AdapterView.OnItemSelectedListener listener) {
+        Spinner s = view.findViewById(id);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        s.setAdapter(adapter);
+        s.setOnItemSelectedListener(listener);
+        s.setSelection(0);
+
+        return s;
+    }
+
+    public void setupSortSpinner(View view, AdapterView.OnItemSelectedListener listener) {
+
+        final String[] sortArray = {"Steps", "Date", "Median", "Std. dev.", "Best day"};
+
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, sortArray) {
             @Override
-            public void onClick(View v) {
-                sortListener(newButton.getLabelText());
+            public int getCount() {
+                if (dateSpinner.getSelectedItemPosition() == 0) return sortArray.length - 3; // Steps, Date
+                else return sortArray.length;
             }
-        });
+        };
 
-        return newButton;
+        sortSpinner = setupSpinner(view, R.id.sort_spinner, sortAdapter, listener);
     }
 
-    public void setOptions(String timeFrameSelected) {
-
-        fabMenu.removeAllMenuButtons();
-
-        //  cells are always sortable by Date and Steps
-        fabMenu.addMenuButton(stepButton);
-        fabMenu.addMenuButton(dateButton);
-
-        if (timeFrameSelected.equals("day")) {
-            fabMenu.addMenuButton(goalButton);
-        }
-        else if ((timeFrameSelected.equals("week")) || (timeFrameSelected.equals("month"))) {
-            fabMenu.addMenuButton(stdDevButton);
-            fabMenu.addMenuButton(medianButton);
-            fabMenu.addMenuButton(bestDayButton);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_step_history , container, false);
-        recordTypeTab = view.findViewById(R.id.tab_layout);
-        this.lsView = view.findViewById(R.id.step_history_list);
 
-        recordTypeTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
-            @Override
-            public void onTabSelected(TabLayout.Tab tab){
-                tabPos = tab.getPosition();
+        dateSpinner = setupSpinner(view, R.id.date_spinner, R.array.date_array, new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
 
-                switch(tabPos) {
+                switch(position) {
                     case 0:
                         showDayStepHistory();
                         break;
@@ -214,32 +199,31 @@ public class History_Fragment extends Fragment {
                         showMonthStepHistory();
                         break;
                     default:
-                        Log.e("STEP_HISTORY_TAB_LAYOUT", "Unexpected Tab selected: " + tab.getPosition());
+                        Log.e("STEP_HISTORY_TAB_LAYOUT", "Unexpected Tab selected: " + position);
                         break;
                 }
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-        this.showDayStepHistory();
 
-        fabMenu = (FloatingActionMenu) view.findViewById(R.id.fab);
-        stepButton = setupButton("Step");
-        dateButton = setupButton("Date");
-        goalButton = setupButton("Goal");
-        stdDevButton = setupButton("Std. Dev.");
-        medianButton = setupButton("Median");
-        bestDayButton = setupButton("Best Day");
+        setupSortSpinner(view, new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+            int position, long id) {
 
-        setOptions("day");
+                sortListener(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        this.lsView = view.findViewById(R.id.step_history_list);
 
         return view;
     }
@@ -254,8 +238,6 @@ public class History_Fragment extends Fragment {
         else{
             this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
-
-        if (fabMenu != null) setOptions("day");
     }
 
     public void showWeekStepHistory() {
@@ -268,8 +250,6 @@ public class History_Fragment extends Fragment {
         } else {
             this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
-
-        if (fabMenu != null) setOptions("week");
     }
 
     public void showMonthStepHistory() {
@@ -283,8 +263,6 @@ public class History_Fragment extends Fragment {
         else{
             this.lsView.setAdapter(this.stepHistoryCellAdapter);
         }
-
-        if (fabMenu != null) setOptions("month");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
