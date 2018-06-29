@@ -33,8 +33,6 @@ public abstract class StepHistory {
     public float getDistance(){return distance;}
     public int getCalories(){return calories;}
 
-
-
     /*Comparator for sorting the list by step*/
     public static Comparator<StepHistory> StepComparator = new Comparator<StepHistory>() {
 

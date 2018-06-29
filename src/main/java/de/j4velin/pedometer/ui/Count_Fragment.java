@@ -91,10 +91,10 @@ public class Count_Fragment extends Fragment {
         distance = newDistance;
 
         distanceText
-                .setText(Statistics_Activity.formatter.format(newDistance));
+                .setText(Statistics_Fragment.formatter.format(newDistance));
 
         stepsText
-                .setText(Statistics_Activity.formatter.format(newSteps));
+                .setText(Statistics_Fragment.formatter.format(newSteps));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class Count_Fragment extends Fragment {
         split_date = prefs.getLong("split_date", -1);
         split_steps = prefs.getInt("split_steps", totalSteps);
         stepsText = d.findViewById(R.id.steps);
-        stepsText.setText(Statistics_Activity.formatter.format(totalSteps - split_steps));
+        stepsText.setText(Statistics_Fragment.formatter.format(totalSteps - split_steps));
         stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
         distance = (totalSteps - split_steps) * stepsize;
 
@@ -135,7 +135,7 @@ public class Count_Fragment extends Fragment {
         }
 
         distanceText =  d.findViewById(R.id.distance);
-        distanceText.setText(Statistics_Activity.formatter.format(distance));
+        distanceText.setText(Statistics_Fragment.formatter.format(distance));
 
         //  split date is used to determine if a split count is active
         split_active = split_date > 0;

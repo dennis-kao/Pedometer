@@ -105,11 +105,8 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.github.clans:fab:1.6.4'
-    implementation 'com.xiaochendev.progressroundbtn:library:2.0.0'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'   //  to be removed
-    implementation 'com.zekapp.library:progreswheelview:1.1.2'
-}
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'}
 
 def props = new Properties()
 

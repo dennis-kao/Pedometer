@@ -3,38 +3,25 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -100,6 +87,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
+
             super(manager);
         }
 
@@ -133,7 +121,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void createTabs() {
-        String labels[] = {"HOME", "HISTORY", "COUNT"};
+        String labels[] = {"HOME", "HISTORY", "TRACK"};
         int drawables[] = {R.drawable.ic_baseline_home_24px,
                 R.drawable.ic_baseline_history_24px,
                 R.drawable.ic_directions_run_black_24dp};
@@ -143,11 +131,32 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    private void createViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new Statistics_Activity(), "Home");
+    private void createViewPager(final ViewPager viewPager) {
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new Statistics_Fragment(), "Home");
         adapter.addFrag(new History_Fragment(), "History");
         adapter.addFrag(new Count_Fragment(), "Count");
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//                //RealtimeCircularProgressBar bar = ((Statistics_Fragment) adapter.getItem(0)).getDailyStepsProgressBar();
+//
+//                if (position == 0) {
+//                    ((Statistics_Fragment) adapter.getItem(0)).getDailyStepsProgressBar().startDrawing();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
         viewPager.setAdapter(adapter);
     }
 
@@ -164,15 +173,6 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         createTabs();
-
-//        if (savedInstanceState == null) {
-//
-//            Fragment newFragment = new Statistics_Activity();
-//            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//
-//            transaction.replace(R.id.container, newFragment);
-//            transaction.commit();
-//        }
 
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
@@ -240,7 +240,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         switch (item.getItemId()) {
             case R.id.action_statistics:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Statistics_Activity()).addToBackStack(null)
+                        .replace(R.id.container, new Statistics_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_settings:

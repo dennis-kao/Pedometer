@@ -17,9 +17,6 @@ import android.widget.ListView;
 import android.support.design.widget.TabLayout;
 import android.widget.Spinner;
 
-import com.github.clans.fab.FloatingActionMenu;
-import com.github.clans.fab.FloatingActionButton;
-
 import java.util.ArrayList;
 
 import de.j4velin.pedometer.Database;
@@ -87,6 +84,10 @@ public class History_Fragment extends Fragment {
         stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
         weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
         db = Database.getInstance((getActivity()));
+
+        this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
+        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
     }
 
     public void sortListener(int option) {
@@ -141,9 +142,9 @@ public class History_Fragment extends Fragment {
     public Spinner setupSpinner(View view, int id, int arrayID, AdapterView.OnItemSelectedListener listener) {
         Spinner s = view.findViewById(id);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                arrayID, android.R.layout.simple_spinner_item);
+                arrayID, R.layout.spinner_item);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(listener);
@@ -155,7 +156,7 @@ public class History_Fragment extends Fragment {
     public Spinner setupSpinner(View view, int id, ArrayAdapter<String> adapter, AdapterView.OnItemSelectedListener listener) {
         Spinner s = view.findViewById(id);
         // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         s.setAdapter(adapter);
         s.setOnItemSelectedListener(listener);
@@ -166,9 +167,9 @@ public class History_Fragment extends Fragment {
 
     public void setupSortSpinner(View view, AdapterView.OnItemSelectedListener listener) {
 
-        final String[] sortArray = {"Steps", "Date", "Median", "Std. dev.", "Best day"};
+        final String[] sortArray = {"Steps", "Date", "Median", "Dev.", "Best day"};
 
-        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, sortArray) {
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, sortArray) {
             @Override
             public int getCount() {
                 if (dateSpinner.getSelectedItemPosition() == 0) return sortArray.length - 3; // Steps, Date
@@ -187,6 +188,8 @@ public class History_Fragment extends Fragment {
         dateSpinner = setupSpinner(view, R.id.date_spinner, R.array.date_array, new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
+
+                if (sortSpinner != null) sortSpinner.setSelection(0);
 
                 switch(position) {
                     case 0:
@@ -230,8 +233,6 @@ public class History_Fragment extends Fragment {
 
     public void showDayStepHistory() {
 
-        this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
-
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
@@ -242,7 +243,6 @@ public class History_Fragment extends Fragment {
 
     public void showWeekStepHistory() {
 
-        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
 
         if (this.weekHistoryRecords == null) {
@@ -253,8 +253,6 @@ public class History_Fragment extends Fragment {
     }
 
     public void showMonthStepHistory() {
-
-        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
 
         this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
 

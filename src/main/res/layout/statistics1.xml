@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
+    android:paddingVertical="30dp"
     android:paddingHorizontal="12dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -18,8 +18,8 @@
             android:layout_gravity="center"
             android:layout_width="225dp"
             android:layout_height="225dp"
-            android:background="?android:colorBackground" />
-
+            android:background="?android:colorBackground"
+            app:layout_constraintTop_toBottomOf="parent"/>
     </FrameLayout>
 
 

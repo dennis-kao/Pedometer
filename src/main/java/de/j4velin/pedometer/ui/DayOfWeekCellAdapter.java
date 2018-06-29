@@ -37,7 +37,8 @@ public class DayOfWeekCellAdapter extends RecyclerView.Adapter<DayOfWeekCellAdap
             dowCircle = v.findViewById(R.id.dowCircle);
             dowCircle.showProgressText(false);
             dowCircle.useRoundedCorners(false);
-            dowCircle.setProgressWidth(5);
+            dowCircle.setCircleGap(3);
+            dowCircle.setProgressWidth(7);
         }
     }
 
@@ -63,7 +64,7 @@ public class DayOfWeekCellAdapter extends RecyclerView.Adapter<DayOfWeekCellAdap
         cal.setTimeInMillis(epochTime);
         int dow = cal.get(Calendar.DAY_OF_WEEK) - 1;
 
-        Logger.log("Day of week: " + strDays[dow]);
+        //Logger.log("Day of week: " + strDays[dow]);
 
         return strDays[dow];
     }

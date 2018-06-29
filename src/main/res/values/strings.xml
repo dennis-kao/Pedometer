@@ -98,9 +98,9 @@
     <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQGg</string>
 
     <string-array name="date_array">
-        <item>Day</item>
-        <item>Week</item>
-        <item>Month</item>
+        <item>Day view</item>
+        <item>Week view</item>
+        <item>Month view</item>
     </string-array>
 
     <string-array name="sort_array">

@@ -12,6 +12,10 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import de.j4velin.pedometer.util.Logger;
+
 /**
  * Real-time android view component that can be used to show a round progress bar.
  * It can be customized with size, stroke size, colors and text etc.
@@ -60,70 +64,105 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
     private Typeface font;
 
     //  mPaint is reused to setup all drawn elements on canvas
-    private Paint mPaint;                       // Allocate paint outside onDraw to avoid unnecessary object creation
+    private Paint backgroundPaint, progressTextPaint, unitTextPaint, progressBarPaint;                       // Allocate paint outside onDraw to avoid unnecessary object creation
 
     //  Thread logic
     private Thread thread = null;
-    volatile boolean running = false;
+    AtomicBoolean running = new AtomicBoolean(false);
 
     //  Progress data
     private int count = 0;
     private float progress = 0;
 
+    private int backgroundColor;
+
     public RealtimeCircularProgressBar(Context context) {
         this(context, null);
-        init(context);
+        init();
     }
 
     public RealtimeCircularProgressBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        init(context);
+        init();
     }
 
     public RealtimeCircularProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
-    public void init(Context context) {
+    public void init() {
         initMeasurments();
         surfaceHolder = getHolder();
 
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        progressBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        progressTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        unitTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        font = Typeface.createFromAsset(context.getAssets(), "font/robotocondensed_regular.ttf");
+        font = Typeface.createFromAsset(getContext().getAssets(), "font/robotocondensed_regular.ttf");
 
-        this.setZOrderOnTop(false);
-        //this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        this.setZOrderOnTop(true);  //  has to be true for viewPager to animate
+        this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        backgroundColor = Color.parseColor("#fffafafa"); //  background color of AppTheme light
+
+        progressBarPaint.setColor(mProgressColor);
+        progressBarPaint.setStrokeWidth(mStrokeWidth - circleGap);
+        progressBarPaint.setAntiAlias(true);
+        progressBarPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
+        progressBarPaint.setStyle(Paint.Style.STROKE);
+
+        backgroundPaint.setColor(backgroundCircleColor);
+        backgroundPaint.setStrokeWidth(mStrokeWidth);
+        backgroundPaint.setAntiAlias(true);
+        backgroundPaint.setStyle(Paint.Style.STROKE);
+
+        progressTextPaint.setTextAlign(Paint.Align.CENTER);
+        progressTextPaint.setStrokeWidth(0);
+        progressTextPaint.setColor(mTextColor);
+        progressTextPaint.setTypeface(font);
+        progressTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        unitTextPaint.setTextAlign(Paint.Align.CENTER);
+        unitTextPaint.setStrokeWidth(0);
+        unitTextPaint.setColor(mTextColor);
+        unitTextPaint.setTypeface(font);
+        unitTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
-    public void onResumeSurfaceView() {
-        running = true;
-        thread = new Thread(this);
-        thread.start();
+    public void startDrawing() {
+
+        if (running.compareAndSet(false, true)) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
-    public void onPauseSurfaceView() {
-        running = false;
+    public void stopDrawing() {
 
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (running.compareAndSet(true, false)) {
+
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void run() {
 
-        while(running) {
+        while(running.get()) {
 
-            if(!surfaceHolder.getSurface().isValid()) //  only update UI when steps text change
+            if(!surfaceHolder.getSurface().isValid())
                 continue;
 
             Canvas canvas = surfaceHolder.lockCanvas();
             onDraw(canvas);
+            //Logger.log("Drawing!" + Integer.toString(count));
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -133,8 +172,7 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
         initMeasurments();
         super.onDraw(canvas);
 
-        canvas.drawColor(Color.parseColor("#fffafafa"));    //  background color of AppTheme light
-        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); //clear the previous frame
+        canvas.drawColor(backgroundColor);
 
         drawBackgroundArc(canvas);
         drawProgressArc(canvas);
@@ -156,12 +194,7 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
         final float pad = mStrokeWidth / 2f;
         final RectF outerOval = new RectF(pad, pad, diameter - pad, diameter - pad);
 
-        mPaint.setColor(mProgressColor);
-        mPaint.setStrokeWidth(mStrokeWidth - circleGap);
-        mPaint.setAntiAlias(true);
-        mPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
-        mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(outerOval, mStartAngle, calcSweepAngleFromProgress(progress), false, mPaint);
+        canvas.drawArc(outerOval, mStartAngle, calcSweepAngleFromProgress(progress), false, progressBarPaint);
     }
 
     private void drawBackgroundArc(Canvas canvas){
@@ -170,39 +203,25 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
         final float pad = mStrokeWidth / 2f;
         final RectF outerOval = new RectF(pad, pad, diameter - pad, diameter - pad);
 
-        mPaint.setColor(backgroundCircleColor);
-        mPaint.setStrokeWidth(mStrokeWidth);
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(outerOval, mStartAngle, mMaxSweepAngle, false, mPaint);
+        canvas.drawArc(outerOval, mStartAngle, mMaxSweepAngle, false, backgroundPaint);
     }
 
     private void drawText(Canvas canvas) {
-        mPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setStrokeWidth(0);
-        mPaint.setColor(mTextColor);
-        mPaint.setTypeface(font);
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        progressTextPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
 
         int xPos = (canvas.getWidth() / 2);
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) ;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((progressTextPaint.descent() + progressTextPaint.ascent()) / 2)) ;
 
-        canvas.drawText(Integer.toString(count), xPos, yPos, mPaint);
+        canvas.drawText(Integer.toString(count), xPos, yPos, progressTextPaint);
     }
 
     private void drawUnitText(Canvas canvas) {
-        mPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 15f);
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setStrokeWidth(0);
-        mPaint.setColor(mTextColor);
-        mPaint.setTypeface(font);
-        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        unitTextPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 15f);
 
         // Center text
         int xPos = (canvas.getWidth() / 2);
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) + unitTextGap;
-        canvas.drawText(unitText, xPos, yPos, mPaint);
+        int yPos = (int) ((canvas.getHeight() / 2) - ((unitTextPaint.descent() + unitTextPaint.ascent()) / 2)) + unitTextGap;
+        canvas.drawText(unitText, xPos, yPos, unitTextPaint);
     }
 
     private float calcSweepAngleFromProgress(float progress) {
@@ -224,27 +243,26 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
 
     public void setProgressColor(int color) {
         mProgressColor = color;
-        invalidate();
+        progressBarPaint.setColor(color);
     }
 
     public void setProgressWidth(int width) {
         mStrokeWidth = width;
-        invalidate();
+        progressTextPaint.setStrokeWidth(width);
     }
 
     public void setTextColor(int color) {
         mTextColor = color;
-        invalidate();
+        progressTextPaint.setColor(color);
     }
 
     public void showProgressText(boolean show) {
         mDrawText = show;
-        invalidate();
     }
 
     public void setCircleGap(int g) {
         circleGap = g;
-        invalidate();
+        progressBarPaint.setStrokeWidth(mStrokeWidth - circleGap);
     }
 
     public void setNumText(int n) {
@@ -267,6 +285,10 @@ public class RealtimeCircularProgressBar extends SurfaceView implements Runnable
      */
     public void useRoundedCorners(boolean roundedCorners) {
         mRoundedCorners = roundedCorners;
-        invalidate();
+    }
+
+    public void setBackgroundCircleColor(int color) {
+        backgroundColor = color;
+        backgroundPaint.setColor(backgroundCircleColor);
     }
 }

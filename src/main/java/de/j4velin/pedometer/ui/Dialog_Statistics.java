@@ -64,15 +64,15 @@ abstract class Dialog_Statistics {
 		int thisMonth = db.getSteps(date.getTimeInMillis(), System.currentTimeMillis()) + since_boot;
 
 		((TextView) d.findViewById(R.id.record)).setText(
-				Statistics_Activity.formatter.format(record.second) + " @ "
+				Statistics_Fragment.formatter.format(record.second) + " @ "
 				+ java.text.DateFormat.getDateInstance().format(record.first));
 
 		//calling fragment_Overview function so time and user's activity could be updated on the app
-		((TextView) d.findViewById(R.id.totalthisweek)).setText(Statistics_Activity.formatter.format(thisWeek));
-		((TextView) d.findViewById(R.id.totalthismonth)).setText(Statistics_Activity.formatter.format(thisMonth));
+		((TextView) d.findViewById(R.id.totalthisweek)).setText(Statistics_Fragment.formatter.format(thisWeek));
+		((TextView) d.findViewById(R.id.totalthismonth)).setText(Statistics_Fragment.formatter.format(thisMonth));
 
-		((TextView) d.findViewById(R.id.averagethisweek)).setText(Statistics_Activity.formatter.format(thisWeek / 7));
-		((TextView) d.findViewById(R.id.averagethismonth)).setText(Statistics_Activity.formatter.format(thisMonth / daysThisMonth));
+		((TextView) d.findViewById(R.id.averagethisweek)).setText(Statistics_Fragment.formatter.format(thisWeek / 7));
+		((TextView) d.findViewById(R.id.averagethismonth)).setText(Statistics_Fragment.formatter.format(thisMonth / daysThisMonth));
 		
 		db.close();
 		

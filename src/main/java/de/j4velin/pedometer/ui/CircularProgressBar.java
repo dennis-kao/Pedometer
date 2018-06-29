@@ -36,19 +36,43 @@ public class CircularProgressBar extends View {
     private int circleGap = 10;
     private int backgroundCircleColor = Color.LTGRAY;
 
-    private final Paint mPaint;                 // Allocate paint outside onDraw to avoid unnecessary object creation
+    private Paint backgroundCirclePaint, progressBarPaint, textPaint;                 // Allocate paint outside onDraw to avoid unnecessary object creation
 
     public CircularProgressBar(Context context) {
         this(context, null);
+        init();
     }
 
     public CircularProgressBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        init();
     }
 
     public CircularProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        init();
+    }
+
+    private void init() {
+        backgroundCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        progressBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        backgroundCirclePaint.setColor(backgroundCircleColor);
+        backgroundCirclePaint.setAntiAlias(true);
+        backgroundCirclePaint.setStyle(Paint.Style.STROKE);
+        backgroundCirclePaint.setStrokeWidth(mStrokeWidth - circleGap);
+
+        progressBarPaint.setColor(mProgressColor);
+        progressBarPaint.setStrokeWidth(mStrokeWidth);
+        progressBarPaint.setAntiAlias(true);
+        progressBarPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
+        progressBarPaint.setStyle(Paint.Style.STROKE);
+
+        textPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setStrokeWidth(0);
+        textPaint.setColor(mTextColor);
     }
 
     @Override
@@ -75,12 +99,7 @@ public class CircularProgressBar extends View {
         final float pad = mStrokeWidth / 2f;
         final RectF outerOval = new RectF(pad, pad, diameter - pad, diameter - pad);
 
-        mPaint.setColor(mProgressColor);
-        mPaint.setStrokeWidth(mStrokeWidth);
-        mPaint.setAntiAlias(true);
-        mPaint.setStrokeCap(mRoundedCorners ? Paint.Cap.ROUND : Paint.Cap.BUTT);
-        mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(outerOval, mStartAngle, mSweepAngle, false, mPaint);
+        canvas.drawArc(outerOval, mStartAngle, mSweepAngle, false, progressBarPaint);
     }
 
     private void drawBackgroundArc(Canvas canvas){
@@ -89,24 +108,16 @@ public class CircularProgressBar extends View {
         final float pad = mStrokeWidth / 2f;
         final RectF outerOval = new RectF(pad, pad, diameter - pad, diameter - pad);
 
-        mPaint.setColor(backgroundCircleColor);
-        mPaint.setStrokeWidth(mStrokeWidth - circleGap);
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawArc(outerOval, mStartAngle, mMaxSweepAngle, false, mPaint);
+        canvas.drawArc(outerOval, mStartAngle, mMaxSweepAngle, false, backgroundCirclePaint);
     }
 
     private void drawText(Canvas canvas) {
-        mPaint.setTextSize(Math.min(mViewWidth, mViewHeight) / 5f);
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setStrokeWidth(0);
-        mPaint.setColor(mTextColor);
 
         // Center text
         int xPos = (canvas.getWidth() / 2);
-        int yPos = (int) ((canvas.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2)) ;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
 
-        canvas.drawText(calcProgressFromSweepAngle(mSweepAngle) + "%", xPos, yPos, mPaint);
+        canvas.drawText(calcProgressFromSweepAngle(mSweepAngle) + "%", xPos, yPos, textPaint);
     }
 
     private float calcSweepAngleFromProgress(int progress) {
@@ -157,21 +168,30 @@ public class CircularProgressBar extends View {
 
     public void setProgressColor(int color) {
         mProgressColor = color;
+        init();
         invalidate();
     }
 
     public void setProgressWidth(int width) {
         mStrokeWidth = width;
+        init();
         invalidate();
     }
 
     public void setTextColor(int color) {
         mTextColor = color;
+        init();
         invalidate();
     }
 
     public void showProgressText(boolean show) {
         mDrawText = show;
+        invalidate();
+    }
+
+    public void setCircleGap(int g) {
+        circleGap = g;
+        init();
         invalidate();
     }
 
