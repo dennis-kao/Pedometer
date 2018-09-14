@@ -3,8 +3,6 @@ package de.j4velin.pedometer.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +11,19 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.PermissionChecker;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,12 +36,13 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.j4velin.pedometer.BuildConfig;
-import de.j4velin.pedometer.Database;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.util.GoogleFit;
 import de.j4velin.pedometer.util.Logger;
-import de.j4velin.pedometer.util.Util;
 
 /**
  * Created by dkao on 2/11/2018.
@@ -44,47 +50,134 @@ import de.j4velin.pedometer.util.Util;
 
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        Fragment_SplitCount.OnFragmentInteractionListener,
-        Fragment_StepHistory.OnFragmentInteractionListener {
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            //  Achievements and leaderboards will crash the app since PlayServices has yet to be
-            //  imported properly
-            return optionsItemSelected(item);
-        }
-
-    };
+        Count_Fragment.OnFragmentInteractionListener,
+        History_Fragment.OnFragmentInteractionListener,
+        PopupMenu.OnMenuItemClickListener {
 
     private GoogleApiClient mGoogleApiClient;
     private final static int RC_RESOLVE = 1;
     private final static int RC_LEADERBOARDS = 2;
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private ImageButton settingsButton;
+
+
+//    /**
+//     * Creates the expanded view of the option menu and sets the pause/resume icon
+//     * to the approriate icon
+//     * @param menu
+//     * @param inflater
+//     */
+//    @Override
+//    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+//        inflater.inflate(R.menu.main, menu);
+//        MenuItem pause = menu.getItem(0);
+//        Drawable d;
+//        if (this.getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE)
+//                .contains("pauseCount")) { // currently paused
+//            pause.setTitle(R.string.resume);
+//            d = getResources().getDrawable(R.drawable.ic_resume);
+//        } else {
+//            pause.setTitle(R.string.pause);
+//            d = getResources().getDrawable(R.drawable.ic_pause);
+//        }
+//        d.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+//        pause.setIcon(d);
+//    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    private void setupTab(String label, int drawable, int tabPos) {
+        TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabOne.setText(label);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0);
+        tabOne.setCompoundDrawablePadding(20);
+        tabLayout.getTabAt(tabPos).setCustomView(tabOne);
+    }
+
+    private void createTabs() {
+        String labels[] = {"HOME", "HISTORY", "TRACK"};
+        int drawables[] = {R.drawable.ic_baseline_home_24px,
+                R.drawable.ic_baseline_history_24px,
+                R.drawable.ic_directions_run_black_24dp};
+
+        for (int i = 0; i < labels.length; i++) {
+            setupTab(labels[i], drawables[i], i);
+        }
+    }
+
+    private void createViewPager(final ViewPager viewPager) {
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new Statistics_Fragment(), "Home");
+        adapter.addFrag(new History_Fragment(), "History");
+        adapter.addFrag(new Count_Fragment(), "Count");
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//                //RealtimeCircularProgressBar bar = ((Statistics_Fragment) adapter.getItem(0)).getDailyStepsProgressBar();
+//
+//                if (position == 0) {
+//                    ((Statistics_Fragment) adapter.getItem(0)).getDailyStepsProgressBar().startDrawing();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
+        viewPager.setAdapter(adapter);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.AppTheme); //  remove splash screen, default is AppTheme.Launcher
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navbar_fragments);
+        setContentView(R.layout.fragment_holder);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        if (savedInstanceState == null) {
-            // Create new fragment and transaction
-            Fragment newFragment = new Fragment_Overview();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-            // Replace whatever is in the fragment_container view with this
-            // fragment,
-            // and add the transaction to the back stack
-            transaction.replace(R.id.container, newFragment);
-
-            // Commit the transaction
-            transaction.commit();
-        }
+        viewPager = findViewById(R.id.container);
+        createViewPager(viewPager);
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        createTabs();
 
         GoogleApiClient.Builder builder = new GoogleApiClient.Builder(this, this, this);
         builder.addApi(Games.API, Games.GamesOptions.builder().build());
@@ -92,7 +185,6 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         builder.addApi(Fitness.HISTORY_API);
         builder.addApi(Fitness.RECORDING_API);
         builder.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE));
-
         mGoogleApiClient = builder.build();
 
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 23 && PermissionChecker
@@ -100,6 +192,23 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 PermissionChecker.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
+
+        settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+
+        popup.inflate(R.menu.main);
+        popup.setOnMenuItemClickListener(this);
+
+        popup.show(); //showing popup menu
     }
 
     @Override
@@ -149,49 +258,48 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    public boolean optionsItemSelected(final MenuItem item) {
+    @Override
+    public boolean onMenuItemClick (MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_statistics:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_Overview()).addToBackStack(null)
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new Statistics_Fragment()).addToBackStack(null)
                         .commit();
                 break;
-            case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_Settings()).addToBackStack(null)
-                        .commit();
-                break;
-            case R.id.action_leaderboard:
-            case R.id.action_achievements:
-                if (mGoogleApiClient.isConnected()) {
-                    startActivityForResult(item.getItemId() == R.id.action_achievements ?
-                                    Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
-                                    Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
-                            RC_LEADERBOARDS);
-                } else {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-                    builder2.setTitle(R.string.sign_in_necessary);
-                    builder2.setMessage(R.string.please_sign_in_with_your_google_account);
-                    builder2.setPositiveButton(android.R.string.ok,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    getFragmentManager().beginTransaction()
-                                            .replace(R.id.container, new Fragment_Settings())
-                                            .addToBackStack(null).commit();
-                                }
-                            });
-                    builder2.setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    builder2.create().show();
-                }
-                break;
+//            case R.id.action_settings:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container, new Settings_Fragment()).addToBackStack(null).commit();
+//                break;
+//            case R.id.action_leaderboard:
+//            case R.id.action_achievements:
+//                if (mGoogleApiClient.isConnected()) {
+//                    startActivityForResult(item.getItemId() == R.id.action_achievements ?
+//                                    Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
+//                                    Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
+//                            RC_LEADERBOARDS);
+//                } else {
+//                    AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+//                    builder2.setTitle(R.string.sign_in_necessary);
+//                    builder2.setMessage(R.string.please_sign_in_with_your_google_account);
+//                    builder2.setPositiveButton(android.R.string.ok,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                    getFragmentManager().beginTransaction()
+//                                            .replace(R.id.container, new Settings_Fragment())
+//                                            .addToBackStack(null).commit();
+//                                }
+//                            });
+//                    builder2.setNegativeButton(android.R.string.cancel,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                }
+//                            });
+//                    builder2.create().show();
+//                }
+//                break;
 //            case R.id.action_faq:
 //                startActivity(new Intent(Intent.ACTION_VIEW,
 //                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))
@@ -199,20 +307,8 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 //                break;
             case R.id.action_about:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.about);
-                TextView tv = new TextView(this);
-                tv.setPadding(10, 10, 10, 10);
-                tv.setText(R.string.about_text_links);
-                try {
-                    tv.append(getString(R.string.about_app_version,
-                            getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
-                } catch (PackageManager.NameNotFoundException e1) {
-                    // should not happen as the app is definitely installed when
-                    // seeing the dialog
-                    e1.printStackTrace();
-                }
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-                builder.setView(tv);
+                builder.setTitle(R.string.about).setMessage("myPedometer passively tracks and logs your steps using the built-in accelerometer. It gives users full ownership of their own data." +
+                        "\n\nThis app created by Dennis Kao and uses database logic from Thomas Hoffmann's Pedometer project (github.com/j4velin/Pedometer)");
                 builder.setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -223,13 +319,13 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 builder.create().show();
                 break;
             case R.id.action_split_count:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_SplitCount()).addToBackStack(null)
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new Count_Fragment()).addToBackStack(null)
                         .commit();
                 break;
             case R.id.action_step_history:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new Fragment_StepHistory()).addToBackStack(null)
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new History_Fragment()).addToBackStack(null)
                         .commit();
                 break;
         }

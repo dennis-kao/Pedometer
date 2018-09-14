@@ -26,6 +26,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -269,10 +270,10 @@ public class Database extends SQLiteOpenHelper {
      * @param num the number of entries to get
      * @return a list of long,integer pair - the first being the date, the second the number of steps
      */
-    public List<Pair<Long, Integer>> getLastEntries(int num) {
+    public List<Pair<Long, Integer>> getLastEntries(int nEntries) {
         Cursor c = getReadableDatabase()
                 .query(DB_NAME, new String[]{"date", "steps"}, "date > 0", null, null, null,
-                        "date DESC", String.valueOf(num));
+                        "date DESC", String.valueOf(nEntries));
         int max = c.getCount();
         List<Pair<Long, Integer>> result = new ArrayList<>(max);
         if (c.moveToFirst()) {
@@ -280,6 +281,24 @@ public class Database extends SQLiteOpenHelper {
                 result.add(new Pair<>(c.getLong(0), c.getInt(1)));
             } while (c.moveToNext());
         }
+        return result;
+    }
+
+    public List<Pair<Long, Float>> getLastEntriesProgress(int nEntries, int goal) {
+        Cursor c = getReadableDatabase()
+                .query(DB_NAME, new String[]{"date", "steps"}, "date > 0", null, null, null,
+                        "date DESC", String.valueOf(nEntries));
+        int max = c.getCount();
+        List<Pair<Long, Float>> result = new ArrayList<>(max);
+        if (c.moveToFirst()) {
+            do {
+
+                float percent = (float) c.getInt(1) / (float) goal * 100;
+                //Logger.log("Time, steps, percent: " + Long.toString(c.getLong(0)) + " " +  Integer.toString(c.getInt(1))+ " " +Integer.toString(percent));
+                result.add(new Pair<>(c.getLong(0), percent));
+            } while (c.moveToNext());
+        }
+        Collections.reverse(result);    //  restore ordering of entries reversed by .add() method
         return result;
     }
 
@@ -608,7 +627,6 @@ public class Database extends SQLiteOpenHelper {
         Cursor c = getReadableDatabase()
                 .rawQuery("SELECT * FROM " + DB_NAME + " WHERE " + DATE_COL + " > 0 ORDER BY " + DATE_COL+ " ASC", null);
 
-        // 160 is hard-coded weight until we can get weight properly from settings
         float caloriesPerMile = (float)(0.57 * weight);
         int dateInd = 0;
         int stepInd = 0;

@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-//package de.j4velin.pedometer.ui;
+//package de.j4velin.de.dkao.de.dkao.pedometer.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,8 +33,8 @@ import android.widget.TextView;
 import de.j4velin.pedometer.BuildConfig;
 import de.j4velin.pedometer.R;
 import de.j4velin.pedometer.SensorListener;
-import de.j4velin.pedometer.ui.Fragment_Overview;
-import de.j4velin.pedometer.ui.Fragment_Settings;
+import de.j4velin.pedometer.ui.Settings_Fragment;
+import de.j4velin.pedometer.ui.Statistics_Fragment;
 
 public class Activity_Main extends FragmentActivity {
 
@@ -46,8 +44,8 @@ public class Activity_Main extends FragmentActivity {
         startService(new Intent(this, SensorListener.class));
         if (b == null) {
             // Create new fragment and transaction
-            Fragment newFragment = new Fragment_Overview();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            Fragment newFragment = new Statistics_Fragment();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             // Replace whatever is in the fragment_container view with this
             // fragment,
@@ -81,24 +79,24 @@ public class Activity_Main extends FragmentActivity {
                 break;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Fragment_Settings()).addToBackStack(null)
+                        .replace(android.R.id.content, new Settings_Fragment()).addToBackStack(null)
                         .commit();
                 break;
-            case R.id.action_leaderboard:
-            case R.id.action_achievements:
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-                builder2.setTitle("Google services required");
-                builder2.setMessage(
-                        "This feature is not available on the F-Droid version of the app");
-                builder2.setNegativeButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder2.create().show();
-                break;
+//            case R.id.action_leaderboard:
+//            case R.id.action_achievements:
+//                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+//                builder2.setTitle("Google services required");
+//                builder2.setMessage(
+//                        "This feature is not available on the F-Droid version of the app");
+//                builder2.setNegativeButton(android.R.string.ok,
+//                        new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                builder2.create().show();
+//                break;
 //            case R.id.action_faq:
 //                startActivity(new Intent(Intent.ACTION_VIEW,
 //                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))

@@ -2,8 +2,9 @@ package de.j4velin.pedometer.obj;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
  */
 
 public class MonthStepHistory extends StepHistory {
+
     private int month;
     private int year;
     private int bestDaySteps;
@@ -20,6 +22,32 @@ public class MonthStepHistory extends StepHistory {
     private long bestDay;
     private double stdDev;
     private double median;
+
+    public static String[] monthStrings = {"January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"};
+
+    public static String[] shortMonthStrings = {"Jan",
+            "Feb",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sept",
+            "Oct",
+            "Nov",
+            "Dec"};
 
     public void setup(int month, int year, int totalSteps, long avgSteps, long bestDay, float distance, ArrayList<Integer> stepsForTheMonth){
         this.month = month;
@@ -40,36 +68,19 @@ public class MonthStepHistory extends StepHistory {
         this.bestDaySteps = bestDaySteps;
     }
 
-    public String getMonth(){
-        switch(month) {
-            case 1:
-                return "January";
-            case 2:
-                return "February";
-            case 3:
-                return "March";
-            case 4:
-                return "April";
-            case 5:
-                return "May";
-            case 6:
-                return "June";
-            case 7:
-                return "July";
-            case 8:
-                return "August";
-            case 9:
-                return "September";
-            case 10:
-                return "October";
-            case 11:
-                return "November";
-            case 12:
-                return "December";
-            default:
-                return "null";
-        }
+    public String getMonth() {
+        return shortMonthStrings[month];
     }
+
+    public String getYearString() {
+        return Integer.toString(year);
+    }
+
+    @Override
+    public String toString(){
+        return monthStrings[month] + " " + Integer.toString(year);
+    }
+
     public int getMonthInt(){
         return month;
     }
@@ -91,17 +102,6 @@ public class MonthStepHistory extends StepHistory {
 
     public long getBestDay() { return bestDay; }
     public void setBestDay(long bestDay) { this.bestDay = bestDay; }
-    public String getBestDayString(){
-        if(this.bestDay <= 0){
-            return "n/a";
-        }
-        String rtn;
-        Date date = new Date(this.bestDay);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        rtn = formatter.format(date).toString();
-        return rtn;
-    }
-
 
     public double getStdDev() {
         return stdDev;
@@ -131,6 +131,16 @@ public class MonthStepHistory extends StepHistory {
             this.median = (data.get((data.size() / 2) - 1) + data.get(data.size() / 2)) / 2.0;
         }
         this.median =  data.get(data.size() / 2);
+    }
+
+    public int getDaysInMonth() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        int numDays = calendar.getActualMaximum(Calendar.DATE);
+
+        return numDays;
     }
 
     /*Comparator for sorting the list by date*/

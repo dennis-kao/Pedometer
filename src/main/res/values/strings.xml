@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <string name="app_name">Pedometer</string>
+    <string name="app_name">myPedometer</string>
+    <string name="splash_screen">Splash screen</string>
     <string name="goal">Goal</string>
     <string name="step_size">Step size</string>
     <string name="height_size">Height</string>
@@ -39,7 +40,7 @@
     <string name="settings">Settings</string>
     <string name="achievements">Achievements</string>
     <string name="leaderboard">Leaderboard</string>
-    <string name="statistics">Statistics</string>
+    <string name="statistics">Home</string>
     <string name="faq">FAQ</string>
     <string name="goal_reached_notification">Goal reached! %s steps and counting</string>
     <string name="notification_text">%s steps to go</string>
@@ -60,8 +61,8 @@
     <string name="stop">Stop</string>
     <string name="close">close</string>
     <string name="no_split_active">No split counter active. Click start to count the steps from now on</string>
-    <string name="split_count">Split count</string>
-    <string name="step_history">Step history</string>
+    <string name="split_count">Count</string>
+    <string name="step_history">History</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="ispaused">Pedometer is paused</string>
@@ -96,16 +97,18 @@
     <string name="leaderboard_most_steps_walked">CgkI_pu14sQDEAIQGQ</string>
     <string name="leaderboard_most_steps_walked_in_one_day">CgkI_pu14sQDEAIQGg</string>
 
-    <!-- This might be somewhat unethical, but using the same app_id as the
-        original allows
-        our version of the app to connect and use j4velin's preconfigured
-        Google Play Achievements !-->
-    <string name="app_id">121539218942</string>
+    <string-array name="date_array">
+        <item>Day view</item>
+        <item>Week view</item>
+        <item>Month view</item>
+    </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="day">Day</string>
-    <string name="week">Week</string>
-    <string name="month">Month</string>
+    <string-array name="sort_array">
+        <item>Steps</item>
+        <item>Date</item>
+        <item>Best day</item>
+        <item>Std. dev.</item>
+        <item>Median</item>
+    </string-array>
 
 </resources>

@@ -1,15 +1,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <group android:id="@+id/app_fragments"
+        android:checkableBehavior="single">
     <item
         android:id="@+id/action_statistics"
-        android:icon="@drawable/ic_pie_chart_outlined_black_24dp"
+        android:icon="@drawable/ic_baseline_home_24px"
         android:title="@string/statistics"/>
     <item
         android:id="@+id/action_step_history"
-        android:icon="@drawable/ic_history_black_24dp"
+        android:icon="@drawable/ic_baseline_history_24px"
         android:title="@string/step_history"/>
     <item
         android:id="@+id/action_split_count"
         android:icon="@drawable/ic_directions_run_black_24dp"
         android:title="@string/split_count"/>
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_settings"
+            android:icon="@drawable/ic_baseline_settings_20px"
+            android:title="@string/settings"/>
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_baseline_info_24px"
+            android:title="@string/about"/>
+    </group>
 </menu>

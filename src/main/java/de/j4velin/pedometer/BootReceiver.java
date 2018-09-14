@@ -35,7 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         if (BuildConfig.DEBUG) Logger.log("booted");
 
-        SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
 
         Database db = Database.getInstance(context);
 
