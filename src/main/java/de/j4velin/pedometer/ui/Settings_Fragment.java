@@ -33,6 +33,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,7 +172,7 @@ public class Settings_Fragment extends PreferenceFragment implements OnPreferenc
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        return ((Activity_Main) getActivity()).optionsItemSelected(item);
+        return ((Activity_Main) getActivity()).onOptionsItemSelected(item);
     }
 
     @Override

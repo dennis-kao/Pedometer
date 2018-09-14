@@ -1,23 +1,20 @@
 package de.j4velin.pedometer.obj;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 
 /**
  * Created by Rajbir on 22/03/18.
  */
 
 public class DayStepHistory extends StepHistory {
-    private float goal;
+    private float goalCompleted;
     private long day;
+    public static String formatter = "EEEEEE, MMMM d, yyyy";
 
-
-    public float getGoal() {
-        return goal;
+    public float getGoalCompleted() {
+        return goalCompleted;
     }
     public  void setGoal() {
         float temp = ((float) super.getSteps() / (float) 10000) * 100;
@@ -26,7 +23,7 @@ public class DayStepHistory extends StepHistory {
         NumberFormat formatter = new DecimalFormat("#.##");
         distString = formatter.format(temp);
 
-        this.goal = Float.parseFloat(distString);
+        this.goalCompleted = Float.parseFloat(distString);
 
     }
     public long getDay() {
@@ -36,12 +33,22 @@ public class DayStepHistory extends StepHistory {
         this.day = day;
     }
 
-    public String getDayString(){
-        Date date = new Date(this.day);
-        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        return formatter.format(date).toString();
+    @Override
+    public String toString(){
+        return getDateText(day, formatter);
     }
 
+    public String getMonth() {
+        return getDateText(day, "MMMM");
+    }
+
+    public String getDayOfWeek() {
+        return getDateText(day, "EEEEEE");
+    }
+
+    public String getNumDayString() {
+        return getDateText(day, "d");
+    }
 
     /*Comparator for sorting the list by day*/
     public static Comparator<DayStepHistory> DayDateComparator = new Comparator<DayStepHistory>() {
@@ -54,14 +61,13 @@ public class DayStepHistory extends StepHistory {
 
         }};
 
-    /*Comparator for sorting the list by goal achieved*/
-    public static Comparator<DayStepHistory> DayGoalComparator = new Comparator<DayStepHistory>() {
+    /*Comparator for sorting the list by goalCompleted achieved*/
+    public static Comparator<DayStepHistory> DayStepComparator = new Comparator<DayStepHistory>() {
 
         public int compare(DayStepHistory m1, DayStepHistory m2) {
-            int day1 = (int) m1.getGoal();
-            int day2 = (int) m2.getGoal();
+            int day1 = (int) m1.getSteps();
+            int day2 = (int) m2.getSteps();
 
             return day1 - day2;
-
         }};
 }

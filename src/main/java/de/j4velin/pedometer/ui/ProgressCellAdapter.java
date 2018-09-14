@@ -32,7 +32,7 @@ public class ProgressCellAdapter extends RecyclerView.Adapter<ProgressCellAdapte
 
             icon = v.findViewById(R.id.icon);
             progressLine = v.findViewById(R.id.progressLine);
-            numText = v.findViewById(R.id.numText);
+            numText = v.findViewById(R.id.unitText);
             infoText = v.findViewById(R.id.infoText);
         }
 

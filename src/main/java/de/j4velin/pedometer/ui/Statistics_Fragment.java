@@ -355,7 +355,7 @@ public class Statistics_Fragment extends Fragment implements SensorEventListener
                         .putExtra("action", SensorListener.ACTION_PAUSE));
                 return true;
             default:
-                return ((Activity_Main) getActivity()).optionsItemSelected(item);
+                return ((Activity_Main) getActivity()).onOptionsItemSelected(item);
         }
     }
 

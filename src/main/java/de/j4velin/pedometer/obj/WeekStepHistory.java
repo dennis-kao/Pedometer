@@ -1,10 +1,7 @@
 package de.j4velin.pedometer.obj;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,6 +9,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class WeekStepHistory extends StepHistory{
+
     private int avgSteps = 0;
     private int bestDaySteps = 0;
     private long dtEnd = 0;
@@ -19,7 +17,35 @@ public class WeekStepHistory extends StepHistory{
     private long bestDay = 0;
     private double stdDev;
     private double median;
-    private DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+    public static String wFormat = "MMMM d";
+
+    @Override
+    public String toString() {
+        return getDateText(dtStart, wFormat) + " - " + getDateText(dtEnd, wFormat);
+    }
+
+    public String getMonthText() {
+
+        String startMonth = getDateText(dtStart, "MMMM");
+        String endMonth = getDateText(dtEnd, "MMMM");
+
+        if (startMonth.equals(endMonth)) return startMonth;
+        else return startMonth + " & " + endMonth;
+    }
+
+    public String getNumText() {
+
+        String firstNum = getDateText(dtStart, "d");
+        String lastNum = getDateText(dtEnd, "d");
+
+        if (firstNum.equals(lastNum)) return firstNum;
+        else return firstNum + " - " + lastNum;
+    }
+
+    public String getYear() {
+        String firstNum = getDateText(dtStart, "YYYY");
+        return firstNum;
+    }
 
     public int getBestDaySteps() {
         return bestDaySteps;
@@ -35,13 +61,6 @@ public class WeekStepHistory extends StepHistory{
 
     public void setBestDay(long bestDay) {
         this.bestDay = bestDay;
-    }
-
-    public String getBestDayAsDateString() {
-        String bestDay;
-        Date date = new Date(this.bestDay);
-        bestDay = this.formatter.format(date).toString();
-        return bestDay;
     }
 
     public void setTotalSteps(int totalSteps) {
@@ -62,7 +81,7 @@ public class WeekStepHistory extends StepHistory{
         this.avgSteps = super.getSteps()/getNumDays();
     }
 
-    private int getNumDays() {
+    public int getNumDays() {
         int numDays = 0;
         numDays = (int) ((this.dtEnd - this.dtStart)/ TimeUnit.DAYS.toMillis(1)) + 1;
         return (numDays > 0) ? numDays : 7;
@@ -76,12 +95,6 @@ public class WeekStepHistory extends StepHistory{
         this.dtEnd = dtEnd;
     }
 
-    public String getDtEndAsDateString() {
-        String dtEnd;
-        Date date = new Date(this.dtEnd);
-        dtEnd = this.formatter.format(date).toString();
-        return dtEnd;
-    }
 
     public long getDtStart() {
         return dtStart;
@@ -91,19 +104,14 @@ public class WeekStepHistory extends StepHistory{
         this.dtStart = dtStart;
     }
 
-    public String getDtStartAsDateString() {
-        String dtStart;
-        Date date = new Date(this.dtStart);
-        dtStart = this.formatter.format(date).toString();
-        return dtStart;
-    }
-
-    public double getStdDev() {
+    public double getDev() {
         return stdDev;
     }
+
     public void setStdDev(double stdDev) {
         this.stdDev = stdDev;
     }
+
     public void calculateStdDev(int[] data){
         double variance = 0;
         for(int i :data)
@@ -117,9 +125,11 @@ public class WeekStepHistory extends StepHistory{
     public double getMedian() {
         return median;
     }
+
     public void setMedian(double median) {
         this.median = median;
     }
+
     public void calculateMedian( int[] data) {
         Arrays.sort(data);
 
@@ -145,8 +155,8 @@ public class WeekStepHistory extends StepHistory{
     public static Comparator<WeekStepHistory> WeekStdDevComparator = new Comparator<WeekStepHistory>() {
 
         public int compare(WeekStepHistory m1, WeekStepHistory m2) {
-            int week1 = (int) m1.getStdDev();
-            int week2 = (int) m2.getStdDev();
+            int week1 = (int) m1.getDev();
+            int week2 = (int) m2.getDev();
 
             return week1 - week2;
 

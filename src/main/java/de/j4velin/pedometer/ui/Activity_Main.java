@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,7 +51,8 @@ import de.j4velin.pedometer.util.Logger;
 public class Activity_Main extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         Count_Fragment.OnFragmentInteractionListener,
-        History_Fragment.OnFragmentInteractionListener {
+        History_Fragment.OnFragmentInteractionListener,
+        PopupMenu.OnMenuItemClickListener {
 
     private GoogleApiClient mGoogleApiClient;
     private final static int RC_RESOLVE = 1;
@@ -57,6 +60,8 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private ImageButton settingsButton;
 
 
 //    /**
@@ -166,7 +171,7 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 
         setTheme(R.style.AppTheme); //  remove splash screen, default is AppTheme.Launcher
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navbar_fragments);
+        setContentView(R.layout.fragment_holder);
 
         viewPager = findViewById(R.id.container);
         createViewPager(viewPager);
@@ -187,6 +192,23 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
                 PermissionChecker.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
+
+        settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });
+    }
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+
+        popup.inflate(R.menu.main);
+        popup.setOnMenuItemClickListener(this);
+
+        popup.show(); //showing popup menu
     }
 
     @Override
@@ -236,47 +258,48 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    public boolean optionsItemSelected(final MenuItem item) {
+    @Override
+    public boolean onMenuItemClick (MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_statistics:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, new Statistics_Fragment()).addToBackStack(null)
                         .commit();
                 break;
-            case R.id.action_settings:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.container, new Settings_Fragment()).addToBackStack(null).commit();
-                break;
-            case R.id.action_leaderboard:
-            case R.id.action_achievements:
-                if (mGoogleApiClient.isConnected()) {
-                    startActivityForResult(item.getItemId() == R.id.action_achievements ?
-                                    Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
-                                    Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
-                            RC_LEADERBOARDS);
-                } else {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-                    builder2.setTitle(R.string.sign_in_necessary);
-                    builder2.setMessage(R.string.please_sign_in_with_your_google_account);
-                    builder2.setPositiveButton(android.R.string.ok,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    getFragmentManager().beginTransaction()
-                                            .replace(R.id.container, new Settings_Fragment())
-                                            .addToBackStack(null).commit();
-                                }
-                            });
-                    builder2.setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    builder2.create().show();
-                }
-                break;
+//            case R.id.action_settings:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.container, new Settings_Fragment()).addToBackStack(null).commit();
+//                break;
+//            case R.id.action_leaderboard:
+//            case R.id.action_achievements:
+//                if (mGoogleApiClient.isConnected()) {
+//                    startActivityForResult(item.getItemId() == R.id.action_achievements ?
+//                                    Games.Achievements.getAchievementsIntent(mGoogleApiClient) :
+//                                    Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
+//                            RC_LEADERBOARDS);
+//                } else {
+//                    AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+//                    builder2.setTitle(R.string.sign_in_necessary);
+//                    builder2.setMessage(R.string.please_sign_in_with_your_google_account);
+//                    builder2.setPositiveButton(android.R.string.ok,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                    getFragmentManager().beginTransaction()
+//                                            .replace(R.id.container, new Settings_Fragment())
+//                                            .addToBackStack(null).commit();
+//                                }
+//                            });
+//                    builder2.setNegativeButton(android.R.string.cancel,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                }
+//                            });
+//                    builder2.create().show();
+//                }
+//                break;
 //            case R.id.action_faq:
 //                startActivity(new Intent(Intent.ACTION_VIEW,
 //                        Uri.parse("http://j4velin.de/faq/index.php?app=pm"))
@@ -284,20 +307,8 @@ public class Activity_Main extends AppCompatActivity implements GoogleApiClient.
 //                break;
             case R.id.action_about:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.about);
-                TextView tv = new TextView(this);
-                tv.setPadding(10, 10, 10, 10);
-                tv.setText(R.string.about_text_links);
-                try {
-                    tv.append(getString(R.string.about_app_version,
-                            getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
-                } catch (PackageManager.NameNotFoundException e1) {
-                    // should not happen as the app is definitely installed when
-                    // seeing the dialog
-                    e1.printStackTrace();
-                }
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-                builder.setView(tv);
+                builder.setTitle(R.string.about).setMessage("myPedometer passively tracks and logs your steps using the built-in accelerometer. It gives users full ownership of their own data." +
+                        "\n\nThis app created by Dennis Kao and uses database logic from Thomas Hoffmann's Pedometer project (github.com/j4velin/Pedometer)");
                 builder.setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override

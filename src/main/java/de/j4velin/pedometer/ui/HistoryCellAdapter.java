@@ -8,6 +8,8 @@ import de.j4velin.pedometer.R;
 import android.content.Context;
 import android.widget.TextView;
 
+import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -24,12 +26,13 @@ import de.j4velin.pedometer.obj.WeekStepHistory;
 
 public class HistoryCellAdapter<T extends StepHistory> extends ArrayAdapter<T>{
 
-    private int position;
+    private int position, goal;
     private View convertView;
     private ViewGroup parent;
 
-    public HistoryCellAdapter(Context context, ArrayList<T> stepHistory) {
+    public HistoryCellAdapter(Context context, ArrayList<T> stepHistory, int goal) {
             super(context, 0, stepHistory);
+            this.goal = goal;
         }
 
         @Override
@@ -49,26 +52,18 @@ public class HistoryCellAdapter<T extends StepHistory> extends ArrayAdapter<T>{
             }
 
             // Lookup view for data population
-            TextView startDate = convertView.findViewById(R.id.startDate);
-            TextView endDate = convertView.findViewById(R.id.endDate);
-            TextView totalStep = convertView.findViewById(R.id.totalStep);
-            TextView avgStep = convertView.findViewById(R.id.avgStep);
-            TextView bestDay = convertView.findViewById(R.id.bestDay);
-            TextView distance = convertView.findViewById(R.id.distance);
-            TextView calories = convertView.findViewById(R.id.calories);
+            TextView dateText = convertView.findViewById(R.id.dateText);
+            TextView numText = convertView.findViewById(R.id.numText);
+            RoundCornerProgressBar progressBar = convertView.findViewById(R.id.stepProgress);
 
             // Populate the data into the template view using the data object
             if (stepHistory instanceof DayStepHistory) {
 
                 DayStepHistory stepDays = (DayStepHistory) stepHistory;
 
-                startDate.setText(stepDays.getDayString());
-                endDate.setVisibility(TextView.INVISIBLE);
-                totalStep.setText("   Total Steps: " + Integer.toString(stepDays.getSteps()));
-                avgStep.setText("   Distance: " + Float.toString(stepDays.getDistance()) + " km");
-                bestDay.setText("   Calories: " + Integer.toString(stepDays.getCalories()));
-                distance.setText("   Goal Achieved: " + stepDays.getGoal() + "%");
-                calories.setVisibility(TextView.INVISIBLE);
+                dateText.setText(stepDays.toString());
+                numText.setText(Integer.toString(stepDays.getSteps()));
+                progressBar.setProgress(stepDays.getGoalCompleted());
             }
             else if (stepHistory instanceof WeekStepHistory)
             {
@@ -79,26 +74,18 @@ public class HistoryCellAdapter<T extends StepHistory> extends ArrayAdapter<T>{
                 cal.setTimeInMillis(stepWeeks.getDtStart());
                 cal.setTimeInMillis(stepWeeks.getDtEnd());
 
-                startDate.setText("   Start: " + stepWeeks.getDtStartAsDateString());
-                endDate.setText("   End: " + stepWeeks.getDtEndAsDateString());
-                totalStep.setText("   Total Steps: "+Integer.toString(stepWeeks.getSteps()));
-                avgStep.setText(String.format("   Average Steps: %d\t Std. Dev: %.3f\t Median:%.3f", stepWeeks.getAvgSteps(), stepWeeks.getStdDev(), stepWeeks.getMedian()));
-                bestDay.setText("   Best Day: " + stepWeeks.getBestDayAsDateString() + " (" + Integer.toString(stepWeeks.getBestDaySteps()) + ")");
-                distance.setText("   Distance: " + Float.toString(stepWeeks.getDistance()) + " km");
-                calories.setText("   Calories: " + Integer.toString(stepWeeks.getCalories()));
+                dateText.setText(stepWeeks.toString());
+                numText.setText(Integer.toString(stepWeeks.getSteps()));
+                progressBar.setProgress(stepWeeks.getSteps() / (float) (stepWeeks.getNumDays() * goal) * 100);
             }
             else if (stepHistory instanceof MonthStepHistory)
             {
 
                 MonthStepHistory stepMonth = (MonthStepHistory) stepHistory;
 
-                startDate.setText(stepMonth.getMonth());
-                endDate.setText(Integer.toString(stepMonth.getYear()));
-                avgStep.setText(String.format("   Average Steps: %d\t Std. Dev: %.3f\t Median: %.3f", stepMonth.getAvgSteps(), stepMonth.getStdDev(), stepMonth.getMedian()));
-                totalStep.setText("   Total Steps: " + Integer.toString(stepMonth.getSteps()));
-                bestDay.setText("   Best Day: " + stepMonth.getBestDayString() + " (" + Integer.toString(stepMonth.getBestDaySteps()) + ")");
-                distance.setText("   Distance: " + Float.toString(stepMonth.getDistance()) + " km");
-                calories.setText("   Calories: " + Integer.toString(stepMonth.getCalories()));
+                dateText.setText(stepMonth.toString());
+                numText.setText(Integer.toString(stepMonth.getSteps()));
+                progressBar.setProgress( (float) stepMonth.getSteps() / (float) (stepMonth.getDaysInMonth() * goal) * 100);
             }
 
             // Return the completed view to render on screen

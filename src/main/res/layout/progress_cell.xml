@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/ic_footsteps" />
 
     <TextView
-        android:id="@+id/numText"
+        android:id="@+id/unitText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -40,7 +40,7 @@
         android:fontFamily="@font/opensans_regular"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/progressLine"
-        app:layout_constraintStart_toEndOf="@+id/numText" />
+        app:layout_constraintStart_toEndOf="@+id/unitText" />
 
     <ProgressBar
         android:id="@+id/progressLine"

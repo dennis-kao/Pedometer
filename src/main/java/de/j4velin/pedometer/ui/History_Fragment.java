@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +45,15 @@ public class History_Fragment extends Fragment {
     private ArrayList<DayStepHistory> dayHistoryRecords = null;
     private ArrayList<WeekStepHistory> weekHistoryRecords = null;
     private ArrayList<MonthStepHistory> monthHistoryRecords = null;
-    private HistoryCellAdapter stepHistoryCellAdapter = null;
+    private HistoryCellAdapter3 stepHistoryCellAdapter = null;
+
+    private SwipeRefreshLayout historySwipeRefresh;
 
     private SharedPreferences prefs;
 
     private float stepsize;
     private float weight;
+    private int goal;
 
     private Database db;
 
@@ -75,6 +79,16 @@ public class History_Fragment extends Fragment {
         return fragment;
     }
 
+    private void getEntries() {
+        db = Database.getInstance((getActivity()));
+
+        this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
+        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
+        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
+
+        db.close();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +97,9 @@ public class History_Fragment extends Fragment {
         prefs = getActivity().getSharedPreferences("de.dkao.de.dkao.pedometer", Context.MODE_PRIVATE);
         stepsize = prefs.getFloat("stepsize_value", Settings_Fragment.DEFAULT_STEP_SIZE);
         weight = prefs.getFloat("weight_value", Settings_Fragment.DEFAULT_WEIGHT);
-        db = Database.getInstance((getActivity()));
+        goal = prefs.getInt("goal", Settings_Fragment.DEFAULT_GOAL);
 
-        this.dayHistoryRecords = db.stepHistoryByDay(stepsize, weight);
-        this.weekHistoryRecords = db.getAllStepHistoryByWeek(stepsize, weight);
-        this.monthHistoryRecords = db.stepHistoryByMonth(stepsize, weight);
+        getEntries();
     }
 
     public void sortListener(int option) {
@@ -107,7 +119,7 @@ public class History_Fragment extends Fragment {
                 else monthHistoryRecords.sort(MonthStepHistory.MonthDateComparator);
                 break;
             case 2:
-                if (currentTimeFrame == 0) dayHistoryRecords.sort(DayStepHistory.DayGoalComparator);
+                if (currentTimeFrame == 0) dayHistoryRecords.sort(DayStepHistory.DayStepComparator);
                 break;
             case 3:
                 if (currentTimeFrame == 1) weekHistoryRecords.sort(WeekStepHistory.WeekMedianComparator);
@@ -127,13 +139,13 @@ public class History_Fragment extends Fragment {
 
         //  feed to adapter and change the view
         if (currentTimeFrame == 0)  {
-            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.dayHistoryRecords, goal);
         }
         else if (currentTimeFrame == 1) {
-            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.weekHistoryRecords, goal);
         }
         else {
-            this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
+            this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.monthHistoryRecords, goal);
         }
 
         this.lsView.setAdapter(this.stepHistoryCellAdapter);
@@ -205,6 +217,8 @@ public class History_Fragment extends Fragment {
                         Log.e("STEP_HISTORY_TAB_LAYOUT", "Unexpected Tab selected: " + position);
                         break;
                 }
+
+                sortListener(sortSpinner.getSelectedItemPosition());
             }
 
             @Override
@@ -226,6 +240,17 @@ public class History_Fragment extends Fragment {
             }
         });
 
+        historySwipeRefresh = view.findViewById(R.id.swipe_container);
+        historySwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                getEntries();
+                sortListener(sortSpinner.getSelectedItemPosition());
+                historySwipeRefresh.setRefreshing(false);
+            }
+        });
+
         this.lsView = view.findViewById(R.id.step_history_list);
 
         return view;
@@ -233,7 +258,7 @@ public class History_Fragment extends Fragment {
 
     public void showDayStepHistory() {
 
-        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.dayHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.dayHistoryRecords, goal);
         if (this.dayHistoryRecords == null)
             Log.e("STEP_HISTORY", "DayHistoryRecords null");
         else{
@@ -243,7 +268,7 @@ public class History_Fragment extends Fragment {
 
     public void showWeekStepHistory() {
 
-        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.weekHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.weekHistoryRecords, goal);
 
         if (this.weekHistoryRecords == null) {
             Log.e("STEP_HISTORY", "WeekHistoryRecords null");
@@ -254,7 +279,7 @@ public class History_Fragment extends Fragment {
 
     public void showMonthStepHistory() {
 
-        this.stepHistoryCellAdapter = new HistoryCellAdapter(getContext(), this.monthHistoryRecords);
+        this.stepHistoryCellAdapter = new HistoryCellAdapter3(getContext(), this.monthHistoryRecords, goal);
 
         if (this.monthHistoryRecords == null)
             Log.e("STEP_HISTORY", "MonthHistoryRecords null");
